@@ -2,26 +2,8 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const generateToken = require("../config/generateToken");
 const bcrypt = require('bcrypt');
-
-
-
-//@description     Get or Search all users
-//@route           GET /api/user?search=
-//@access          Public
-const allUsers = asyncHandler(async (req, res) => {
-    const keyword = req.query.search
-        ? {
-            $or: [
-                { name: { $regex: req.query.search, $options: "i" } },
-                { email: { $regex: req.query.search, $options: "i" } },
-            ],
-        }
-        : {};
-
-    const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
-    res.send(users);
-});
-
+const Complaint = require("../models/complaintModel");
+const { ObjectId } = require('mongoose').Types;
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password, room_no, wing, hostel_no, mobile_number } = req.body;
 
@@ -98,4 +80,34 @@ const authUser = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { allUsers, registerUser, authUser };
+const registerComplaint = async (req, res) => {
+    try {
+        const { fullname, rollNumber, description, issue } = req.body;
+        const userId = req.user._id; // Access user ID from req.user
+
+        if (!ObjectId.isValid(userId)) {
+            return res.status(400).json({ success: false, message: 'Invalid userId' });
+        }
+        const newComplaint = new Complaint({ userId, fullname, rollNumber, description, issue });
+        await newComplaint.save();
+
+        res.status(201).json({ success: true, message: 'Complaint registered successfully' });
+    } catch (error) {
+        console.error('An error occurred during complaint registration:', error);
+        res.status(500).json({ success: false, message: 'Failed to register complaint' });
+    }
+};
+const getComplaint = async (req, res) => {
+    try {
+        const complaints = await Complaint.find();
+        res.json({ success: true, complaints }); // Sending complaints with success flag
+    } catch (error) {
+        console.error("Error fetching complaints:", error);
+        res.status(500).json({ success: false, error: "Failed to fetch complaints" }); // Sending error with success flag
+    }
+};
+
+
+
+
+module.exports = { registerComplaint, registerUser, authUser, getComplaint };

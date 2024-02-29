@@ -2,6 +2,7 @@
 import { React, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Categories, MajorIssues, Navbar2 } from "./components";
+import axios from "axios";
 
 
 const Dashboard = () => {
@@ -10,20 +11,30 @@ const Dashboard = () => {
   const navigate = useNavigate(); // Using useNavigate hook
 
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await fetch("http://localhost:3000/complaintsList");
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setComplaints(data);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
+  const fetchData = async () => {
+    try {
+      const token = JSON.parse(localStorage.getItem("userInfo")).token;
+
+      const response = await axios.get("http://localhost:5000/api/user/getcomplaints", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data.success) {
+        setComplaints(response.data.complaints);
+      } else {
+        throw new Error("Failed to fetch complaints");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   return (
     <>
       <Navbar2 />
@@ -33,13 +44,13 @@ const Dashboard = () => {
             <div className="m-4 divide-y-2 divide-newpurple">
               {complaints.map((complaint) => (
                 <MajorIssues
-                  key={complaint.id}
-                  roll_no={complaint.created_by}
-                  timestamp={new Date(complaint.created_at).toLocaleString()}
-                  category={complaint.label}
-                  heading={"Problems regarding " + complaint.label}
+                  key={complaint._id}
+                  roll_no={complaint.rollNumber}
+                  timestamp={new Date(complaint.createdAt).toLocaleString()}
+                  category={complaint.issue}
+                  heading={"Problems regarding " + complaint.issue}
                   description={complaint.description}
-                  voteCount={complaint.upvotes}
+                //voteCount={complaint.upvotes}
                 />
               ))}
             </div>

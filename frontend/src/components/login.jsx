@@ -11,11 +11,20 @@ const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      console.log("Please fill in all fields");
+      return;
+    }
+
     try {
-      const { data } = await axios.post("http://localhost:5000/api/user/login", {
-        email,
-        password,
-      });
+
+
+      const { data } = await axios.post(
+        "http://localhost:5000/api/user/login",
+        { email, password },
+      );
+
       console.log(data);
 
       if (data) {
@@ -30,7 +39,7 @@ const Login = () => {
         console.log("Invalid response format from server!");
       }
     } catch (error) {
-      console.error(error);
+      console.error("An error occurred:", error);
     }
   };
 

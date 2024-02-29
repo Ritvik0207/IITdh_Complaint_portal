@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 import { React, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Navbar2 } from "./components";
 
-const complaint = () => {
+const Complaint = () => {
   const [fullname, setFullName] = useState("");
   const [rollNumber, setRollNumber] = useState("");
   const [description, setDescription] = useState("");
@@ -20,17 +21,27 @@ const complaint = () => {
         return;
       }
 
+      // Get the token from localStorage
+      const token = JSON.parse(localStorage.getItem("userInfo")).token;
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`, // Set the Authorization header with the bearer token
+        },
+      };
+
       const response = await axios.post(
-        "http://localhost:3000/complaintRegister",
+        "http://localhost:5000/api/user/postcomplaint",
         {
           fullname,
           rollNumber,
           description,
           issue,
-        }
+        },
+        config // Pass the config object as the third argument
       );
 
-      if (response.data.success) {
+      if (!response.data.success) {
         console.error("Complaint registration failed:", response.data);
       } else {
         console.log("Complaint registered successfully:", response.data);
@@ -40,6 +51,7 @@ const complaint = () => {
       console.error("An error occurred during complaint registration:", error);
     }
   };
+
 
   return (
     <>
@@ -105,4 +117,4 @@ const complaint = () => {
   );
 };
 
-export default complaint;
+export default Complaint;
