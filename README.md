@@ -21,41 +21,18 @@ IUHD is a helpdesk site to streamline all the work requests in a single format. 
      npm install
      ```
 
-3. **Set Up PostgreSQL Database:**
-   - Access PostgreSQL using the command:
-     ```bash
-     psql -U postgres -h localhost
-     ```
-   - Create a new database named `helpdesk`:
-     ```sql
-     CREATE DATABASE helpdesk;
-     ```
-   - Connect to the `helpdesk` database:
-     ```sql
-     \c helpdesk
-     ```
-   - Import the database schema from `database.sql`:
-     ```sql
-     \i database.sql
-     ```
-   - For admin access, manually change the `is_admin` property to true:
-     ```sql
-     UPDATE student
-     SET is_admin = true
-     WHERE name = 'admin';
-     ```
-
-4. **Update Database Credentials:**
-   - Change the database credentials in `backend/index.js` file.
-
-5. **Run the Application:**
+3. **Run the Backend:**
    - Navigate back to the main folder and run the command:
+     ```bash
+     npm start
+     ```
+
+4. **Run the frontend:**
+     - Navigate  to the main folder  and cd over fornend and run the command:
      ```bash
      npm run dev
      ```
 
-6. **Access the Site:**
-   - Open your browser and access the IUHD site from [http://localhost:your-port](http://localhost:your-port).
 
 Feel free to explore and contribute to the IITdh Unified HelpDesk project!
 
