@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
-import { Details } from "../components/components";
+// import { Details } from "../components/components";
 import { RI, SI, PI, RII, RAI } from "../assets/images";
+import Details from "../components/details";
 
 const Contact = () => {
   return (

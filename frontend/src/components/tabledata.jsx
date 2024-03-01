@@ -1,33 +1,26 @@
-import {React, useState, useEffect} from "react";
-import { Navbar2 } from "./components";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from "react";
+// import { Navbar2 } from "./components";
 import axios from "axios";
+import Navbar2 from "./navbar2";
 
 const TableData = () => {
-  const data = [
-    { id: 1, className: "Default", heading1: "Cell", heading2: "Cell" },
-    // Add more data as needed
-  ];
-  
   const [complaints, setComplaints] = useState([]);
 
   const handleAssignClick = async (complaintId) => {
     try {
-      // Send a DELETE request to the server
-      const response = await axios.delete(`http://localhost:3000/admin/complaints/${complaintId}`);
-      
+      const response = await axios.delete(`http://localhost:5000/api/user/complaints/${complaintId}`);
+
       setComplaints((prevComplaints) =>
-        prevComplaints.filter((complaint) => complaint.id !== complaintId)
+        prevComplaints.filter((complaint) => complaint._id !== complaintId)
       );
-      
+
       if (response.data.success) {
-        // Handle success (optional)
         console.log('Complaint marked as done');
       } else {
-        // Handle failure (optional)
         console.log('Failed to mark complaint as done');
       }
     } catch (error) {
-      // Handle error (optional)
       console.error('Error marking complaint as done:', error);
     }
   };
@@ -38,10 +31,15 @@ const TableData = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/complaintsList");
-      const data = await response.json();
-      console.log(data);
-      setComplaints(data);
+      const token = JSON.parse(localStorage.getItem("userInfo")).token;
+
+      const response = await axios.get("http://localhost:5000/api/user/getcomplaints", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setComplaints(response.data.complaints);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -75,23 +73,23 @@ const TableData = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {complaints.map((complaint) => (
+                  {Array.isArray(complaints) && complaints.map((complaint) => (
                     <tr
-                      key={complaint.id}
+                      key={complaint._id}
                       className="border-b dark:border-neutral-500"
                     >
                       <td className="whitespace-nowrap px-6 py-4 font-medium">
-                        {complaint.created_by}
+                        {complaint.rollNumber}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        {complaint.label}
+                        {complaint.issue}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
                         {complaint.description}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
                         <button
-                          onClick={() => handleAssignClick(complaint.id)}
+                          onClick={() => handleAssignClick(complaint._id)}
                           className="bg-green-500 text-white px-2 py-1 rounded-md"
                         >
                           Mark as Done

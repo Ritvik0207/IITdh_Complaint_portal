@@ -2,7 +2,7 @@
 import { React, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Navbar2 } from "./components";
+import Navbar2 from "../components/navbar2";
 
 const Complaint = () => {
   const [fullname, setFullName] = useState("");
@@ -10,7 +10,6 @@ const Complaint = () => {
   const [description, setDescription] = useState("");
   const [issue, setIssue] = useState("");
   const navigate = useNavigate();
-
   const onSubmitForm = async (e) => {
     e.preventDefault();
 

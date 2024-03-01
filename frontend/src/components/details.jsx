@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React from "react";
 import { maillogo } from "../assets/images";
 
-const details = (props) => {
+const Details = (props) => {
   const handleEmailClick = () => {
     const emailAddress = `${props.roll_no}@gmail.com`;
     const subject = "Regarding Center_A_Div";
@@ -41,4 +43,4 @@ const details = (props) => {
   );
 };
 
-export default details;
+export default Details;

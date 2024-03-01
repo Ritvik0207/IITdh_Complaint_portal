@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { React, useState } from "react";
 
-const majorissues = (props) => {
-  const [vote, setVote] = useState(props.voteCount); 
-  const [upvote, setUpvote] = useState(false); 
+const Majorissues = (props) => {
+  const [vote, setVote] = useState(props.voteCount);
+  const [upvote, setUpvote] = useState(false);
   const upvotefn = () => {
     setUpvote(true);
     setVote(prev => prev + 1);
@@ -56,4 +58,4 @@ const majorissues = (props) => {
   );
 };
 
-export default majorissues;
+export default Majorissues;

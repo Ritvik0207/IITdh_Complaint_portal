@@ -1,8 +1,10 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
 
-const categories = (props) => {
+const Categories = (props) => {
   const [id, setId] = useState("");
 
   return (
@@ -19,4 +21,4 @@ const categories = (props) => {
   );
 };
 
-export default categories;
+export default Categories;
