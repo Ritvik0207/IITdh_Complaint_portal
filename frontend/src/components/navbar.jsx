@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { hamburger, logo1, logo2 } from "../assets/images";
+import { hamburger, logo1, logo2, profile } from "../assets/images";
+import Profile from "./profile";
 
 const Navbar = ({ isLoggedIn, loginStatus }) => {
   const [activeNavLink, setActiveNavLink] = useState("home");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+
   const navigate = useNavigate();
 
   if (localStorage.getItem("userInfo")) {
-    // console.log("checking token");
     loginStatus(true);
   }
+
+  const toggleProfile = () => {
+    setShowProfile(!showProfile);
+  };
 
   const handleNavLinkClick = (navLink) => {
     setActiveNavLink(navLink);
@@ -51,29 +57,44 @@ const Navbar = ({ isLoggedIn, loginStatus }) => {
           />
         </Link>
 
-        <div className=" flex gap-4 justify-end max-lg:hidden">
+        <div className="flex justify-end max-lg:hidden">
           {isLoggedIn ? (
-            <button
-              className="bg-white text-[#89288f] border-[3px] border-[#89288f] rounded-lg px-4 py-2 hover:border-orange-500"
-              onClick={handleSignOut}
-            >
-              Sign Out
-            </button>
-          ) : (
-            <>
-              <Link
+            <div className="flex gap-4 justify-between items-center">
+              <button
                 className="bg-white text-[#89288f] border-[3px] border-[#89288f] rounded-lg px-4 py-2 hover:border-orange-500"
+                onClick={handleSignOut}
+              >
+                Sign Out
+              </button>
+              <button
+                className="rounded-full border-[3px] border-newpurple"
+                onClick={toggleProfile}
+              >
+                <img
+                  className="rounded-full hover:ring-[3px] ring-orange-500  border-newpurple"
+                  src={profile}
+                  alt="profile"
+                  height={38}
+                  width={38}
+                />
+                {showProfile ? <Profile onClose={toggleProfile} /> : ""}
+              </button>
+            </div>
+          ) : (
+            <div className="flex gap-4 justify-between items-center">
+              <Link
+                className="flex justify-center items-center bg-white text-newpurple border-[3px] border-newpurple font-medium rounded-lg hover:border-orange-500 px-4 py-2"
                 to={"/login"}
               >
                 Sign In
               </Link>
               <Link
-                className="text-white border-[3px] border-newpurple hover:border-[3px] hover:border-orange-500 hover:rounded-lg px-4 py-2"
+                className="flex justify-center items-center text-white border-[3px] border-newpurple hover:border-[3px] hover:border-orange-500 hover:rounded-lg px-4 py-2"
                 to={"/register"}
               >
                 Register
               </Link>
-            </>
+            </div>
           )}
         </div>
       </nav>

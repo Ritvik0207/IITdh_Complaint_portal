@@ -2,6 +2,7 @@ import hamburger from "./hamburger.svg";
 import logo1 from "./logo1.png";
 import logo2 from "./logo2.png";
 import logo from "./logo.png";
+import profile from "./profile.png";
 import homelogo from "./homelogo.png";
 import maillogo from "./maillogo.png";
 import RI from "./Rahul.jpeg";
@@ -15,6 +16,7 @@ export {
   logo1,
   logo2,
   logo,
+  profile,
   homelogo,
   maillogo,
   RI,

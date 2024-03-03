@@ -78,6 +78,7 @@ const authUser = asyncHandler(async (req, res) => {
         email: user.email,
         isAdmin: user.isAdmin,
         room_no: user.room_no,
+        roll_no: user.roll_no,
         wing: user.wing,
         hostel_no: user.hostel_no,
         mobile_number: user.mobile_number,
