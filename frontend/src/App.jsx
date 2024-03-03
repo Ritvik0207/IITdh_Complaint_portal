@@ -12,6 +12,7 @@ import Dashboard from "./pages/dashboard";
 import Home from "./sections/Home";
 import Contact from "./sections/Contact";
 import Profile from "./components/profile";
+import PrevComplaints from "./pages/prevComplaints";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -76,10 +77,10 @@ const App = () => {
           }
         />
         <Route
-          path="/profile"
+          path="/prevcomplaints"
           element={
             <ProtectedRoute>
-              <Profile />
+              <PrevComplaints />
             </ProtectedRoute>
           }
         />
