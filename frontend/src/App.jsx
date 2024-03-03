@@ -11,7 +11,6 @@ import Complaint from "./pages/complaint";
 import Dashboard from "./pages/dashboard";
 import Home from "./sections/Home";
 import Contact from "./sections/Contact";
-import Profile from "./components/profile";
 import PrevComplaints from "./pages/prevComplaints";
 
 const App = () => {
