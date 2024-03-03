@@ -1,43 +1,34 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-const Login = () => {
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+const Login = ({ loginStatus }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-
   const onSubmit = async (e) => {
     e.preventDefault();
-
     if (!email || !password) {
-      console.log("Please fill in all fields");
+      toast.warning("Please fill out all the fields");
       return;
     }
-
     try {
-
-
       const { data } = await axios.post(
         "http://localhost:5000/api/user/login",
-        { email, password },
+        { email, password }
       );
-
-      console.log(data);
-
       if (data) {
         localStorage.setItem("userInfo", JSON.stringify(data));
-        console.log("Login successful:", data);
-
+        toast.success("Login successful");
+        loginStatus();
+        // console.log(data); // data output
         navigate("/dashboard");
-
-      } else {
-        console.log("Invalid response format from server!");
       }
     } catch (error) {
-      console.error("An error occurred:", error);
+      toast.error("Invalid credentials");
     }
   };
 
@@ -68,20 +59,21 @@ const Login = () => {
                     Email{" "}
                   </label>
                   <input
-                    type="text"
+                    type="email"
                     className="block w-full cursor-text appearance-none rounded-md border border-gray-400  py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white focus:text-gray-600 focus:shadow"
                     id="email"
                     name="email-username"
                     placeholder="Enter your email"
-                    // autoFocus=""
+                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                    required
                     onChange={(element) => setEmail(element.target.value)}
                   />
                 </div>
                 <div className="mb-4">
                   <div className="flex justify-between">
                     <label
-                      className="mb-2 inline-block text-xs font-medium uppercase text-gray-700"
                       htmlFor="password"
+                      className="mb-2 inline-block text-xs font-medium uppercase text-gray-700"
                     >
                       Password
                     </label>
@@ -89,10 +81,12 @@ const Login = () => {
                   <div className="relative flex w-full flex-wrap items-stretch">
                     <input
                       type="password"
-                      id="password"
                       className="relative block flex-auto cursor-text appearance-none rounded-md border border-gray-400 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white focus:text-gray-600 focus:shadow"
+                      id="password"
                       name="password"
                       placeholder="................."
+                      pattern="[a-zA-Z0-9]{6,}$"
+                      required
                       onChange={(element) => setPassword(element.target.value)}
                     />
                   </div>
@@ -109,7 +103,7 @@ const Login = () => {
                 </div>
               </form>
               <p className="mb-4 text-center">
-                Dont have an account yet?{" "}
+                Don't have an account yet?{" "}
                 <Link
                   to="/register"
                   className="cursor-pointer text-newpurple underline hover:text-orange-500 hover:underline-offset-2 ms-2"

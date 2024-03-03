@@ -4,14 +4,15 @@ const {
   authUser,
   registerComplaint,
   getComplaint,
+  getComplaintsByCategory,
 } = require("../controllers/userControllers");
 const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-
 router.route("/").post(registerUser);
 router.post("/login", authUser);
-router.post("/postcomplaint", protect, registerComplaint)
-router.get("/getcomplaints", protect, getComplaint)
+router.post("/postcomplaint", protect, registerComplaint);
+router.get("/getcomplaints", protect, getComplaint);
+router.get("/getcomplaintbycategory", protect, getComplaintsByCategory);
 module.exports = router;

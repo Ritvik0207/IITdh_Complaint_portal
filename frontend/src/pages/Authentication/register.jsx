@@ -2,9 +2,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
-
-
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -15,32 +13,98 @@ const Register = () => {
   const [wing, setWing] = useState("");
   const [room, setRoom] = useState("");
   const navigate = useNavigate();
+
+  // const onSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (
+  //     !name ||
+  //     !email ||
+  //     !mobile_no ||
+  //     !hostel_no ||
+  //     !wing ||
+  //     !room ||
+  //     !password
+  //   ) {
+  //     toast.warning("Please fill in all required fields");
+  //     return;
+  //   }
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         "Content-type": "application/json",
+  //       },
+  //     };
+
+  //     const response = await axios.post(
+  //       "http://localhost:5000/api/user",
+  //       {
+  //         name: name,
+  //         password: password,
+  //         email: email,
+  //         room_no: room,
+  //         wing: wing,
+  //         hostel_no: hostel_no,
+  //         mobile_number: mobile_no,
+  //       },
+  //       config
+  //     );
+
+  //     console.log(response); // data output
+  //     toast.success("Registration successful!");
+  //     navigate("/login");
+  //   } catch (error) {
+  //     toast.warning(error.message);
+  //     console.log(error);
+  //   }
+  // };
   const onSubmit = async (e) => {
     e.preventDefault();
-
+    if (
+      !name ||
+      !email ||
+      !mobile_no ||
+      !hostel_no ||
+      !wing ||
+      !room ||
+      !password
+    ) {
+      toast.warning("Please fill in all required fields");
+      return;
+    }
     try {
       const config = {
         headers: {
           "Content-type": "application/json",
         },
       };
-      const response = await axios.post("http://localhost:5000/api/user", {
-        name: name,
-        password: password,
-        email: email,
-        room_no: room,
-        wing: wing,
-        hostel_no: hostel_no,
-        mobile_number: mobile_no,
-      }, config);
 
-      console.log(response);
-      navigate('/dashboard');
+      const response = await axios.post(
+        "http://localhost:5000/api/user",
+        {
+          name: name,
+          password: password,
+          email: email,
+          room_no: room,
+          wing: wing,
+          hostel_no: hostel_no,
+          mobile_number: mobile_no,
+        },
+        config
+      );
+
+      if (response.data.success) {
+        console.log(response.data); // data output
+        toast.success("Registration successful!");
+        navigate("/login");
+      } else {
+        toast.warning(response.data.message);
+      }
     } catch (error) {
+      toast.warning("Registration failed");
       console.log(error);
     }
-
   };
+
   return (
     <>
       <div className="flex min-h-screen w-full items-center justify-center text-gray-600 bg-gray-50">
@@ -72,6 +136,8 @@ const Register = () => {
                       className="relative block flex-auto cursor-text appearance-none rounded-md border border-gray-400 bg--100 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white focus:text-gray-600 focus:shadow"
                       name="name"
                       placeholder="Enter your full name"
+                      pattern="[a-zA-Z]{3,}$"
+                      required
                       onChange={(element) => setName(element.target.value)}
                     />
                   </div>
@@ -86,11 +152,13 @@ const Register = () => {
                       Email
                     </label>
                     <input
-                      type="text"
+                      type="email"
                       className="block w-full cursor-text appearance-none rounded-md border border-gray-400 bg--100 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white focus:text-gray-600 focus:shadow"
                       id="email"
                       name="email-username"
                       placeholder="Enter your email "
+                      pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                      required
                       onChange={(element) => setEmail(element.target.value)}
                     />
                   </div>
@@ -102,10 +170,14 @@ const Register = () => {
                       Phone Number
                     </label>
                     <input
-                      type="text"
+                      type="tel"
                       className="block w-full cursor-text appearance-none rounded-md border border-gray-400 bg--100 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white focus:text-gray-600 focus:shadow"
                       name="mobile_no"
                       placeholder="Enter your phone number"
+                      pattern="[0-9]{10}"
+                      minLength={10}
+                      maxLength={10}
+                      required
                       onChange={(element) => setMobile_No(element.target.value)}
                     />
                   </div>
@@ -124,15 +196,16 @@ const Register = () => {
                         id="hostel_no"
                         name="hostel_no"
                         className="block w-full cursor-pointer appearance-none rounded-md border border-gray-400 bg--100 py-2 px-3 text-gray-400 text-sm outline-none focus:border-orange-500 focus:bg-white"
+                        required
                         onChange={(element) =>
                           setHostel_No(element.target.value)
                         }
                       >
-                        <option value="" disabled selected>
+                        <option defaultValue="" disabled selected>
                           Hostel
                         </option>
-                        <option value="hostel-1">Hostel-1</option>
-                        <option value="hostel-2">Hostel-2</option>
+                        <option defaultValue="hostel-1">Hostel-1</option>
+                        <option defaultValue="hostel-2">Hostel-2</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                         <svg
@@ -159,18 +232,17 @@ const Register = () => {
                         id="wing"
                         name="wing"
                         className="block w-full cursor-pointer appearance-none rounded-md border border-gray-400 bg--100 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white text-gray-400 "
-                        onChange={(element) =>
-                          setWing(element.target.value)
-                        }
+                        required
+                        onChange={(element) => setWing(element.target.value)}
                       >
-                        <option value="" disabled selected>
+                        <option defaultValue="" disabled selected>
                           Wing
                         </option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
+                        <option defaultValue="A">A</option>
+                        <option defaultValue="B">B</option>
+                        <option defaultValue="C">C</option>
+                        <option defaultValue="D">D</option>
+                        <option defaultValue="E">E</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                         <svg
@@ -193,11 +265,15 @@ const Register = () => {
                       Room
                     </label>
                     <input
-                      type="text"
+                      type="tel"
                       className="block w-full cursor-text appearance-none rounded-md border border-gray-400 bg--100 py-2 px-3 text-sm outline-none focus:border-indigo-500 focus:bg-white text-gray-400 focus:shadow"
                       name="room_no"
                       placeholder="Room No."
+                      pattern="[0-8]([0-2][1-9]|3[012])"
+                      maxLength={3}
+                      required
                       onChange={(element) => setRoom(element.target.value)}
+                      // style={{ appearance: "none" }}
                     />
                   </div>
                 </div>
@@ -216,6 +292,8 @@ const Register = () => {
                       className="w-full relative block flex-auto cursor-text appearance-none rounded-md border border-gray-400 bg--100 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white focus:text-gray-600 focus:shadow"
                       name="password"
                       placeholder="................."
+                      pattern="[a-zA-Z0-9]{6,}$"
+                      required
                       onChange={(element) => setPassword(element.target.value)}
                     />
                   </div>
@@ -223,6 +301,7 @@ const Register = () => {
 
                 <div className="mb-4">
                   <button
+                    type="submit"
                     className="grid w-full cursor-pointer select-none rounded-md border bg-newpurple py-2 px-5 text-center align-middle text-sm font-bold text-white shadow hover:border-[#75237a] hover:bg-[#75237a] hover:text-white focus:border-[#75237a] focus:bg-[#75237a] focus:text-white focus:shadow-none tracking-wide"
                     onClick={onSubmit}
                   >

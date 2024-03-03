@@ -2,13 +2,22 @@
 import { React, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Navbar2 from "../components/navbar2";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Complaint = () => {
   const [fullname, setFullName] = useState("");
   const [rollNumber, setRollNumber] = useState("");
   const [description, setDescription] = useState("");
   const [issue, setIssue] = useState("");
+
+  const options = ["Food", "Water", "Electricity", "Hostel_affairs"];
+
+  const handleOptionChange = (e) => {
+    setIssue(e.target.value);
+    // console.log(e.target.value);
+  };
+
   const navigate = useNavigate();
   const onSubmitForm = async (e) => {
     e.preventDefault();
@@ -16,7 +25,7 @@ const Complaint = () => {
     try {
       // Basic form validation (customize as needed)
       if (!fullname || !rollNumber || !description || !issue) {
-        console.error("All fields are required.");
+        toast.warning("Please fill out all the fields");
         return;
       }
 
@@ -42,8 +51,10 @@ const Complaint = () => {
 
       if (!response.data.success) {
         console.error("Complaint registration failed:", response.data);
+        toast.warning("Complaint registration failed");
       } else {
         console.log("Complaint registered successfully:", response.data);
+        toast.success("Complaint registered successfully");
         navigate("/dashboard");
       }
     } catch (error) {
@@ -51,10 +62,8 @@ const Complaint = () => {
     }
   };
 
-
   return (
     <>
-      <Navbar2 />
       <div className="flex min-h-screen w-full items-center justify-center bg-gray-50">
         <div className="relative mt-20 border border-gray-100 shadow-gray-500/20 max-w-md bg-white rounded-lg shadow-lg">
           <div className="relative border-b border-gray-300 p-4 py-2 ">
@@ -73,34 +82,52 @@ const Complaint = () => {
               placeholder="Enter your name"
               onChange={(e) => setFullName(e.target.value)}
             />
-            <div className="flex gap-2">
+            <div className="flex flex-1 gap-2">
               <input
                 id="rollnumber"
                 type="text"
-                className="w-full sm:w-auto my-2 resize-y overflow-auto rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-orange-500 focus:outline-none "
+                maxLength={9}
+                className="w-1/2 my-2 resize-y overflow-auto rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-orange-500 focus:outline-none "
                 placeholder="Roll number"
                 onChange={(e) => setRollNumber(e.target.value)}
               />
-              <select
+              {/* <select
                 id="issue"
                 className="w-full sm:w-auto my-2 resize-y overflow-auto rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-orange-500 focus:outline-none"
                 onChange={(e) => setIssue(e.target.value)}
               >
-                <option disabled value="" selected style={{ color: "#888888" }}>
+                <option
+                  // disabled
+                  defaultValue="Issue Regarding"
+                  // style={{ color: "#888888" }}
+                >
                   Issue regarding
                 </option>
-                <option value="food">Food</option>
-                <option value="water">Water</option>
-                <option value="electricity">Electricity</option>
-                <option value="hostel_affairs">Hostel Affairs</option>
+                <option defaultValue="food">Food</option>
+                <option defaultValue="water">Water</option>
+                <option defaultValue="electricity">Electricity</option>
+                <option defaultValue="hostel_affairs">Hostel Affairs</option>
+              </select> */}
+              <select
+                value={issue}
+                onChange={handleOptionChange}
+                className="w-1/2 my-2 resize-y overflow-auto rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-orange-500 focus:outline-none "
+              >
+                <option value="Issue regarding">Issue regarding</option>
+                {options.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
               </select>
             </div>
-            <label className="mt-5 mb-2 inline-block max-w-full">
+            <label className="mt-5 mb-2 mx-1 inline-block max-w-full">
               Brief the problem you are facing
             </label>
             <textarea
               id="about"
-              className="mb-8 w-full resize-y overflow-auto rounded-lg border border-gray-300 px-6 py-6 shadow-sm focus:border-orange-500 focus:outline-none hover:border-white-500"
+              rows="5"
+              className="mb-8 w-full resize-y overflow-auto rounded-lg border border-gray-300 p-3 shadow-sm focus:border-orange-500 focus:outline-none hover:border-white-500"
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
             <button

@@ -1,21 +1,21 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import TableData from "./tabledata";
 
 const Categories = (props) => {
-  const [id, setId] = useState("");
-
   return (
-    <div className="container px-5 py-3 mx-auto">
-      <div className="px-2 w-full">
-        <Link
-          className="h-full flex items-center border-newpurple border-2 p-4 rounded-lg text-gray-900 title-font font-medium"
-          to="/complaint"
+    <div className="w-full mx-auto my-4">
+      <div className="px-2 ">
+        <button
+          className="w-full text- flex items-center border-b-2  p-4 hover:border-b-2 hover:border-orange-500 text-lg text-gray-800 font-medium"
+          onClick={() => {
+            props.fun();
+            // console.log(props.issue);
+          }}
         >
-          {props.category}
-        </Link>
+          {props.name}
+        </button>
       </div>
     </div>
   );
