@@ -139,7 +139,7 @@ const Dashboard = () => {
               <div className="px-2 w-full">
                 <Link
                   className="h-full flex items-center border-newpurple border-2 p-4 rounded-lg text-gray-900 title-font font-medium"
-                  to="/tabledata"
+                  to="/prevcomplaints"
                 >
                   View Previous Complaints
                 </Link>

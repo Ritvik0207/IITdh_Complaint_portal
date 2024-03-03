@@ -22,6 +22,16 @@ const complaintSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    isApproved: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
+    isDone: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
 }, {
     timestamps: true // Add timestamps option to enable createdAt and updatedAt fields
 });
