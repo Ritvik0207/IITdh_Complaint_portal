@@ -5,8 +5,21 @@ const bcrypt = require("bcrypt");
 const Complaint = require("../models/complaintModel");
 const { ObjectId } = require("mongoose").Types;
 const registerUser = asyncHandler(async (req, res) => {
+<<<<<<< HEAD
     const { name, email, password, room_no, wing, hostel_no, mobile_number } =
         req.body;
+=======
+  const {
+    name,
+    email,
+    password,
+    room_no,
+    wing,
+    hostel_no,
+    mobile_number,
+    roll_no,
+  } = req.body;
+>>>>>>> 437fdc8ea07a13da1c8680c081d39d441ba64930
 
     if (!name || !email || !password) {
         return res
@@ -25,6 +38,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+<<<<<<< HEAD
     const user = await User.create({
         name,
         email,
@@ -33,6 +47,32 @@ const registerUser = asyncHandler(async (req, res) => {
         wing,
         hostel_no,
         mobile_number,
+=======
+  const user = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+    roll_no,
+    room_no,
+    wing,
+    hostel_no,
+    mobile_number,
+  });
+
+  if (user) {
+    res.status(201).json({
+      success: true,
+      _id: user._id,
+      name: user.name,
+      roll_no: user.roll_no,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      room_no: user.room_no,
+      wing: user.wing,
+      hostel_no: user.hostel_no,
+      mobile_number: user.mobile_number,
+      token: generateToken(user._id),
+>>>>>>> 437fdc8ea07a13da1c8680c081d39d441ba64930
     });
 
     if (user) {
