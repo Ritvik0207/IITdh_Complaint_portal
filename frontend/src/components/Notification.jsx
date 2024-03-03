@@ -12,7 +12,7 @@ const Notification = () => {
       newestOnTop={false}
       closeOnClick
       rtl={false}
-      pauseOnFocusLoss
+      // pauseOnFocusLoss
       draggable
       pauseOnHover={false}
       theme="light"

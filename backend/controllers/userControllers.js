@@ -5,8 +5,16 @@ const bcrypt = require("bcrypt");
 const Complaint = require("../models/complaintModel");
 const { ObjectId } = require("mongoose").Types;
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, room_no, wing, hostel_no, mobile_number } =
-    req.body;
+  const {
+    name,
+    email,
+    password,
+    room_no,
+    wing,
+    hostel_no,
+    mobile_number,
+    roll_no,
+  } = req.body;
 
   if (!name || !email || !password) {
     return res
@@ -29,6 +37,7 @@ const registerUser = asyncHandler(async (req, res) => {
     name,
     email,
     password: hashedPassword,
+    roll_no,
     room_no,
     wing,
     hostel_no,
@@ -40,6 +49,7 @@ const registerUser = asyncHandler(async (req, res) => {
       success: true,
       _id: user._id,
       name: user.name,
+      roll_no: user.roll_no,
       email: user.email,
       isAdmin: user.isAdmin,
       room_no: user.room_no,
