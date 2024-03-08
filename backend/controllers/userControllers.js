@@ -103,6 +103,11 @@ const authUser = asyncHandler(async (req, res) => {
       res.status(500);
       throw new Error("Some Error occurred");
     }
+  } else {
+    return res
+      .status(400)
+      .json({ success: false, message: "User already exists" });
+
   }
 });
 
@@ -176,6 +181,7 @@ const getUserComplaints = async (req, res) => {
       .json({ success: false, error: "Failed to fetch complaints" });
   }
 };
+
 
 module.exports = {
   registerComplaint,

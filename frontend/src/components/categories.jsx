@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from "react";
-import TableData from "./tabledata";
+import React from "react";
 
 const Categories = (props) => {
   return (
@@ -10,8 +9,7 @@ const Categories = (props) => {
         <button
           className="w-full text- flex items-center border-b-2  p-4 hover:border-b-2 hover:border-orange-500 text-lg text-gray-800 font-medium"
           onClick={() => {
-            props.fun();
-            // console.log(props.issue);
+            props.fun(props.issue);
           }}
         >
           {props.name}

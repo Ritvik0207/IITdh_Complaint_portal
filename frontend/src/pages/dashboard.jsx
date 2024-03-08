@@ -15,7 +15,10 @@ const Dashboard = () => {
   const [isCatSelected, setCatSelected] = useState(false);
   const [complaints, setComplaints] = useState([]);
   const [issue, setIssue] = useState("");
-  const navigate = useNavigate;
+  const [totalComplaintsCount, setTotalComplaintsCount] = useState(0);
+  const [approvedComplaintsCount, setApprovedComplaintsCount] = useState(0);
+  const [pendingComplaintsCount, setPendingComplaintsCount] = useState(0);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     navigate("/complaint");
@@ -25,6 +28,7 @@ const Dashboard = () => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo")); // for user details
     if (userInfo && userInfo.isAdmin) {
       setIsAdmin(true);
+      fetchData();
     } else {
       fetchData();
     }
@@ -53,6 +57,18 @@ const Dashboard = () => {
     }
   };
 
+  useEffect(() => {
+    // Calculate complaint counts
+    const totalComplaintsCount = complaints.length;
+    const approvedComplaintsCount = complaints.filter(complaint => complaint.isApproved).length;
+    const pendingComplaintsCount = complaints.filter(complaint => !complaint.isApproved && !complaint.isDone).length;
+
+    // Pass complaint counts to Adminview
+    setTotalComplaintsCount(totalComplaintsCount);
+    setApprovedComplaintsCount(approvedComplaintsCount);
+    setPendingComplaintsCount(pendingComplaintsCount);
+  }, [complaints]);
+
   return (
     <>
       {isAdmin ? (
@@ -62,43 +78,45 @@ const Dashboard = () => {
           </h1>
           <div className="flex flex-row max-sm:flex-col h-full">
             <div className="flex flex-col mt-10 w-1/4 ">
-              {/* <div className=""> */}
               <Categories
                 name="Food related issues"
                 issue="Food"
-                fun={() => {
+                fun={(issue) => {
                   setCatSelected(true);
-                  setIssue("Food");
+                  setIssue(issue);
                 }}
               />
               <Categories
                 name="Water related issues"
                 issue="Water"
-                fun={() => {
+                fun={(issue) => {
                   setCatSelected(true);
-                  setIssue("Water");
+                  setIssue(issue);
                 }}
               />
               <Categories
                 name="Electricity related issues"
                 issue="Electricity"
-                fun={() => {
+                fun={(issue) => {
                   setCatSelected(true);
-                  setIssue("Electricity");
+                  setIssue(issue);
                 }}
               />
               <Categories
                 name="Hostel Affaires"
                 issue="Hostel_affairs"
-                fun={() => {
+                fun={(issue) => {
                   setCatSelected(true);
-                  setIssue("Hostel_affairs");
+                  setIssue(issue);
                 }}
               />
-              {/* </div> */}
             </div>
             <div className=" flex flex-1 justify-center items-center ps-10">
-              {isCatSelected ? <TableData issue={issue} /> : <Adminview />}
+              {isCatSelected ? <TableData issue={issue} /> : <Adminview
+                totalComplaintsCount={totalComplaintsCount}
+                approvedComplaintsCount={approvedComplaintsCount}
+                pendingComplaintsCount={pendingComplaintsCount}
+              />}
             </div>
           </div>
         </div>

@@ -6,6 +6,7 @@ const {
   getComplaint,
   getComplaintsByCategory,
   getUserComplaints,
+
 } = require("../controllers/userControllers");
 const { protect } = require("../middleware/authMiddleware");
 
@@ -17,4 +18,5 @@ router.post("/postcomplaint", protect, registerComplaint);
 router.get("/getcomplaints", protect, getComplaint);
 router.get("/getcomplaintbycategory", protect, getComplaintsByCategory);
 router.get("/usercomplaints", protect, getUserComplaints);
+
 module.exports = router;

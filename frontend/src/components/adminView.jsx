@@ -1,7 +1,9 @@
-import React from "react";
-// import { button } from "react-router-dom";
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const Adminview = () => {
+const Adminview = ({ totalComplaintsCount, approvedComplaintsCount, pendingComplaintsCount }) => {
   return (
     <>
       <div className="flex justify-center flex-wrap w-full gap-16">
@@ -10,7 +12,7 @@ const Adminview = () => {
             Total Complaints
           </p>
           <p className="text-4xl font-palanquin font-bold text-center mt-5">
-            25
+            {totalComplaintsCount}
           </p>
         </div>
         <div className="">
@@ -18,7 +20,7 @@ const Adminview = () => {
             Approved Complaints
           </p>
           <p className="text-4xl font-palanquin font-bold text-center mt-5">
-            12
+            {approvedComplaintsCount}
           </p>
         </div>
         <div className="">
@@ -26,7 +28,7 @@ const Adminview = () => {
             Pending Complaints
           </p>
           <p className="text-4xl font-palanquin font-bold text-center mt-5">
-            4
+            {pendingComplaintsCount}
           </p>
         </div>
       </div>
