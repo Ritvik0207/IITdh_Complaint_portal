@@ -1,6 +1,6 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -88,6 +88,9 @@ const TableData = (props) => {
                     Description
                   </th>
                   <th scope="col" className="px-6 py-4 text-lg">
+                    Upvotes
+                  </th>
+                  <th scope="col" className="px-6 py-4 text-lg">
                     Work Request
                   </th>
                 </tr>
@@ -107,6 +110,9 @@ const TableData = (props) => {
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-base">
                         {complaint.description}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4 text-base">
+                        {complaint.upvoteCount}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
                         {!complaint.isApproved ? (

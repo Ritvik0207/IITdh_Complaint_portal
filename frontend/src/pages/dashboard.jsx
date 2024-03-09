@@ -30,6 +30,8 @@ const Dashboard = () => {
       setIsAdmin(true);
       fetchData();
     } else {
+      setIsAdmin(false);
+
       fetchData();
     }
   }, []);
@@ -48,13 +50,17 @@ const Dashboard = () => {
       );
 
       if (response.data.success) {
-        setComplaints(response.data.complaints);
+        // Sort complaints by upvote count in descending order
+        const sortedComplaints = response.data.complaints.sort((a, b) => b.upvoteCount - a.upvoteCount);
+        setComplaints(sortedComplaints);
+
       } else {
         throw new Error("Failed to fetch complaints");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+
   };
 
   useEffect(() => {
@@ -67,10 +73,12 @@ const Dashboard = () => {
     setTotalComplaintsCount(totalComplaintsCount);
     setApprovedComplaintsCount(approvedComplaintsCount);
     setPendingComplaintsCount(pendingComplaintsCount);
+
   }, [complaints]);
 
   return (
     <>
+
       {isAdmin ? (
         <div className="flex flex-col pt-28 px-10 min-h-screen">
           <h1 className="text-3xl font-bold mb-8 pb-2 text-[#89288f] border-b-gray-400 border-b-2">
@@ -133,6 +141,9 @@ const Dashboard = () => {
                     category={complaint.issue}
                     heading={"Problems regarding " + complaint.issue}
                     description={complaint.description}
+                    upvoteCount={complaint.upvoteCount}
+                    complaintId={complaint._id}
+                    upvotedBy={complaint.upvotedBy}
                   />
                 ))}
               </div>

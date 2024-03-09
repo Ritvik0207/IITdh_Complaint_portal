@@ -32,6 +32,14 @@ const complaintSchema = new mongoose.Schema({
         required: true,
         default: false,
     },
+    upvoteCount: {
+        type: Number,
+        default: 0,
+    },
+    upvotedBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User' // Reference the User model if you have one
+    }],
 }, {
     timestamps: true // Add timestamps option to enable createdAt and updatedAt fields
 });

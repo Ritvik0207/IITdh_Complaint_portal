@@ -182,6 +182,40 @@ const getUserComplaints = async (req, res) => {
   }
 };
 
+const setUpvote = async (req, res) => {
+  try {
+    // Check if user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
+    // Find the complaint by ID
+    const complaint = await Complaint.findById(req.params.id);
+    if (!complaint) {
+      return res.status(404).json({ success: false, message: 'Complaint not found' });
+    }
+
+    // Check if the user has already upvoted this complaint
+    if (complaint.upvotedBy.includes(req.user._id)) {
+      return res.status(200).json({ success: false, message: 'You have already upvoted this complaint' });
+    }
+
+    // Increment the upvote count
+    complaint.upvoteCount++;
+    // Add the user to the list of upvoters
+    complaint.upvotedBy.push(req.user._id);
+    // Save the updated complaint
+    await complaint.save();
+
+    // Return success response
+    return res.status(200).json({ success: true, message: 'Complaint upvoted successfully' });
+  } catch (error) {
+    console.error('Error upvoting complaint:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+
+}
+
 
 module.exports = {
   registerComplaint,
@@ -190,4 +224,5 @@ module.exports = {
   getComplaint,
   getComplaintsByCategory,
   getUserComplaints,
+  setUpvote
 };
