@@ -3,29 +3,10 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const TableData = (props) => {
   const [complaints, setComplaints] = useState([]);
-
-  const handleAssignClick = async (complaintId) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:5000/api/user/complaints/${complaintId}`
-      );
-
-      setComplaints((prevComplaints) =>
-        prevComplaints.filter((complaint) => complaint._id !== complaintId)
-      );
-
-      if (response.data.success) {
-        console.log("Complaint marked as done");
-      } else {
-        console.log("Failed to mark complaint as done");
-      }
-    } catch (error) {
-      console.error("Error marking complaint as done:", error);
-    }
-  };
 
   useEffect(() => {
     fetchData();
@@ -38,7 +19,7 @@ const TableData = (props) => {
       const response = await axios.get(
         "http://localhost:5000/api/user/getcomplaintbycategory",
         {
-          params: { issue: props.issue }, // Sending issue as a query parameter
+          params: { issue: props.issue },
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -48,6 +29,44 @@ const TableData = (props) => {
       setComplaints(response.data.complaints);
     } catch (error) {
       console.error("Error fetching data:", error);
+    }
+  };
+
+  const updateStatus = async (complaintId, isApproved) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("userInfo")).token;
+
+      const response = await axios.put(
+        "http://localhost:5000/api/admin/updatestatus",
+        { complaintId, isApproved },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        if (!isApproved) {
+          // If complaint is rejected, delete it from the UI
+          const updatedComplaints = complaints.filter((complaint) => complaint._id !== complaintId);
+          toast.success(response.data.message);
+          setComplaints(updatedComplaints);
+        } else {
+          // If complaint is approved, update its status
+          const updatedComplaints = complaints.map((complaint) =>
+            complaint._id === complaintId
+              ? { ...complaint, isApproved } // Update the isApproved field of the matching complaint
+              : complaint
+          );
+          toast.success(response.data.message);
+          setComplaints(updatedComplaints);
+        }
+      } else {
+        console.log("Failed to update complaint status");
+      }
+    } catch (error) {
+      console.error("Error updating complaint status:", error);
     }
   };
 
@@ -69,7 +88,7 @@ const TableData = (props) => {
                     Description
                   </th>
                   <th scope="col" className="px-6 py-4 text-lg">
-                    Work Done
+                    Work Request
                   </th>
                 </tr>
               </thead>
@@ -90,12 +109,26 @@ const TableData = (props) => {
                         {complaint.description}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        <button
-                          onClick={() => handleAssignClick(complaint._id)}
-                          className="bg-green-500 text-white px-2 py-1 rounded-md"
-                        >
-                          Mark as Done
-                        </button>
+                        {!complaint.isApproved ? (
+                          <>
+                            <button
+                              onClick={() => updateStatus(complaint._id, true)}
+                              className="bg-green-500 text-white px-2 py-1 rounded-md mr-2"
+                            >
+                              Approve
+                            </button>
+                            <button
+                              onClick={() => updateStatus(complaint._id, false)}
+                              className="bg-red-500 text-white px-2 py-1 rounded-md"
+                            >
+                              Reject
+                            </button>
+                          </>
+                        ) : (
+                          <span className="flex justify-center items-center text-green-600 h-full">
+                            Approved
+                          </span>
+                        )}
                       </td>
                     </tr>
                   ))}
