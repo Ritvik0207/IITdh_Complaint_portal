@@ -46,9 +46,9 @@ const Majorissues = (props) => {
   return (
     <div className="p-6 bg-white rounded-lg shadow-md mb-6">
       <div className="flex justify-between items-center mb-4">
-        <div className="flex flex-col">
+        <div>
           <span className="font-bold text-lg text-gray-700">{props.category}</span>
-          <span className="font-semibold text-sm text-gray-600 mt-1">{props.timestamp}</span>
+          <span className="block text-sm text-gray-600 mt-1">{props.timestamp}</span>
         </div>
         <div className="flex items-center">
           <button
@@ -72,16 +72,16 @@ const Majorissues = (props) => {
           </span>
         </div>
       </div>
-      <h2 className="text-xl font-medium text-gray-900 mb-2">
-        {props.heading}
-      </h2>
-      <p className="text-gray-700 leading-relaxed mb-4">
-        <span className="font-semibold">Roll No:</span> {props.roll_no} <br />
-        <span className="font-semibold">Description:</span> {props.description}
-      </p>
+      <div className="text-gray-700 leading-relaxed mb-4">
+        <div className="mb-2">
+          <span className="font-semibold">Complaint ID:</span> {props.complaintId}
+        </div>
+        <div className="mb-2">
+          <span className="font-semibold">Description:</span> {props.description}
+        </div>
+      </div>
     </div>
   );
 };
 
 export default Majorissues;
-
