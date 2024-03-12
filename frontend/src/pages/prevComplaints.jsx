@@ -52,11 +52,11 @@ const PrevComplaints = () => {
                                     <th scope="col" className="px-6 py-4 text-lg">
                                         Status
                                     </th>
-                                    {complaints.some(complaint => complaint.isApproved) && (
+                                    {/* {complaints.some(complaint => complaint.isApproved) && (
                                         <th scope="col" className="px-6 py-4 text-lg">
                                             Completion
                                         </th>
-                                    )}
+                                    )} */}
                                 </tr>
                             </thead>
                             <tbody>

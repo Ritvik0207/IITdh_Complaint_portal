@@ -1,12 +1,10 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 const TableData = (props) => {
   const [complaints, setComplaints] = useState([]);
+  const [approvedComplaints, setApprovedComplaints] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -61,6 +59,10 @@ const TableData = (props) => {
           );
           toast.success(response.data.message);
           setComplaints(updatedComplaints);
+
+          // Add the approved complaint to the approvedComplaints state
+          const approvedComplaint = complaints.find((complaint) => complaint._id === complaintId);
+          setApprovedComplaints([...approvedComplaints, approvedComplaint]);
         }
       } else {
         console.log("Failed to update complaint status");
@@ -69,6 +71,37 @@ const TableData = (props) => {
       console.error("Error updating complaint status:", error);
     }
   };
+
+  const markAsDone = async (complaintId) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("userInfo")).token;
+
+      const response = await axios.put(
+        "http://localhost:5000/api/admin/markasdone",
+        { complaintId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        // Remove the complaint from approvedComplaints when marked as done
+        const updatedApprovedComplaints = approvedComplaints.filter((complaint) => complaint._id !== complaintId);
+        setApprovedComplaints(updatedApprovedComplaints);
+        // Remove the complaint from complaints state to update the UI
+        const updatedComplaints = complaints.filter((complaint) => complaint._id !== complaintId);
+        setComplaints(updatedComplaints);
+        toast.success(response.data.message);
+      } else {
+        console.log("Failed to mark complaint as done");
+      }
+    } catch (error) {
+      console.error("Error marking complaint as done:", error);
+    }
+  };
+
 
   return (
     <div className="flex flex-col ps-5">
@@ -98,7 +131,7 @@ const TableData = (props) => {
               <tbody>
                 {Array.isArray(complaints) &&
                   complaints.map((complaint) => (
-                    <tr
+                    !complaint.isDone && (<tr
                       key={complaint._id}
                       className="border-b dark:border-neutral-500 text-black"
                     >
@@ -131,12 +164,20 @@ const TableData = (props) => {
                             </button>
                           </>
                         ) : (
-                          <span className="flex justify-center items-center text-green-600 h-full">
-                            Approved
-                          </span>
+                          <div>
+                            <span className="flex justify-center items-center text-green-600 h-full">
+                              Approved
+                            </span>
+                            <button
+                              onClick={() => markAsDone(complaint._id)}
+                              className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2"
+                            >
+                              Mark as Done
+                            </button>
+                          </div>
                         )}
                       </td>
-                    </tr>
+                    </tr>)
                   ))}
               </tbody>
             </table>
