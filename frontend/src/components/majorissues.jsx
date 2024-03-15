@@ -1,10 +1,16 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import PhotoModal from "../components/Modals/PhotoModal";
 
 const Majorissues = (props) => {
   const [vote, setVote] = useState(props.upvoteCount);
   const [upvoted, setUpvoted] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
 
   useEffect(() => {
     // Check if the complaint has been upvoted by the user
@@ -15,6 +21,13 @@ const Majorissues = (props) => {
       setUpvoted(false); // Reset upvote status when user changes
     }
   }, [props.upvotedBy]);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const upvotefn = async () => {
     if (!upvoted) {
@@ -79,7 +92,15 @@ const Majorissues = (props) => {
         <div className="mb-2">
           <span className="font-semibold">Description:</span> {props.description}
         </div>
+        <div className="flex flex-wrap">
+          {props.photos.length > 0 && (
+            <a className="text-blue-500 underline cursor-pointer" onClick={openModal}>
+              Show Photos
+            </a>
+          )}
+        </div>
       </div>
+      <PhotoModal isOpen={isModalOpen} onRequestClose={closeModal} photos={props.photos} />
     </div>
   );
 };

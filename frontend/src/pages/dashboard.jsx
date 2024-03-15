@@ -144,6 +144,7 @@ const Dashboard = () => {
                     upvoteCount={complaint.upvoteCount}
                     complaintId={complaint._id}
                     upvotedBy={complaint.upvotedBy}
+                    photos={complaint.photos}
                   />
                 ))}
               </div>

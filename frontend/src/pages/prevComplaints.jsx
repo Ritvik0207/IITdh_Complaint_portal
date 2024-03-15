@@ -1,9 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { FaCamera, FaTimes } from "react-icons/fa"; // Import camera and times icons
+import PhotoModal from "../components/Modals/PhotoModal";
 
 const PrevComplaints = () => {
     const [complaints, setComplaints] = useState([]);
+    const [selectedComplaint, setSelectedComplaint] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -28,6 +32,16 @@ const PrevComplaints = () => {
         fetchData();
     }, []);
 
+    const openModal = (complaint) => {
+        setSelectedComplaint(complaint);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setSelectedComplaint(null);
+        setIsModalOpen(false);
+    };
+
     return (
         <div className="container px-5 py-3 mx-auto">
             <h1 className="text-3xl font-semibold mb-4 mt-2">Your Complaints</h1>
@@ -45,6 +59,9 @@ const PrevComplaints = () => {
                                     </th>
                                     <th scope="col" className="px-6 py-4 text-lg">
                                         Description
+                                    </th>
+                                    <th scope="col" className="px-6 py-4 text-lg">
+                                        Photos
                                     </th>
                                     <th scope="col" className="px-6 py-4 text-lg">
                                         Is Assigned
@@ -71,6 +88,13 @@ const PrevComplaints = () => {
                                         <td className="whitespace-nowrap px-6 py-4 text-base">
                                             {complaint.description}
                                         </td>
+                                        <td className="whitespace-nowrap px-6 py-4 text-lg">
+                                            {complaint.photos.length > 0 ? (
+                                                <FaCamera className="text-green-500 cursor-pointer" onClick={() => openModal(complaint)} />
+                                            ) : (
+                                                <FaTimes className="text-red-500" />
+                                            )}
+                                        </td>
                                         <td className={`whitespace-nowrap px-6 py-4 ${complaint.isApproved ? 'text-green-500' : 'text-red-500'}`}>
                                             {complaint.isApproved ? "Approved" : "Pending"}
                                         </td>
@@ -86,6 +110,10 @@ const PrevComplaints = () => {
                     </div>
                 </div>
             </div>
+            {/* Render the PhotoModal with the selected complaint */}
+            {selectedComplaint && (
+                <PhotoModal isOpen={isModalOpen} onRequestClose={closeModal} photos={selectedComplaint.photos} />
+            )}
         </div>
     );
 }

@@ -1,6 +1,6 @@
 # Ignore node_modules directory
 node_modules/
-
+/backend/uploads/
 # Ignore build output
 dist/
 

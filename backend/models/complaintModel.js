@@ -22,6 +22,11 @@ const complaintSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    photos: [{
+        type: String, // Assuming you'll store file paths
+    }],
+
+
     isApproved: {
         type: Boolean,
         required: true,

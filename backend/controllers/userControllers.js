@@ -4,6 +4,7 @@ const generateToken = require("../config/generateToken");
 const bcrypt = require("bcrypt");
 const Complaint = require("../models/complaintModel");
 const { ObjectId } = require("mongoose").Types;
+const path = require('path'); // Import the path module
 
 const registerUser = asyncHandler(async (req, res) => {
   const {
@@ -111,35 +112,38 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
+
+
+
 const registerComplaint = async (req, res) => {
   try {
     const { fullname, rollNumber, description, issue } = req.body;
     const userId = req.user._id; // Access user ID from req.user
+    const photos = req.files.map(file => path.basename(file.path)); // Get filenames from req.files
 
-    if (!ObjectId.isValid(userId)) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid userId" });
-    }
     const newComplaint = new Complaint({
       userId,
       fullname,
       rollNumber,
       description,
       issue,
+      photos: photos // Store only filenames in the database
     });
+
     await newComplaint.save();
 
-    res
-      .status(201)
-      .json({ success: true, message: "Complaint registered successfully" });
+    res.status(201).json({ success: true, message: "Complaint registered successfully" });
   } catch (error) {
     console.error("An error occurred during complaint registration:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Failed to register complaint" });
+    res.status(500).json({ success: false, message: "Failed to register complaint" });
   }
 };
+
+module.exports = { registerComplaint };
+
+
+
+
 const getComplaint = async (req, res) => {
   try {
     const complaints = await Complaint.find();

@@ -1,10 +1,16 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { FaCamera, FaTimes } from "react-icons/fa"; // Import camera icon
 import { toast } from "react-toastify";
+import PhotoModal from "./Modals/PhotoModal";
 
 const TableData = (props) => {
   const [complaints, setComplaints] = useState([]);
   const [approvedComplaints, setApprovedComplaints] = useState([]);
+  const [selectedComplaint, setSelectedComplaint] = useState(null); // To store the selected complaint
+  const [isModalOpen, setIsModalOpen] = useState(false); // To control the modal visibility
 
   useEffect(() => {
     fetchData();
@@ -28,6 +34,16 @@ const TableData = (props) => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+  };
+
+  // Function to handle opening the modal and setting the selected complaint
+  const openModal = (complaint) => {
+    setSelectedComplaint(complaint);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   const updateStatus = async (complaintId, isApproved) => {
@@ -121,6 +137,9 @@ const TableData = (props) => {
                     Description
                   </th>
                   <th scope="col" className="px-6 py-4 text-lg">
+                    Photos
+                  </th>
+                  <th scope="col" className="px-6 py-4 text-lg">
                     Upvotes
                   </th>
                   <th scope="col" className="px-6 py-4 text-lg">
@@ -131,59 +150,83 @@ const TableData = (props) => {
               <tbody>
                 {Array.isArray(complaints) &&
                   complaints.map((complaint) => (
-                    !complaint.isDone && (<tr
-                      key={complaint._id}
-                      className="border-b dark:border-neutral-500 text-black"
-                    >
-                      <td className="whitespace-nowrap px-6 py-4 font-medium tracking-wider">
-                        {complaint.rollNumber}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-base">
-                        {complaint.issue}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-base">
-                        {complaint.description}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-base">
-                        {complaint.upvoteCount}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">
-                        {!complaint.isApproved ? (
-                          <>
+                    !complaint.isDone && (
+                      <tr
+                        key={complaint._id}
+                        className="border-b dark:border-neutral-500 text-black"
+                      >
+                        <td className="whitespace-nowrap px-6 py-4 font-medium tracking-wider">
+                          {complaint.rollNumber}
+                        </td>
+                        <td className="whitespace-nowrap px-6 py-4 text-base">
+                          {complaint.issue}
+                        </td>
+                        <td className="whitespace-nowrap px-6 py-4 text-base">
+                          {complaint.description}
+                        </td>
+                        <td className="whitespace-nowrap px-6 py-4 text-lg">
+                          {complaint.photos.length > 0 ? (
                             <button
-                              onClick={() => updateStatus(complaint._id, true)}
-                              className="bg-green-500 text-white px-2 py-1 rounded-md mr-2"
+                              onClick={() => openModal(complaint)}
+                              className="flex items-center justify-center text-blue-500 hover:text-blue-700"
                             >
-                              Approve
+                              <FaCamera className="mr-1" />
+                              View Photos
                             </button>
-                            <button
-                              onClick={() => updateStatus(complaint._id, false)}
-                              className="bg-red-500 text-white px-2 py-1 rounded-md"
-                            >
-                              Reject
-                            </button>
-                          </>
-                        ) : (
-                          <div>
-                            <span className="flex justify-center items-center text-green-600 h-full">
-                              Approved
-                            </span>
-                            <button
-                              onClick={() => markAsDone(complaint._id)}
-                              className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2"
-                            >
-                              Mark as Done
-                            </button>
-                          </div>
-                        )}
-                      </td>
-                    </tr>)
+                          ) : (
+                            <div className="flex items-center">
+                              <FaTimes className="text-red-500 mr-1" />
+                              <span className="text-red-400">No photos</span>
+                            </div>
+                          )}
+                        </td>
+                        <td className="whitespace-nowrap px-6 py-4 text-base">
+                          {complaint.upvoteCount}
+                        </td>
+
+                        <td className="whitespace-nowrap px-6 py-4">
+                          {!complaint.isApproved ? (
+                            <>
+                              <button
+                                onClick={() => updateStatus(complaint._id, true)}
+                                className="bg-green-500 text-white px-2 py-1 rounded-md mr-2"
+                              >
+                                Approve
+                              </button>
+                              <button
+                                onClick={() => updateStatus(complaint._id, false)}
+                                className="bg-red-500 text-white px-2 py-1 rounded-md"
+                              >
+                                Reject
+                              </button>
+                            </>
+                          ) : (
+                            <div>
+                              <span className="flex justify-center items-center text-green-600 h-full">
+                                Approved
+                              </span>
+                              <button
+                                onClick={() => markAsDone(complaint._id)}
+                                className="bg-blue-500 text-white px-2 py-1 rounded-md ml-2"
+                              >
+                                Mark as Done
+                              </button>
+                            </div>
+                          )}
+                        </td>
+
+                      </tr>
+                    )
                   ))}
               </tbody>
             </table>
           </div>
         </div>
       </div>
+      {/* Render the PhotoModal with the selected complaint */}
+      {selectedComplaint && (
+        <PhotoModal isOpen={isModalOpen} onRequestClose={closeModal} photos={selectedComplaint.photos} />
+      )}
     </div>
   );
 };
