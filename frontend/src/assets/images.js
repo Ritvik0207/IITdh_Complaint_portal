@@ -5,23 +5,6 @@ import logo from "./logo.png";
 import profile from "./profile.png";
 import homelogo from "./homelogo.png";
 import maillogo from "./maillogo.png";
-import RI from "./Rahul.jpeg";
-import PI from "./Praneeth.jpeg";
-import SI from "./Sanjana.jpeg";
-import RII from "./Ritvik.jpeg";
-import RAI from "./Ramesh.jpg";
+import upvote from "./upvote.png";
 
-export {
-  hamburger,
-  logo1,
-  logo2,
-  logo,
-  profile,
-  homelogo,
-  maillogo,
-  RI,
-  PI,
-  SI,
-  RII,
-  RAI,
-};
+export { hamburger, logo1, logo2, logo, profile, homelogo, maillogo, upvote };

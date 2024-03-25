@@ -47,7 +47,7 @@ const Login = ({ loginStatus }) => {
               <h4 className="mb-2 font-medium text-gray-700 xl:text-xl">
                 Welcome!
               </h4>
-              <p className="mb-6 text-gray-500">
+              <p className="mb-6 text-gray-500 text-md max-phone:text-sm">
                 Please sign-in to access your account
               </p>
               <form className="mb-4" action="#" method="POST">

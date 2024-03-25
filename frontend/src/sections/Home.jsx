@@ -3,13 +3,13 @@ import { homelogo } from "../assets/images";
 
 const Home = () => {
   return (
-    <section className="w-full min-h-screen flex flex-col xl:flex-row justify-center gap-10 max-container">
-      <div className="relative flex flex-col justify-center items-start w-full xl:w-3/5 pt-28 ps-10 max-xl:padding-x">
-        <h3 className="mb-6 font-palanquin font-bold text-orange-600 text-3xl max-sm:text-3xl">
+    <section className="w-full min-h-screen flex flex-row max-lg:flex-col justify-center gap-4">
+      <div className="relative flex flex-col justify-center items-start w-full max-lg:px-28 lg:w-3/5 pt-28 lg:px-20 max-[600px]:px-12">
+        <h3 className="mb-6 font-palanquin font-bold text-orange-500 text-3xl max-xl:text-[34px] max-md:text-2xl">
           Discover IUHD: Elevating Campus Living
         </h3>
 
-        <p className="mb-5 text-xl font-semibold">
+        <p className="mb-5 text-xl font-semibold max-md:text-lg">
           Welcome to IIT Dharwad's Pinnacle of Campus Assistance
         </p>
 
@@ -38,7 +38,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="relative flex flex-1 justify-center items-center xl:min-h-screen max-xl:py-40 bg-primary bg-hero bg-cover bg-center border-slate-400 border-2">
+      <div className="relative flex flex-1 justify-center items-center xl:min-h-screen bg-primary bg-hero bg-cover bg-center border-slate-400 border-2">
         <img
           src={homelogo}
           alt="Story set"

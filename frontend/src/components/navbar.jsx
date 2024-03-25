@@ -4,25 +4,21 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { hamburger, logo1, logo2, profile } from "../assets/images";
 import Profile from "./profile";
+import Hamburger from "./hamburger";
 
 const Navbar = ({ isLoggedIn, loginStatus }) => {
-  const [activeNavLink, setActiveNavLink] = useState("home");
   const [showDropdown, setShowDropdown] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
   const navigate = useNavigate();
+  const info = localStorage.getItem("userInfo");
 
-  if (localStorage.getItem("userInfo")) {
+  if (info) {
     loginStatus(true);
   }
 
   const toggleProfile = () => {
     setShowProfile(!showProfile);
-  };
-
-  const handleNavLinkClick = (navLink) => {
-    setActiveNavLink(navLink);
-    setShowDropdown(false);
   };
 
   const toggleDropdown = () => {
@@ -36,13 +32,9 @@ const Navbar = ({ isLoggedIn, loginStatus }) => {
   };
 
   return (
-    <header className="px-8 sm:px-16 py-3 fixed z-30 w-full bg-[#89288f]">
-      <nav className="flex justify-between items-center max-container">
-        <Link
-          to={"/"}
-          className="flex"
-          onClick={() => handleNavLinkClick("home")}
-        >
+    <header className="px-8 py-3 fixed z-30 w-full bg-newpurple max-phone:px-4 ">
+      <nav className="flex justify-between items-center">
+        <Link to={"/"} className="flex">
           <img
             src={logo1}
             alt="college logo"
@@ -59,7 +51,17 @@ const Navbar = ({ isLoggedIn, loginStatus }) => {
           />
         </Link>
 
-        <div className="flex justify-end max-lg:hidden">
+        <div className="hidden max-[600px]:block">
+          <div
+            className="cursor-pointer p-1 border-2 border-newpurple rounded-md hover:border-orange-500"
+            onClick={toggleDropdown}
+          >
+            <img src={hamburger} alt="Hamburger Logo" width={25} height={25} />
+          </div>
+          {showDropdown && <Hamburger toggleDropdown={toggleDropdown} />}
+        </div>
+
+        <div className="flex justify-end max-[600px]:hidden">
           {isLoggedIn ? (
             <div className="flex gap-4 justify-between items-center">
               <button
@@ -68,19 +70,23 @@ const Navbar = ({ isLoggedIn, loginStatus }) => {
               >
                 Sign Out
               </button>
-              <button
-                className="rounded-full border-[3px] border-newpurple"
-                onClick={toggleProfile}
-              >
-                <img
-                  className="rounded-full hover:ring-[3px] ring-orange-500  border-newpurple"
-                  src={profile}
-                  alt="profile"
-                  height={38}
-                  width={38}
-                />
-                {showProfile ? <Profile onClose={toggleProfile} /> : ""}
-              </button>
+              {info.isAdmin ? (
+                <button
+                  className="rounded-full border-[3px] border-newpurple"
+                  onClick={toggleProfile}
+                >
+                  <img
+                    className="rounded-full hover:ring-[3px] ring-orange-500  border-newpurple"
+                    src={profile}
+                    alt="profile"
+                    height={38}
+                    width={38}
+                  />
+                  {showProfile ? <Profile onClose={toggleProfile} /> : ""}
+                </button>
+              ) : (
+                ""
+              )}
             </div>
           ) : (
             <div className="flex gap-4 justify-between items-center">

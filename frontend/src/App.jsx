@@ -35,14 +35,6 @@ const App = () => {
           }
         />
         <Route
-          path="/contact"
-          element={
-            <PublicRoute>
-              <Contact />
-            </PublicRoute>
-          }
-        />
-        <Route
           path="/login"
           element={
             <PublicRoute>
@@ -86,7 +78,6 @@ const App = () => {
       </Routes>
     </Router>
   );
-  // return <AdminView />;
 };
 
 export default App;

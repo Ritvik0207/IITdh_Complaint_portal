@@ -25,6 +25,7 @@ export default {
         "pale-blue": "#F5F6FF",
         "white-400": "rgba(255, 255, 255, 0.80)",
         newpurple: "#89288f",
+        neworange: "#FAA519",
       },
       boxShadow: {
         "3xl": "0 10px 40px rgba(0, 0, 0, 0.1)",
@@ -35,6 +36,7 @@ export default {
       },
       screens: {
         wide: "1440px",
+        phone: "360px",
       },
     },
   },
