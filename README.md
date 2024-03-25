@@ -36,6 +36,6 @@ IUHD is a helpdesk site to streamline all the work requests in a single format. 
 
 Feel free to explore and contribute to the IITdh Unified HelpDesk project!
 
-Link for the demo: https://www.youtube.com/watch?v=G8wzyDV0KDw
+Link for the demo: https://drive.google.com/file/d/1VyVm8XcQiCnGRUxZCUL3DFCk1r_ybD2-/view?usp=sharing
 
 
