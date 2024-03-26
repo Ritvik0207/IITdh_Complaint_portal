@@ -36,8 +36,12 @@ const complaintSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-
     isApproved: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    isAssigned: {
       type: Boolean,
       required: true,
       default: false,

@@ -151,12 +151,28 @@ const getComplaintsByCategory = async (req, res) => {
   }
 };
 
+const getComplaintById = async (req, res) => {
+  try {
+    const complaintId = req.params.id;
+    const complaint = await Complaint.findById(complaintId);
+    if (!complaint) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Complaint not found" });
+    }
+    res.status(200).json({ success: true, complaint });
+  } catch (error) {
+    console.error("Error fetching complaints:", error);
+    res
+      .status(500)
+      .json({ success: false, error: "Failed to fetch complaints" });
+  }
+};
+
 const getUserComplaints = async (req, res) => {
   try {
     const userId = req.user._id;
-
     const complaints = await Complaint.find({ userId: userId });
-
     res.json({ success: true, complaints });
   } catch (error) {
     console.error("Error fetching complaints:", error);
@@ -214,6 +230,7 @@ module.exports = {
   registerComplaint,
   getComplaint,
   getComplaintsByCategory,
+  getComplaintById,
   getUserComplaints,
   setUpvote,
 };

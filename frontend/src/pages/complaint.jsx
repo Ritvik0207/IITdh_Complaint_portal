@@ -6,10 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 const Complaint = () => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-  const [fullname, setFullName] = useState(userInfo ? userInfo.name : "");
-  const [rollNumber, setRollNumber] = useState(
-    userInfo ? userInfo.roll_no : ""
-  );
+  const fullname = userInfo ? userInfo.name : "";
+  const rollNumber = userInfo ? userInfo.roll_no : "";
   const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
   const [charCount, setCharCount] = useState(0);
@@ -17,8 +15,9 @@ const Complaint = () => {
   const [photos, setPhotos] = useState([]);
   const [anonymous, setAnonymous] = useState(true);
 
-  const options = ["Food", "Water", "Electricity", "Hostel_affairs"];
+  const navigate = useNavigate();
 
+  const options = ["Food", "Water", "Electricity", "Hostel_affairs"];
   const handleOptionChange = (e) => {
     setIssue(e.target.value);
   };
@@ -43,8 +42,6 @@ const Complaint = () => {
   const handleAnonymousChange = () => {
     setAnonymous(!anonymous);
   };
-
-  const navigate = useNavigate();
 
   const onSubmitForm = async (e) => {
     e.preventDefault();
@@ -89,7 +86,7 @@ const Complaint = () => {
         console.error("Complaint registration failed:", response.data);
         toast.warning("Complaint registration failed");
       } else {
-        console.log("Complaint registered successfully:", response.data);
+        // console.log("Complaint registered successfully:", response.data);
         toast.success("Complaint registered successfully");
         navigate("/dashboard");
       }
@@ -158,7 +155,7 @@ const Complaint = () => {
                     id="subject"
                     type="text"
                     value={subject}
-                    maxLength={48}
+                    maxLength={45}
                     onChange={(e) => setSubject(e.target.value)}
                     className="w-full my-2 resize-y overflow-auto rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-orange-500 focus:outline-none"
                     placeholder="Subject"

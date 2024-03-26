@@ -1,14 +1,12 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Categories from "../components/categories";
 import TableData from "../components/tabledata";
 import Majorissues from "../components/majorissues";
 import { Link } from "react-router-dom";
-// import Details from "../components/details";
 import Adminview from "../components/adminview";
-// import { set } from "mongoose";
+import LoadingBar from "react-top-loading-bar";
 
 const Dashboard = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -16,22 +14,22 @@ const Dashboard = () => {
   const [complaints, setComplaints] = useState([]);
   const [complaintsCopy, setComplaintsCopy] = useState([]);
   const [issue, setIssue] = useState("");
-  const [filterBy, setFilterBy] = useState("");
+  const [filterBy, setFilterBy] = useState("votes");
   const [totalComplaintsCount, setTotalComplaintsCount] = useState(0);
   const [approvedComplaintsCount, setApprovedComplaintsCount] = useState(0);
   const [pendingComplaintsCount, setPendingComplaintsCount] = useState(0);
   const [selectedIssue, setSelectedIssue] = useState("");
-  const [filteredComplaints, setFilteredComplaints] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const loadingBar = useRef(null);
 
-  const handleCategoryFilter = (issue) => {
-    setSelectedIssue(issue);
-    if (issue === "All") {
+  const handleCategoryFilter = (category) => {
+    setSelectedIssue(category);
+    if (category === "All") {
       setComplaintsCopy(complaints);
     } else {
-      let filteredComplaints = complaints.filter(
-        (complaint) => complaint.issue === issue
+      const filteredComplaints = complaints.filter(
+        (complaint) => complaint.issue === category
       );
-      setFilteredComplaints(filteredComplaints);
       setComplaintsCopy(filteredComplaints);
     }
   };
@@ -45,7 +43,8 @@ const Dashboard = () => {
   const fetchData = async () => {
     try {
       const token = JSON.parse(localStorage.getItem("userInfo")).token;
-
+      setLoading(true);
+      loadingBar.current.continuousStart(); // Start the loading bar
       const response = await axios.get(
         "http://localhost:5000/api/user/getcomplaints",
         {
@@ -56,12 +55,22 @@ const Dashboard = () => {
       );
 
       if (response.data.success) {
-        // Sort complaints by upvote count in descending order
-        const sortedComplaints = response.data.complaints.sort(
-          (a, b) => b.upvoteCount - a.upvoteCount
-        );
+        let sortedComplaints = response.data.complaints;
+        // Sort complaints based on the selected option
+        if (filterBy === "votes") {
+          sortedComplaints = sortedComplaints.sort(
+            (a, b) => b.upvoteCount - a.upvoteCount
+          );
+        } else if (filterBy === "date") {
+          sortedComplaints = sortedComplaints.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+        }
+
         setComplaints(sortedComplaints);
         setComplaintsCopy(sortedComplaints);
+        loadingBar.current.complete();
+        setLoading(false); // Complete the loading bar
       } else {
         throw new Error("Failed to fetch complaints");
       }
@@ -71,7 +80,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo")); // for user details
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     if (userInfo && userInfo.isAdmin) {
       setIsAdmin(true);
       fetchData();
@@ -79,7 +88,7 @@ const Dashboard = () => {
       setIsAdmin(false);
       fetchData();
     }
-  }, []);
+  }, [filterBy]);
 
   useEffect(() => {
     // Calculate complaint counts
@@ -99,6 +108,7 @@ const Dashboard = () => {
 
   return (
     <>
+      <LoadingBar height={3} color="#f11946" ref={loadingBar} />
       {isAdmin ? (
         <div className="flex flex-col pt-28 px-10 min-h-screen">
           <h1 className="text-3xl font-bold mb-8 pb-2 text-[#89288f] border-b-gray-400 border-b-2">
@@ -163,7 +173,7 @@ const Dashboard = () => {
                 <div className="flex justify-center me-6">
                   <div className="flex gap-2 flex-wrap justify-center">
                     <button
-                      className="w-auto py-1 bg-orange-500 rounded-3xl font-palanquin font-medium text-xl text-white hover:bg-gray-100 border-2 border-transparent hover:border-gray-700 transition-colors"
+                      className="w-auto py-1 bg-orange-500 rounded-3xl font-palanquin font-medium text-xl text-white hover:bg-gray-100 border-2 border-transparent hover:border-gray-700 transition-colors hover:shadow-md"
                       onClick={() => {
                         handleCategoryFilter("Food");
                       }}
@@ -173,7 +183,7 @@ const Dashboard = () => {
                       </div>
                     </button>
                     <button
-                      className="w-auto py-1 bg-orange-500 rounded-3xl font-palanquin font-medium text-xl text-white hover:bg-gray-100 border-2 border-transparent hover:border-gray-700 transition-colors"
+                      className="w-auto py-1 bg-orange-500 rounded-3xl font-palanquin font-medium text-xl text-white hover:bg-gray-100 border-2 border-transparent hover:border-gray-700 transition-colors hover:shadow-md"
                       onClick={() => {
                         handleCategoryFilter("Water");
                       }}
@@ -183,7 +193,7 @@ const Dashboard = () => {
                       </div>
                     </button>
                     <button
-                      className="w-auto py-1 bg-orange-500 rounded-3xl font-palanquin font-medium text-xl text-white hover:bg-gray-100 border-2 border-transparent hover:border-gray-700 transition-colors"
+                      className="w-auto py-1 bg-orange-500 rounded-3xl font-palanquin font-medium text-xl text-white hover:bg-gray-100 border-2 border-transparent hover:border-gray-700 transition-colors hover:shadow-md"
                       onClick={() => {
                         handleCategoryFilter("Electricity");
                       }}
@@ -193,7 +203,7 @@ const Dashboard = () => {
                       </div>
                     </button>
                     <button
-                      className="w-auto py-1 bg-orange-500 rounded-3xl font-palanquin font-medium text-xl text-white hover:bg-gray-100 border-2 border-transparent hover:border-gray-700 transition-colors"
+                      className="w-auto py-1 bg-orange-500 rounded-3xl font-palanquin font-medium text-xl text-white hover:bg-gray-100 border-2 border-transparent hover:border-gray-700 transition-colors hover:shadow-md"
                       onClick={() => {
                         handleCategoryFilter("All");
                       }}
@@ -206,25 +216,31 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className="m-4">
-                {complaintsCopy.map((complaint) => (
-                  <Majorissues
-                    key={complaint._id}
-                    timestamp={new Date(complaint.createdAt).toLocaleString()}
-                    issue={complaint.issue}
-                    subject={complaint.subject}
-                    description={complaint.description}
-                    upvoteCount={complaint.upvoteCount}
-                    complaintId={complaint._id}
-                    upvotedBy={complaint.upvotedBy}
-                    photos={complaint.photos}
-                  />
-                ))}
+                {complaintsCopy.length == 0 && !loading ? (
+                  <h2 className="pt-30 font-palanquin font-semibold text-2xl text-orange-400 flex justify-center items-center h-full w-full pt-20">
+                    No complaints registered
+                  </h2>
+                ) : (
+                  complaintsCopy.map((complaint) => (
+                    <Majorissues
+                      key={complaint._id}
+                      timestamp={new Date(complaint.createdAt).toLocaleString()}
+                      issue={complaint.issue}
+                      subject={complaint.subject}
+                      description={complaint.description}
+                      upvoteCount={complaint.upvoteCount}
+                      complaintId={complaint._id}
+                      upvotedBy={complaint.upvotedBy}
+                      photos={complaint.photos}
+                    />
+                  ))
+                )}
               </div>
             </div>
           </section>
 
-          <section className="text-orange-500 body-font w-full lg:w-1/4 pt-28">
-            <div className="w-full p-1 flex items-center justify-start box-border mb-16 pe-10">
+          <section className="text-orange-500 body-font w-full lg:w-1/4">
+            <div className="w-full p-1 flex items-center justify-start box-border mb-16 pe-10 pt-28">
               <label
                 htmlFor="filter"
                 className="text-xl text-gray-600 mx-1 ms-1 tracking-wider font-semibold w-auto text-nowrap"
@@ -233,7 +249,7 @@ const Dashboard = () => {
               </label>
               <select
                 id="filter"
-                className="w-full ms-2 appearance-none rounded-lg border border-gray-400 px-4 py-2 shadow-sm focus:border-orange-500 focus:outline-none text-gray-500"
+                className="w-full ms-2 appearance-none rounded-lg border-2 border-gray-400 px-4 py-2 shadow-sm focus:border-orange-500 focus:outline-none text-gray-500 font-semibold"
                 value={filterBy}
                 onChange={(e) => setFilterBy(e.target.value)}
               >
@@ -242,23 +258,21 @@ const Dashboard = () => {
               </select>
             </div>
 
-            <div className=" font-medium text-xl px-2 py-3 cursor-default mt-20">
-              Complaint Status & New Complaints ?
-            </div>
-            <div className="container px-5 py-3 mx-auto">
-              <div className="px-2 w-full">
+            <div className="font-medium text-xl py-3 text-center space-y-3 flex flex-col justify-center items-center">
+              <div className="font-montserrat font-semibold w-full pb-5 text-lg">
+                Complaint Status & New Complaints ?
+              </div>
+              <div className="w-5/6">
                 <Link
-                  className="h-full flex items-center border-newpurple border-2 p-4 rounded-lg text-gray-900 title-font font-medium"
+                  className="h-full flex items-center border-newpurple border-2 p-4 rounded-lg text-gray-900 font-medium text-lg"
                   to="/complaint"
                 >
                   Register a Complaint
                 </Link>
               </div>
-            </div>
-            <div className="container px-5 py-3 mx-auto">
-              <div className="px-2 w-full">
+              <div className="w-5/6">
                 <Link
-                  className="h-full flex items-center border-newpurple border-2 p-4 rounded-lg text-gray-900 title-font font-medium"
+                  className="h-full flex items-center border-newpurple border-2 p-4 rounded-lg text-gray-900 font-medium text-lg"
                   to="/prevcomplaints"
                 >
                   View Previous Complaints

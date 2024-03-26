@@ -5,6 +5,7 @@ const {
   registerComplaint,
   getComplaint,
   getComplaintsByCategory,
+  getComplaintById,
   getUserComplaints,
   setUpvote,
 } = require("../controllers/userControllers");
@@ -39,6 +40,7 @@ router.post(
 
 router.get("/getcomplaints", protect, getComplaint);
 router.get("/getcomplaintbycategory", protect, getComplaintsByCategory);
+router.get("/getcomplaintbyId/:id", protect, getComplaintById);
 router.get("/usercomplaints", protect, getUserComplaints);
 router.post("/complaints/upvote/:id", protect, setUpvote);
 
