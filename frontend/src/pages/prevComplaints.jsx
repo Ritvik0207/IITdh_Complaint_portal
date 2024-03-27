@@ -109,7 +109,7 @@ const PrevComplaints = () => {
           sortedCompletedComplaints = completedComplaints.sort(
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
           );
-        } else if (filterBy === "status") {
+        } else if (filterBy === "progress") {
           sortedPendingComplaints = pendingComplaints.sort((a, b) => {
             const trueValuesA = [a.isApproved, a.isAssigned].filter(
               Boolean
@@ -185,7 +185,7 @@ const PrevComplaints = () => {
                   onChange={(e) => setFilterBy(e.target.value)}
                 >
                   <option value="date">Date</option>
-                  <option value="status">Status</option>
+                  <option value="progress">Progress</option>
                 </select>
                 <button
                   className="ms-1 p-2 border-2 border-gray-100 rounded-xl hover:bg-gray-100"
@@ -296,11 +296,10 @@ const PrevComplaints = () => {
                             {complaint.subject}
                             <button
                               className="border-2 border-transparent hover:bg-orange-100 rounded-full p-1"
-                              title={`${
-                                showDescription
-                                  ? "Show Description"
-                                  : "Hide Description"
-                              } `}
+                              title={`${showDescription
+                                ? "Show Description"
+                                : "Hide Description"
+                                } `}
                               onClick={() => toggleDescription(complaint._id)}
                             >
                               {showDescription[complaint._id] ? (
@@ -319,16 +318,14 @@ const PrevComplaints = () => {
                         <td className="px-4 pt-2.5 align-top box-border">
                           <div className="flex justify-center items-center">
                             <button
-                              className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors rounded-md px-3 py-1 border-2 hover:bg-gray-200 ${
-                                complaint.photos.length > 0
-                                  ? "cursor-pointer"
-                                  : "cursor-default"
-                              }`}
-                              title={` ${
-                                complaint.photos.length > 0
-                                  ? "View Attachments"
-                                  : "No Attached Images"
-                              }`}
+                              className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors rounded-md px-3 py-1 border-2 hover:bg-gray-200 ${complaint.photos.length > 0
+                                ? "cursor-pointer"
+                                : "cursor-default"
+                                }`}
+                              title={` ${complaint.photos.length > 0
+                                ? "View Attachments"
+                                : "No Attached Images"
+                                }`}
                               onClick={
                                 complaint.photos.length > 0
                                   ? () => openPhotoModal(complaint)
@@ -340,11 +337,10 @@ const PrevComplaints = () => {
                                 fill="#f2f2f2"
                                 viewBox="0 0 24 24"
                                 strokeWidth="1.75"
-                                stroke={`${
-                                  complaint.photos.length > 0
-                                    ? "#33ff33"
-                                    : "#ff3333"
-                                }`}
+                                stroke={`${complaint.photos.length > 0
+                                  ? "#33ff33"
+                                  : "#ff3333"
+                                  }`}
                                 className="w-6 h-6"
                               >
                                 <path
@@ -366,11 +362,10 @@ const PrevComplaints = () => {
                             <div className="grid grid-cols-3 gap-4 pointer-events-none">
                               <div className="flex justify-end">
                                 <div
-                                  className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                                    complaint.isApproved
-                                      ? "bg-[#62cf62] text-white"
-                                      : "bg-[#D9D9D9]"
-                                  }`}
+                                  className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${complaint.isApproved
+                                    ? "bg-[#62cf62] text-white"
+                                    : "bg-[#D9D9D9]"
+                                    }`}
                                 >
                                   {complaint.isApproved
                                     ? "Approved"
@@ -379,11 +374,10 @@ const PrevComplaints = () => {
                               </div>
                               <div className="flex justify-center">
                                 <div
-                                  className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                                    complaint.isAssigned
-                                      ? "bg-[#62cf62] text-white"
-                                      : "bg-[#D9D9D9]"
-                                  }`}
+                                  className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${complaint.isAssigned
+                                    ? "bg-[#62cf62] text-white"
+                                    : "bg-[#D9D9D9]"
+                                    }`}
                                 >
                                   {complaint.isAssigned
                                     ? "Assigned"
@@ -392,11 +386,10 @@ const PrevComplaints = () => {
                               </div>
                               <div className="flex justify-start">
                                 <div
-                                  className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                                    complaint.isDone
-                                      ? "bg-[#62cf62] text-white"
-                                      : "bg-[#D9D9D9]"
-                                  }`}
+                                  className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${complaint.isDone
+                                    ? "bg-[#62cf62] text-white"
+                                    : "bg-[#D9D9D9]"
+                                    }`}
                                 >
                                   {complaint.isDone ? "Done" : "Not Done"}
                                 </div>
@@ -474,11 +467,10 @@ const PrevComplaints = () => {
                             {complaint.subject}
                             <button
                               className="border-2 border-transparent hover:bg-orange-100 rounded-full p-1"
-                              title={`${
-                                showDescription
-                                  ? "Show Description"
-                                  : "Hide Description"
-                              } `}
+                              title={`${showDescription
+                                ? "Show Description"
+                                : "Hide Description"
+                                } `}
                               onClick={() => toggleDescription(complaint._id)}
                             >
                               {showDescription[complaint._id] ? (
@@ -496,16 +488,14 @@ const PrevComplaints = () => {
                         <td className="px-4 pt-2.5 align-top box-border">
                           <div className="flex justify-center items-center">
                             <button
-                              className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors rounded-md px-3 py-1 border-2 hover:bg-gray-200 ${
-                                complaint.photos.length > 0
-                                  ? "cursor-pointer"
-                                  : "cursor-default"
-                              }`}
-                              title={` ${
-                                complaint.photos.length > 0
-                                  ? "View Attachments"
-                                  : "No Attached Images"
-                              }`}
+                              className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors rounded-md px-3 py-1 border-2 hover:bg-gray-200 ${complaint.photos.length > 0
+                                ? "cursor-pointer"
+                                : "cursor-default"
+                                }`}
+                              title={` ${complaint.photos.length > 0
+                                ? "View Attachments"
+                                : "No Attached Images"
+                                }`}
                               onClick={
                                 complaint.photos.length > 0
                                   ? () => openPhotoModal(complaint)
@@ -517,11 +507,10 @@ const PrevComplaints = () => {
                                 fill="#f2f2f2"
                                 viewBox="0 0 24 24"
                                 strokeWidth="1.75"
-                                stroke={`${
-                                  complaint.photos.length > 0
-                                    ? "#33ff33"
-                                    : "#ff3333"
-                                }`}
+                                stroke={`${complaint.photos.length > 0
+                                  ? "#33ff33"
+                                  : "#ff3333"
+                                  }`}
                                 className="w-6 h-6"
                               >
                                 <path
@@ -540,8 +529,8 @@ const PrevComplaints = () => {
                         </td>
                         <td className="px-4 pt-3 align-top">
                           <div className="flex justify-center items-center">
-                            <div className="grid grid-cols-3 gap-4 pointer-events-none">
-                              <div className="flex justify-end">
+                            {/* <div className="grid grid-cols-3 gap-4 pointer-events-none"> */}
+                            {/* <div className="flex justify-end">
                                 <div
                                   className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                                     complaint.isApproved
@@ -553,8 +542,8 @@ const PrevComplaints = () => {
                                     ? "Approved"
                                     : "Not Approved"}
                                 </div>
-                              </div>
-                              <div className="flex justify-center">
+                              </div> */}
+                            {/* <div className="flex justify-center">
                                 <div
                                   className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                                     complaint.isAssigned
@@ -566,34 +555,31 @@ const PrevComplaints = () => {
                                     ? "Assigned"
                                     : "Not Assigned"}
                                 </div>
-                              </div>
-                              <div className="flex justify-start">
-                                <div
-                                  className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                                    complaint.isDone
-                                      ? "bg-[#62cf62] text-white"
-                                      : "bg-[#D9D9D9]"
+                              </div> */}
+                            <div className="flex justify-center">
+                              <div
+                                className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${complaint.isDone
+                                  ? "bg-[#62cf62] text-white"
+                                  : "bg-[#D9D9D9]"
                                   }`}
-                                >
-                                  {complaint.isDone ? "Done" : "Not Done"}
-                                </div>
+                              >
+                                {complaint.isDone ? "Done" : "Not Done"}
                               </div>
                             </div>
+                            {/* </div> */}
                           </div>
                         </td>
                         <td className="px-4 pt-4 align-top">
                           <div className="flex justify-center items-center">
                             <button
-                              className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors rounded-md px-3 py-1 border-2 hover:bg-gray-200 ${
-                                complaint.feedback
-                                  ? "cursor-default"
-                                  : "cursor-pointer"
-                              }`}
-                              title={`${
-                                complaint.feedback
-                                  ? "Feedback Submitted"
-                                  : "Give Feedback"
-                              }`}
+                              className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors rounded-md px-3 py-1 border-2 hover:bg-gray-200 ${complaint.feedback
+                                ? "cursor-default"
+                                : "cursor-pointer"
+                                }`}
+                              title={`${complaint.feedback
+                                ? "Feedback Submitted"
+                                : "Give Feedback"
+                                }`}
                               onClick={
                                 !complaint.feedback
                                   ? () => openFeedbackModal(complaint)
@@ -601,9 +587,8 @@ const PrevComplaints = () => {
                               }
                             >
                               <VscFeedback
-                                color={`${
-                                  complaint.feedback ? "green" : "red"
-                                }`}
+                                color={`${complaint.feedback ? "green" : "red"
+                                  }`}
                               />
                             </button>
                           </div>
