@@ -175,7 +175,9 @@ const Complaint = () => {
                     onChange={handleOptionChange}
                     className="w-full my-2 resize-y overflow-auto rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-orange-500 focus:outline-none"
                   >
-                    <option value="">Select an issue</option>
+                    <option value="" disabled>
+                      Select an issue
+                    </option>
                     {options.map((option) => (
                       <option key={option} value={option}>
                         {option}
@@ -254,17 +256,20 @@ const Complaint = () => {
                 </div>
               </div>
 
-              <div className="flex items-center">
+              <div
+                className={`flex items-center justify-start gap-1.5 ${
+                  issue == "Hostel_affairs" ? "hidden" : ""
+                } `}
+              >
                 <input
                   type="checkbox"
                   id="anonymousCheckbox"
-                  // checked={anonymous}
                   onChange={handleAnonymousChange}
                   className="h-4 w-4 border-gray-500 shadow-sm focus:border-orange-500 mx-1"
                 />
                 <label
                   htmlFor="anonymousCheckbox"
-                  className="ml-1 text-gray-900 font-montserrat"
+                  className="text-gray-900 font-montserrat"
                 >
                   Post complaint on Dashboard
                 </label>

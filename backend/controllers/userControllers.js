@@ -121,6 +121,32 @@ const registerComplaint = async (req, res) => {
   }
 };
 
+const submitFeedback = async (req, res) => {
+  try {
+    const { complaintId, feedback } = req.body;
+    console.log(complaintId);
+    // Update the feedback field of the complaint
+    const complaint = await Complaint.findByIdAndUpdate(
+      complaintId,
+      { feedback: feedback },
+      { new: true }
+    );
+    if (complaint) {
+      res
+        .status(200)
+        .json({ success: true, message: "Feedback submitted successfully" });
+    } else {
+      res.status(404).json({ success: false, message: "Some error occured" });
+    }
+  } catch (error) {
+    // Handle errors
+    console.error("An error occurred during feedback submission:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to submit feedback" });
+  }
+};
+
 const getComplaint = async (req, res) => {
   try {
     const complaints = await Complaint.find({
@@ -233,4 +259,5 @@ module.exports = {
   getComplaintById,
   getUserComplaints,
   setUpvote,
+  submitFeedback,
 };

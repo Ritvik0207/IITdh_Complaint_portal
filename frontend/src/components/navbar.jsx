@@ -11,7 +11,7 @@ const Navbar = ({ isLoggedIn, loginStatus }) => {
   const [showProfile, setShowProfile] = useState(false);
 
   const navigate = useNavigate();
-  const info = localStorage.getItem("userInfo");
+  const info = JSON.parse(localStorage.getItem("userInfo"));
 
   if (info) {
     loginStatus(true);
@@ -70,7 +70,7 @@ const Navbar = ({ isLoggedIn, loginStatus }) => {
               >
                 Sign Out
               </button>
-              {info.isAdmin ? (
+              {!info.isAdmin ? (
                 <button
                   className="rounded-full border-[3px] border-newpurple"
                   onClick={toggleProfile}

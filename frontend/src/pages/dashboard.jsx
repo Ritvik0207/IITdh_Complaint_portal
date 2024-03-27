@@ -224,7 +224,7 @@ const Dashboard = () => {
                   complaintsCopy.map((complaint) => (
                     <Majorissues
                       key={complaint._id}
-                      timestamp={new Date(complaint.createdAt).toLocaleString()}
+                      timestamp={complaint.createdAt}
                       issue={complaint.issue}
                       subject={complaint.subject}
                       description={complaint.description}

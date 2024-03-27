@@ -13,7 +13,7 @@ const customStyles = {
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
     width: "60%",
-    height: "55%",
+    height: "40%",
     padding: "10px",
     borderRadius: "10px",
   },
@@ -21,20 +21,7 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
-const PhotoModal = ({
-  isOpen,
-  onRequestClose,
-  photos,
-  complaintId,
-  complaintData,
-  time,
-  loading,
-}) => {
-  const isApproved = complaintData.isApproved;
-  const isAssigned = complaintData.isAssigned;
-  const isDone = complaintData.isDone;
-  // console.log(isApproved, isAssigned, isDone);
-
+const PhotoModal = ({ isOpen, onRequestClose, photos }) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -69,171 +56,6 @@ const PhotoModal = ({
               />
             </div>
           ))}
-        </div>
-      </div>
-
-      <div className="flex justify-between items-center px-10">
-        <div className="grid grid-rows-2 space-y-2">
-          <div className="flex items-center font-semibold font-montserrat text-md text-gray-700">
-            Complaint ID:{" "}
-            <div className="ps-2 font-normal text-gray-500">{complaintId}</div>
-          </div>
-          <div>
-            <div className="flex items-center font-semibold font-montserrat text-md text-gray-700">
-              Posted On:{" "}
-              <div className="ps-2 font-normal text-gray-500">{time}</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center justify-center">
-          <div className="flex justify-center items-center w-full h-auto">
-            <div className="text-center text-lg font-semibold text-gray-700 font-palanquin pb-3">
-              Complaint Status
-            </div>
-          </div>
-          <div className="flex justify-center items-center">
-            <div className="flex items-center justify-center relative pe-16 pb-2">
-              <div className="flex flex-col justify-center items-center">
-                <div
-                  className={`flex-shrink-0 w-10 h-10 rounded-full inline-flex items-center justify-center text-white relative z-10 ${
-                    isApproved ? "bg-[#33cc33]" : "bg-[#D9D9D9]"
-                  }`}
-                >
-                  {isApproved ? (
-                    <svg
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
-                      <path d="M22 4L12 14.01l-3-3"></path>
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="#ff6666"
-                      class="w-7 h-7"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                      />
-                    </svg>
-                  )}
-                </div>
-                <div className="w-24 h-10 overflow-hidden text-center">
-                  <h2 className="font-medium text-[12px] text-gray-900 tracking-tight">
-                    {isApproved ? "Approved" : "Waiting for approval"}
-                  </h2>
-                </div>
-              </div>
-              <div className="flex justify-start">
-                <div className="w-full h-10 ms-10 absolute inset-0 flex items-center justify-center">
-                  <div className="w-full h-1 bg-gray-200"></div>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center justify-center relative pe-16 pb-2">
-              <div className="flex flex-col justify-center items-center">
-                <div
-                  className={`flex-shrink-0 w-10 h-10 rounded-full inline-flex items-center justify-center text-white relative z-10 ${
-                    isAssigned ? "bg-[#33cc33]" : "bg-[#D9D9D9]"
-                  }`}
-                >
-                  {isAssigned ? (
-                    <svg
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
-                      <path d="M22 4L12 14.01l-3-3"></path>
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="#ff6666"
-                      class="w-7 h-7"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                      />
-                    </svg>
-                  )}
-                </div>
-                <div className="w-24 h-10 overflow-hidden text-center">
-                  <h2 className="font-medium text-[12px] text-gray-900 tracking-tight text-sm">
-                    {isAssigned ? "Assigned" : "Waiting to be assigned"}
-                  </h2>
-                </div>
-              </div>
-              <div className="w-full h-10 ms-10 absolute inset-0 flex items-center justify-center">
-                <div className="w-full h-1 bg-gray-200"></div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center justify-center relative pb-2">
-              <div className="flex flex-col justify-center items-center">
-                <div
-                  className={`flex-shrink-0 w-10 h-10 rounded-full inline-flex items-center justify-center text-white relative z-10 ${
-                    isDone ? "bg-[#33cc33]" : "bg-[#D9D9D9]"
-                  }`}
-                >
-                  {isDone ? (
-                    <svg
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
-                      <path d="M22 4L12 14.01l-3-3"></path>
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="#ff6666"
-                      class="w-7 h-7"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                      />
-                    </svg>
-                  )}
-                </div>
-                <div className="w-24 h-10 overflow-hidden text-center">
-                  <h2 className="font-medium text-[12px] text-gray-900 tracking-tight text-sm">
-                    {isDone ? "Work Done" : "Work is in progress"}
-                  </h2>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </Modal>

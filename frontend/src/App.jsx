@@ -12,6 +12,7 @@ import Dashboard from "./pages/dashboard";
 import Home from "./sections/Home";
 import Contact from "./sections/Contact";
 import PrevComplaints from "./pages/prevComplaints";
+import Feedback from "./pages/feedback";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -72,6 +73,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <PrevComplaints />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/feedback"
+          element={
+            <ProtectedRoute>
+              <Feedback />
             </ProtectedRoute>
           }
         />

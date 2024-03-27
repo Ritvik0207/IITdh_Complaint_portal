@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import PhotoModal from "../components/Modals/PhotoModal";
+import StatusModal from "../components/Modals/StatusModal";
 import LoadingBar from "react-top-loading-bar";
 
 const Majorissues = (props) => {
@@ -138,7 +138,7 @@ const Majorissues = (props) => {
             {props.issue}
           </div>
         </div>
-        <div className="text-md text-gray-700 leading-tight pb-3">
+        <div className="text-base text-gray-700 leading-tight pb-3">
           {props.description.length > 250 && !expanded ? (
             <>
               {props.description.slice(0, 250)}
@@ -166,10 +166,7 @@ const Majorissues = (props) => {
         <div className="flex items-center justify-between space-x-4">
           <div className="flex w-auto items-center justify-start">
             <div className=" font-medium text-sm flex"></div>
-            <time
-              className="opacity-80 flex items-center gap-1"
-              dateTime="2023-09-15T09:45:00Z"
-            >
+            <time className="opacity-80 flex items-center gap-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -220,7 +217,7 @@ const Majorissues = (props) => {
               </svg>
             </div>
             <div
-              className={`transition-all text-md font-bold ${
+              className={`transition-all text-base font-bold ${
                 upvoted ? "text-white" : "text-[#7C838F]"
               } pe-[10px] py-1`}
             >
@@ -229,7 +226,7 @@ const Majorissues = (props) => {
           </button>
         </div>
         {isModalOpen && (
-          <PhotoModal
+          <StatusModal
             complaintId={props.complaintId}
             complaintData={complaint}
             photos={props.photos}

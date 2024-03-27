@@ -179,11 +179,9 @@ const Register = () => {
                           setHostel_No(element.target.value)
                         }
                       >
-                        <option defaultValue="" disabled selected>
-                          Hostel
-                        </option>
-                        <option defaultValue="hostel-1">Hostel-1</option>
-                        <option defaultValue="hostel-2">Hostel-2</option>
+                        <option disabled>Hostel</option>
+                        <option value="hostel-1">Hostel-1</option>
+                        <option value="hostel-2">Hostel-2</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                         <svg
@@ -213,14 +211,12 @@ const Register = () => {
                         required
                         onChange={(element) => setWing(element.target.value)}
                       >
-                        <option defaultValue="" disabled selected>
-                          Wing
-                        </option>
-                        <option defaultValue="A">A</option>
-                        <option defaultValue="B">B</option>
-                        <option defaultValue="C">C</option>
-                        <option defaultValue="D">D</option>
-                        <option defaultValue="E">E</option>
+                        <option disabled>Wing</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                         <svg

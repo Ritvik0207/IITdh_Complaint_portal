@@ -8,6 +8,7 @@ const {
   getComplaintById,
   getUserComplaints,
   setUpvote,
+  submitFeedback,
 } = require("../controllers/userControllers");
 const { protect } = require("../middleware/authMiddleware");
 const multer = require("multer");
@@ -43,5 +44,6 @@ router.get("/getcomplaintbycategory", protect, getComplaintsByCategory);
 router.get("/getcomplaintbyId/:id", protect, getComplaintById);
 router.get("/usercomplaints", protect, getUserComplaints);
 router.post("/complaints/upvote/:id", protect, setUpvote);
+router.post("/postfeedback", protect, submitFeedback);
 
 module.exports = router;

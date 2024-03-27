@@ -13,7 +13,7 @@ const Home = () => {
           Welcome to IIT Dharwad's Pinnacle of Campus Assistance
         </p>
 
-        <p className="mb-10 text-md text-gray-600 leading-relaxed text-wrap sm:max-w-lg">
+        <p className="mb-10 text-base text-gray-600 leading-relaxed text-wrap sm:max-w-lg">
           Embark on a transformative journey with the IITdh Unified HelpDesk
           (IUHD), where cutting-edge technology converges with the heartbeat of
           our campus. IUHD is not just a platform; it's your passport to a

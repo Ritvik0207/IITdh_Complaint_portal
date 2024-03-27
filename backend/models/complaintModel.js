@@ -51,6 +51,11 @@ const complaintSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    feedback: {
+      type: String,
+      required: false,
+      default: "",
+    },
     upvoteCount: {
       type: Number,
       default: 0,
