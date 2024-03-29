@@ -111,7 +111,7 @@ const PrevComplaints = () => {
           sortedCompletedComplaints = completedComplaints.sort(
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
           );
-        } else if (filterBy === "status") {
+        } else if (filterBy === "progress") {
           sortedPendingComplaints = pendingComplaints.sort((a, b) => {
             const trueValuesA = [a.isApproved, a.isAssigned].filter(
               Boolean
@@ -187,7 +187,7 @@ const PrevComplaints = () => {
                   onChange={(e) => setFilterBy(e.target.value)}
                 >
                   <option value="date">Date</option>
-                  <option value="status">Status</option>
+                  <option value="progress">Progress</option>
                 </select>
                 <button
                   className="ms-1 p-2 border-2 border-gray-100 rounded-xl hover:bg-gray-100"
@@ -512,8 +512,8 @@ const PrevComplaints = () => {
                         </td>
                         <td className="px-4 pt-3 align-top">
                           <div className="flex justify-center items-center">
-                            <div className="grid grid-cols-3 gap-4 pointer-events-none">
-                              <div className="flex justify-end">
+                            {/* <div className="grid grid-cols-3 gap-4 pointer-events-none"> */}
+                            {/* <div className="flex justify-end">
                                 <div
                                   className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                                     complaint.isApproved
@@ -525,8 +525,8 @@ const PrevComplaints = () => {
                                     ? "Approved"
                                     : "Not Approved"}
                                 </div>
-                              </div>
-                              <div className="flex justify-center">
+                              </div> */}
+                            {/* <div className="flex justify-center">
                                 <div
                                   className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                                     complaint.isAssigned
@@ -538,19 +538,19 @@ const PrevComplaints = () => {
                                     ? "Assigned"
                                     : "Not Assigned"}
                                 </div>
-                              </div>
-                              <div className="flex justify-start">
-                                <div
-                                  className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                                    complaint.isDone
-                                      ? "bg-[#62cf62] text-white"
-                                      : "bg-[#D9D9D9]"
-                                  }`}
-                                >
-                                  {complaint.isDone ? "Done" : "Not Done"}
-                                </div>
+                              </div> */}
+                            <div className="flex justify-center">
+                              <div
+                                className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                                  complaint.isDone
+                                    ? "bg-[#62cf62] text-white"
+                                    : "bg-[#D9D9D9]"
+                                }`}
+                              >
+                                {complaint.isDone ? "Done" : "Not Done"}
                               </div>
                             </div>
+                            {/* </div> */}
                           </div>
                         </td>
                         <td className="px-4 pt-4 align-top">
