@@ -26,9 +26,10 @@ const ConfirmationModal = ({
   onRequestClose,
   complaintId,
   deleteComplaint,
+  status,
 }) => {
   const deleteClickHandler = () => {
-    deleteComplaint(complaintId);
+    deleteComplaint(complaintId, status);
     onRequestClose();
   };
   return (

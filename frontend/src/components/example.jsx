@@ -32,7 +32,6 @@ const Example = () => {
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const loadingBar = useRef(null);
-  const [clickedButtons, setClickedButtons] = useState({});
 
   const formatDate = (time) => {
     const date = new Date(time);
@@ -42,31 +41,6 @@ const Example = () => {
       year: "numeric",
     });
     return formattedTime;
-  };
-
-  const handleClick = (status, complaint) => {
-    setClickedButtons((prevClickedButtons) => ({
-      ...prevClickedButtons,
-      [complaint._id]: status,
-    }));
-
-    if (status === "Rejected" && clickedButtons[complaint._id] !== "Rejected") {
-      rejectComplaint(complaint._id);
-    }
-    // If the button was previously set to "Rejected", call openConfirmationModal
-    else if (clickedButtons[complaint._id] === "Rejected") {
-      console.log("Previously rejected, opening confirmation modal");
-      openConfirmationModal(complaint);
-    }
-    // for only updating
-    else if (
-      status === "Approved" ||
-      status === "Assigned" ||
-      status === "Done"
-    ) {
-      updateStatus(complaint._id);
-      console.log("updating status");
-    }
   };
 
   const handleSearch = (e) => {
@@ -119,14 +93,14 @@ const Example = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchComplaints();
   }, [issue]);
 
   useEffect(() => {
-    fetchData();
+    fetchComplaints();
   }, [filterBy, issue]);
 
-  const fetchData = async () => {
+  const fetchComplaints = async () => {
     try {
       const token = JSON.parse(localStorage.getItem("userInfo")).token;
       setLoading(true);
@@ -178,46 +152,14 @@ const Example = () => {
     }
   };
 
-  const rejectComplaint = async (complaintId) => {
-    try {
-      const token = JSON.parse(localStorage.getItem("userInfo")).token;
-      const response = await axios.put(
-        "http://localhost:5000/api/admin/rejectComplaint",
-        { complaintId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.data.success) {
-        console.log(...[response.data.updatedComplaint]);
-        const { isApproved, isAssigned, isDone, isRejected } =
-          response.data.updatedComplaint;
-
-        const updatedComplaints = complaints.map((complaint) =>
-          complaint._id === complaintId
-            ? { ...complaint, isApproved, isAssigned, isDone, isRejected } // Update the fields of the matching complaint
-            : complaint
-        );
-
-        setComplaints(updatedComplaints);
-      } else {
-        console.log("Failed to reject complaint");
-      }
-    } catch (error) {
-      console.error("Error rejecting complaint:", error);
-    }
-  };
-
-  const updateStatus = async (complaintId) => {
+  const updateStatus = async (complaintId, status) => {
+    console.log(status);
     try {
       const token = JSON.parse(localStorage.getItem("userInfo")).token;
 
       const response = await axios.put(
         "http://localhost:5000/api/admin/updatestatus",
-        { complaintId },
+        { complaintId, status },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -230,42 +172,17 @@ const Example = () => {
         const { isApproved, isAssigned, isDone, isRejected } =
           response.data.updatedComplaint;
 
-        const updatedComplaints = complaints.map((complaint) =>
+        const updatedComplaints = complaintsCopy.map((complaint) =>
           complaint._id === complaintId
             ? { ...complaint, isApproved, isAssigned, isDone, isRejected } // Update the fields of the matching complaint
             : complaint
         );
-
-        setComplaints(updatedComplaints);
+        setComplaintsCopy(updatedComplaints);
       } else {
         console.log("Failed to update complaint status");
       }
     } catch (error) {
       console.error("Error updating complaint status:", error);
-    }
-  };
-
-  const deleteComplaint = async (complaintId) => {
-    try {
-      const token = JSON.parse(localStorage.getItem("userInfo")).token;
-      const response = await axios.put(
-        "http://localhost:5000/api/admin/deleteComplaint",
-        { complaintId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.data.success) {
-        toast.success(response.data.message);
-        console.log(response.data.deletedComplaint);
-      } else {
-        console.log("Failed to delete the complaint");
-      }
-    } catch (error) {
-      console.error("Error deleting the complaint:", error);
     }
   };
 
@@ -555,110 +472,128 @@ const Example = () => {
                                   <div className="grid grid-cols-4 gap-2">
                                     <div className="flex justify-center w-24">
                                       <button
-                                        className={`inline-flex items-center rounded-full whitespace-nowrap border py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center ${
-                                          complaint.isApproved ||
-                                          clickedButtons[complaint._id] ===
-                                            "Approved"
-                                            ? "border-[#62cf62] border-2 bg-[#62cf62] text-white pointer-events-none"
-                                            : "border-[#D9D9D9] cursor-pointer"
-                                        }
-                                        `}
-                                        disabled={complaint.isApproved}
-                                        onClick={
+                                        className={`inline-flex items-center rounded-full whitespace-nowrap border-2 border-transparent py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center
+                                        ${
                                           complaint.isApproved
-                                            ? undefined
-                                            : () =>
-                                                handleClick(
-                                                  "Approved",
-                                                  complaint
-                                                )
+                                            ? "border-[#62cf62] border-2 bg-[#62cf62] text-white"
+                                            : "border-[#D9D9D9] hover:border-[#62cf62]"
+                                        }
+                                        ${
+                                          complaint.isRejected
+                                            ? "opacity-50 cursor-not-allowed bg-[#d1d5d8] hover:border-2 hover:border-[#D9D9D9]"
+                                            : "border-[#D9D9D9]"
+                                        }`}
+                                        disabled={
+                                          complaint.isApproved ||
+                                          complaint.isRejected
+                                        }
+                                        onClick={() =>
+                                          updateStatus(
+                                            complaint._id,
+                                            "ApproveRequest"
+                                          )
                                         }
                                       >
-                                        {clickedButtons[complaint._id] ===
-                                          "Approved" || complaint.isApproved
+                                        {complaint.isApproved
                                           ? "Approved"
                                           : "Approve"}
                                       </button>
                                     </div>
                                     <div className="flex justify-center w-24">
                                       <button
-                                        className={`inline-flex items-center rounded-full whitespace-nowrap border py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center ${
-                                          complaint.isAssigned ||
-                                          clickedButtons[complaint._id] ===
-                                            "Assigned"
-                                            ? "border-[#62cf62] border-2 bg-[#62cf62] text-white  pointer-events-none"
+                                        className={`inline-flex items-center rounded-full whitespace-nowrap border-2 border-transparent py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center
+                                        ${
+                                          complaint.isAssigned
+                                            ? "border-[#62cf62] border-2 bg-[#62cf62] text-white "
+                                            : "border-[#D9D9D9] "
+                                        }
+                                        ${
+                                          complaint.isApproved
+                                            ? "border-2 hover:border-[#62cf62]"
+                                            : ""
+                                        }
+                                        ${
+                                          complaint.isRejected
+                                            ? "opacity-50 cursor-not-allowed bg-[#d1d5d8] hover:border-2 hover:border-[#D9D9D9]"
                                             : "border-[#D9D9D9]"
                                         }`}
                                         disabled={
                                           !complaint.isApproved ||
-                                          complaint.isAssigned
+                                          complaint.isAssigned ||
+                                          complaint.isRejected
                                         }
-                                        onClick={
-                                          complaint.isAssigned
-                                            ? undefined
-                                            : () =>
-                                                handleClick(
-                                                  "Assigned",
-                                                  complaint
-                                                )
+                                        onClick={() =>
+                                          updateStatus(
+                                            complaint._id,
+                                            "AssignRequest"
+                                          )
                                         }
                                       >
-                                        {clickedButtons[complaint._id] ===
-                                          "Assigned" || complaint.isAssigned
+                                        {complaint.isAssigned
                                           ? "Assigned"
                                           : "Assign"}
                                       </button>
                                     </div>
                                     <div className={`flex justify-center w-24`}>
                                       <button
-                                        className={`inline-flex items-center rounded-full whitespace-nowrap border py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center ${
-                                          complaint.isDone ||
-                                          clickedButtons[complaint._id] ===
-                                            "Done"
-                                            ? "border-[#62cf62] border-2 bg-[#62cf62] text-white pointer-events-none"
+                                        className={`inline-flex items-center rounded-full whitespace-nowrap border-2 border-transparent py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center
+                                        ${
+                                          complaint.isDone
+                                            ? "border-[#62cf62] border-2 bg-[#62cf62] text-white"
                                             : "border-[#D9D9D9] "
+                                        }
+                                        ${
+                                          complaint.isAssigned
+                                            ? "border-2 hover:border-[#62cf62]"
+                                            : ""
+                                        }
+                                        ${
+                                          complaint.isRejected
+                                            ? "opacity-50 cursor-not-allowed bg-[#d1d5d8] hover:border-2 hover:border-[#D9D9D9]"
+                                            : "border-[#D9D9D9]"
                                         }`}
                                         disabled={
                                           !complaint.isApproved ||
                                           !complaint.isAssigned ||
                                           complaint.isDone
                                         }
-                                        onClick={
-                                          complaint.isDone
-                                            ? undefined
-                                            : () =>
-                                                handleClick("Done", complaint)
+                                        onClick={() =>
+                                          updateStatus(
+                                            complaint._id,
+                                            "DoneRequest"
+                                          )
                                         }
                                       >
-                                        {clickedButtons[complaint._id] ===
-                                          "Done" || complaint.isDone
+                                        {complaint.isDone
                                           ? "Done"
                                           : "Mark as Done"}
                                       </button>
                                     </div>
                                     <div className="flex justify-center w-24">
                                       <button
-                                        className={`inline-flex items-center rounded-full whitespace-nowrap border py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center ${
-                                          !complaint.isApproved ||
-                                          clickedButtons[complaint._id] ===
-                                            "Rejected"
-                                            ? "bg-red-500 text-white cursor-pointer"
+                                        className={`inline-flex items-center rounded-full whitespace-nowrap border py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center 
+                                        ${
+                                          !complaint.isApproved
+                                            ? "bg-red-500/80 text-white cursor-pointer"
                                             : "bg-gray-300 text-gray-700"
                                         }
                                         `}
                                         disabled={complaint.isApproved}
                                         onClick={
                                           complaint.isRejected
-                                            ? undefined
-                                            : () =>
-                                                handleClick(
-                                                  "Rejected",
+                                            ? () => {
+                                                openConfirmationModal(
                                                   complaint
+                                                );
+                                              }
+                                            : () =>
+                                                updateStatus(
+                                                  complaint._id,
+                                                  "RejectRequest"
                                                 )
                                         }
                                       >
-                                        {clickedButtons[complaint._id] ===
-                                          "Rejected" || complaint.isRejected
+                                        {complaint.isRejected
                                           ? "Delete"
                                           : "Reject"}
                                       </button>
@@ -690,7 +625,8 @@ const Example = () => {
           isOpen={isConfirmationModalOpen}
           onRequestClose={closeModal}
           complaintId={selectedComplaint._id}
-          deleteComplaint={deleteComplaint}
+          deleteComplaint={updateStatus}
+          status={"DeleteRequest"}
         />
       )}
     </>
