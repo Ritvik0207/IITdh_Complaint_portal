@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React from "react";
-import { maillogo } from "../assets/images";
+// import { maillogo } from "../assets/images";
 
 const Details = (props) => {
   const handleEmailClick = () => {

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { LiaTimesSolid } from "react-icons/lia";
 
 const Complaint = () => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -18,6 +19,7 @@ const Complaint = () => {
   const navigate = useNavigate();
 
   const options = ["Food", "Water", "Electricity", "Hostel_affairs"];
+
   const handleOptionChange = (e) => {
     setIssue(e.target.value);
   };
@@ -233,23 +235,10 @@ const Complaint = () => {
                       />
                       <button
                         type="button"
-                        className="absolute p-1 -top-2 -right-2 bg-slate-50 text-orange-500 rounded-full"
+                        className="absolute p-1 -top-2 -right-2 bg-gray-50 text-orange-500 rounded-full"
                         onClick={() => handleRemovePhoto(index)}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-3 w-3"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={4}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
+                        <LiaTimesSolid size={12} strokeWidth={4} />
                       </button>
                     </div>
                   ))}

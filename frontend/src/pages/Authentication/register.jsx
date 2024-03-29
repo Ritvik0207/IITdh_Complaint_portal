@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { FaChevronDown } from "react-icons/fa";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -14,6 +15,9 @@ const Register = () => {
   const [room, setRoom] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const hostels = ["Hostel-1", "Hostel-2"];
+  const wings = ["A", "B", "C", "D", "E"];
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -62,6 +66,14 @@ const Register = () => {
       toast.warning("Registration failed");
       console.log(error);
     }
+  };
+
+  const handleHostelChange = (e) => {
+    setHostel_No(e.target.value);
+  };
+
+  const handleWingChange = (e) => {
+    setHostel_No(e.target.value);
   };
 
   return (
@@ -173,25 +185,22 @@ const Register = () => {
                       <select
                         id="hostel_no"
                         name="hostel_no"
+                        value={hostel_no}
                         className="block w-full cursor-pointer appearance-none rounded-md border border-gray-400 bg--100 py-2 px-3 text-gray-400 text-sm outline-none focus:border-orange-500 focus:bg-white"
                         required
-                        onChange={(element) =>
-                          setHostel_No(element.target.value)
-                        }
+                        onChange={handleHostelChange}
                       >
-                        <option disabled>Hostel</option>
-                        <option value="hostel-1">Hostel-1</option>
-                        <option value="hostel-2">Hostel-2</option>
+                        <option value="" disabled>
+                          Hostel
+                        </option>
+                        {hostels.map((hostel) => (
+                          <option key={hostel} value={hostel}>
+                            {hostel}
+                          </option>
+                        ))}
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                        <svg
-                          className="h-4 w-4"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M10 12l-6-6 1.41-1.41L10 9.17l4.59-4.58L16 6z"></path>
-                        </svg>
+                        <FaChevronDown size={12} />
                       </div>
                     </div>
                   </div>
@@ -207,26 +216,22 @@ const Register = () => {
                       <select
                         id="wing"
                         name="wing"
+                        value={wing}
                         className="block w-full cursor-pointer appearance-none rounded-md border border-gray-400 bg--100 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white text-gray-400 "
                         required
-                        onChange={(element) => setWing(element.target.value)}
+                        onChange={handleWingChange}
                       >
-                        <option disabled>Wing</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
+                        <option value="" disabled>
+                          Wing
+                        </option>
+                        {wings.map((wing) => (
+                          <option key={wing} value={wing}>
+                            {wing}
+                          </option>
+                        ))}
                       </select>
                       <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                        <svg
-                          className="h-4 w-4 text-gray-400"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M10 12l-6-6 1.41-1.41L10 9.17l4.59-4.58L16 6z"></path>
-                        </svg>
+                        <FaChevronDown size={12} />
                       </div>
                     </div>
                   </div>

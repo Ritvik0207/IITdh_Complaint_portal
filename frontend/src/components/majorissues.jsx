@@ -6,6 +6,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import StatusModal from "../components/Modals/StatusModal";
 import LoadingBar from "react-top-loading-bar";
+import { FaRegCalendar } from "react-icons/fa6";
+import { BiUpvote } from "react-icons/bi";
 
 const Majorissues = (props) => {
   const [vote, setVote] = useState(props.upvoteCount);
@@ -166,21 +168,8 @@ const Majorissues = (props) => {
         <div className="flex items-center justify-between space-x-4">
           <div className="flex w-auto items-center justify-start">
             <div className=" font-medium text-sm flex"></div>
-            <time className="opacity-80 flex items-center gap-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
-                />
-              </svg>
+            <time className="opacity-80 flex items-center gap-1.5">
+              <FaRegCalendar size={16} strokeWidth={2} />
               {time}
             </time>
           </div>
@@ -196,7 +185,7 @@ const Majorissues = (props) => {
                 upvoted ? "hover:bg-orange-300" : "hover:bg-gray-100"
               }  m-1`}
             >
-              <svg
+              {/* <svg
                 width={24}
                 height={24}
                 viewBox="0 0 24 24"
@@ -214,7 +203,12 @@ const Majorissues = (props) => {
                   //   upvoted ? "hover:stroke-[#7C838F]" : "hover:stroke-white"
                   // }`}
                 />
-              </svg>
+              </svg> */}
+              <BiUpvote
+                size={20}
+                className="m-1"
+                stroke={upvoted ? "white" : "rgb(156, 163, 175) "}
+              />
             </div>
             <div
               className={`transition-all text-base font-bold ${

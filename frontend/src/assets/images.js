@@ -4,7 +4,5 @@ import logo2 from "./logo2.png";
 import logo from "./logo.png";
 import profile from "./profile.png";
 import homelogo from "./homelogo.png";
-import maillogo from "./maillogo.png";
-import upvote from "./upvote.png";
 
-export { hamburger, logo1, logo2, logo, profile, homelogo, maillogo, upvote };
+export { hamburger, logo1, logo2, logo, profile, homelogo };

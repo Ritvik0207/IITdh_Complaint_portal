@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { HiChevronDoubleDown, HiChevronDoubleUp } from "react-icons/hi2";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa6";
+// import { FaCameraRetro } from "react-icons/fa";
+import { IoCameraOutline } from "react-icons/io5";
 import { VscFeedback } from "react-icons/vsc";
 import PhotoModal from "../components/Modals/PhotoModal";
 import LoadingBar from "react-top-loading-bar";
@@ -319,9 +321,9 @@ const PrevComplaints = () => {
                         <td className="px-4 pt-2.5 align-top box-border">
                           <div className="flex justify-center items-center">
                             <button
-                              className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors rounded-md px-3 py-1 border-2 hover:bg-gray-200 ${
+                              className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors rounded-md px-3 py-1 border-2  ${
                                 complaint.photos.length > 0
-                                  ? "cursor-pointer"
+                                  ? "cursor-pointer hover:bg-gray-200"
                                   : "cursor-default"
                               }`}
                               title={` ${
@@ -335,36 +337,21 @@ const PrevComplaints = () => {
                                   : undefined // Set onClick to undefined when there are no photos
                               }
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="#f2f2f2"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.75"
-                                stroke={`${
+                              <IoCameraOutline
+                                size={24}
+                                color={`${
                                   complaint.photos.length > 0
-                                    ? "#33ff33"
+                                    ? "#00e600"
                                     : "#ff3333"
                                 }`}
-                                className="w-6 h-6"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"
-                                />
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z"
-                                />
-                              </svg>
+                              />
                             </button>
                           </div>
                         </td>
                         <td className="px-4 pt-3 align-top">
                           <div className="flex justify-center items-center">
                             <div className="grid grid-cols-3 gap-4 pointer-events-none">
-                              <div className="flex justify-end">
+                              <div className="flex justify-end w-24">
                                 <div
                                   className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                                     complaint.isApproved
@@ -377,7 +364,7 @@ const PrevComplaints = () => {
                                     : "Not Approved"}
                                 </div>
                               </div>
-                              <div className="flex justify-center">
+                              <div className="flex justify-center w-24">
                                 <div
                                   className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                                     complaint.isAssigned
@@ -390,7 +377,7 @@ const PrevComplaints = () => {
                                     : "Not Assigned"}
                                 </div>
                               </div>
-                              <div className="flex justify-start">
+                              <div className="flex justify-start w-24">
                                 <div
                                   className={`inline-flex items-center rounded-full whitespace-nowrap border px-3 py-1.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                                     complaint.isDone
@@ -496,9 +483,9 @@ const PrevComplaints = () => {
                         <td className="px-4 pt-2.5 align-top box-border">
                           <div className="flex justify-center items-center">
                             <button
-                              className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors rounded-md px-3 py-1 border-2 hover:bg-gray-200 ${
+                              className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors rounded-md px-3 py-1 border-2  ${
                                 complaint.photos.length > 0
-                                  ? "cursor-pointer"
+                                  ? "cursor-pointer hover:bg-gray-200"
                                   : "cursor-default"
                               }`}
                               title={` ${
@@ -512,29 +499,14 @@ const PrevComplaints = () => {
                                   : undefined // Set onClick to undefined when there are no photos
                               }
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="#f2f2f2"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.75"
-                                stroke={`${
+                              <IoCameraOutline
+                                size={24}
+                                color={`${
                                   complaint.photos.length > 0
-                                    ? "#33ff33"
+                                    ? "#00e600"
                                     : "#ff3333"
                                 }`}
-                                className="w-6 h-6"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"
-                                />
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z"
-                                />
-                              </svg>
+                              />
                             </button>
                           </div>
                         </td>
@@ -584,10 +556,10 @@ const PrevComplaints = () => {
                         <td className="px-4 pt-4 align-top">
                           <div className="flex justify-center items-center">
                             <button
-                              className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors rounded-md px-3 py-1 border-2 hover:bg-gray-200 ${
+                              className={`inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors rounded-md px-3 py-1 border-2  ${
                                 complaint.feedback
                                   ? "cursor-default"
-                                  : "cursor-pointer"
+                                  : "cursor-pointer hover:bg-gray-200"
                               }`}
                               title={`${
                                 complaint.feedback

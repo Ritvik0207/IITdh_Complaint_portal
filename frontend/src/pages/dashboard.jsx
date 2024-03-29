@@ -34,12 +34,6 @@ const Dashboard = () => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log("filter in effect:" + filteredComplaints);
-  //   // setComplaintsCopy(filteredComplaints);
-  //   console.log(complaintsCopy);
-  // }, [selectedIssue]);
-
   const fetchData = async () => {
     try {
       const token = JSON.parse(localStorage.getItem("userInfo")).token;
@@ -110,55 +104,77 @@ const Dashboard = () => {
     <>
       <LoadingBar height={3} color="#f11946" ref={loadingBar} />
       {isAdmin ? (
-        <div className="flex flex-col pt-28 px-10 min-h-screen">
-          <h1 className="text-3xl font-bold mb-8 pb-2 text-[#89288f] border-b-gray-400 border-b-2">
+        <div className="flex flex-col justify-center items-center min-h-screen">
+          {/* <h1 className="text-3xl font-bold mb-8 pb-2 text-[#89288f] border-b-gray-400 border-b-2">
             Welcome Admin
-          </h1>
-          <div className="flex flex-row max-sm:flex-col h-full">
-            <div className="flex flex-col mt-10 w-1/4 ">
-              <Categories
-                name="Food related issues"
-                issue="Food"
-                fun={(issue) => {
-                  setCatSelected(true);
-                  setIssue(issue);
-                }}
-              />
-              <Categories
-                name="Water related issues"
-                issue="Water"
-                fun={(issue) => {
-                  setCatSelected(true);
-                  setIssue(issue);
-                }}
-              />
-              <Categories
-                name="Electricity related issues"
-                issue="Electricity"
-                fun={(issue) => {
-                  setCatSelected(true);
-                  setIssue(issue);
-                }}
-              />
-              <Categories
-                name="Hostel Affaires"
-                issue="Hostel_affairs"
-                fun={(issue) => {
-                  setCatSelected(true);
-                  setIssue(issue);
-                }}
-              />
-            </div>
-            <div className=" flex flex-1 justify-center items-center ps-10">
-              {isCatSelected ? (
-                <TableData issue={issue} />
-              ) : (
-                <Adminview
-                  totalComplaintsCount={totalComplaintsCount}
-                  approvedComplaintsCount={approvedComplaintsCount}
-                  pendingComplaintsCount={pendingComplaintsCount}
-                />
-              )}
+          </h1> */}
+          <div className="py-16 w-full">
+            <div className="flex flex-row max-sm:flex-col">
+              <aside className="sticky top-0 h-screen w-1/6 bg-gray-100 text-gray-800 py-10 px-6">
+                <nav className="space-y-2">
+                  <div className="w-full flex items-center space-x-2 hover:bg-gray-200 active:bg-gray-300 p-2 rounded-lg text-gray-500">
+                    <Categories
+                      name="Food"
+                      issue="Food"
+                      fun={(issue) => {
+                        setCatSelected(true);
+                        setIssue(issue);
+                      }}
+                    />
+                    {/* <button
+                      className="w-full flex items-center p-3 text-lg text-gray-800 font-medium"
+                      onClick={(issue) => {
+                        setCatSelected(true);
+                        setIssue(issue);
+                      }}
+                    >
+                      Food related issues
+                    </button> */}
+                  </div>
+                  <div className="w-full flex items-center space-x-2 hover:bg-gray-200 active:bg-gray-300 py-2 px-2 rounded-lg text-gray-500">
+                    <Categories
+                      name="Water"
+                      issue="Water"
+                      fun={(issue) => {
+                        setCatSelected(true);
+                        setIssue(issue);
+                      }}
+                    />
+                  </div>
+                  <div className="w-full flex items-center space-x-2 hover:bg-gray-200 active:bg-gray-300 py-2 px-2 rounded-lg text-gray-500">
+                    <Categories
+                      name="Electricity"
+                      issue="Electricity"
+                      fun={(issue) => {
+                        setCatSelected(true);
+                        setIssue(issue);
+                      }}
+                    />
+                  </div>
+                  <div className="w-full flex items-center space-x-2 hover:bg-gray-200 active:bg-gray-300 py-2 px-2 rounded-lg text-gray-500">
+                    <Categories
+                      name="Hostel Affaires"
+                      issue="Hostel_affairs"
+                      fun={(issue) => {
+                        setCatSelected(true);
+                        setIssue(issue);
+                      }}
+                    />
+                  </div>
+                  <Link to={"/example"}>Example</Link>
+                </nav>
+              </aside>
+              <div className=" flex flex-1 justify-center items-center ps-10">
+                {isCatSelected ? (
+                  <TableData issue={issue} />
+                ) : (
+                  <Adminview
+                    totalComplaintsCount={totalComplaintsCount}
+                    approvedComplaintsCount={approvedComplaintsCount}
+                    pendingComplaintsCount={pendingComplaintsCount}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -3,6 +3,8 @@
 import React from "react";
 import Modal from "react-modal";
 import { FaTimes } from "react-icons/fa";
+import { MdOutlineCancel } from "react-icons/md";
+import { LuCheckCircle } from "react-icons/lu";
 
 const customStyles = {
   content: {
@@ -13,7 +15,7 @@ const customStyles = {
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
     width: "60%",
-    height: "55%",
+    height: "60%",
     padding: "10px",
     borderRadius: "10px",
   },
@@ -101,33 +103,9 @@ const StatusModal = ({
                   }`}
                 >
                   {isApproved ? (
-                    <svg
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
-                      <path d="M22 4L12 14.01l-3-3"></path>
-                    </svg>
+                    <LuCheckCircle size={22} />
                   ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="#ff6666"
-                      className="w-7 h-7"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                      />
-                    </svg>
+                    <MdOutlineCancel size={26} color="#ff6666" />
                   )}
                 </div>
                 <div className="w-24 h-10 overflow-hidden text-center">
@@ -150,33 +128,9 @@ const StatusModal = ({
                   }`}
                 >
                   {isAssigned ? (
-                    <svg
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
-                      <path d="M22 4L12 14.01l-3-3"></path>
-                    </svg>
+                    <LuCheckCircle size={22} />
                   ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="#ff6666"
-                      className="w-7 h-7"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                      />
-                    </svg>
+                    <MdOutlineCancel size={26} color="#ff6666" />
                   )}
                 </div>
                 <div className="w-24 h-10 overflow-hidden text-center">
@@ -197,33 +151,9 @@ const StatusModal = ({
                   }`}
                 >
                   {isDone ? (
-                    <svg
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
-                      <path d="M22 4L12 14.01l-3-3"></path>
-                    </svg>
+                    <LuCheckCircle size={22} />
                   ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="#ff6666"
-                      className="w-7 h-7"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                      />
-                    </svg>
+                    <MdOutlineCancel size={26} color="#ff6666" />
                   )}
                 </div>
                 <div className="w-24 h-10 overflow-hidden text-center">

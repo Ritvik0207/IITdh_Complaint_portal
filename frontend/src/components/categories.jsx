@@ -4,18 +4,14 @@ import React from "react";
 
 const Categories = (props) => {
   return (
-    <div className="w-full mx-auto my-4">
-      <div className="px-2 ">
-        <button
-          className="w-full text- flex items-center border-b-2  p-4 hover:border-b-2 hover:border-orange-500 text-lg text-gray-800 font-medium"
-          onClick={() => {
-            props.fun(props.issue);
-          }}
-        >
-          {props.name}
-        </button>
-      </div>
-    </div>
+    <button
+      className="w-full flex items-center  text-lg text-gray-800 font-medium"
+      onClick={() => {
+        props.fun(props.issue);
+      }}
+    >
+      {props.name}
+    </button>
   );
 };
 

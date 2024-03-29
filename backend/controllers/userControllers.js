@@ -55,39 +55,51 @@ const registerUser = asyncHandler(async (req, res) => {
       token: generateToken(user._id),
     });
   } else {
-    res.status(400).json({ success: false, message: "Some Error occurred" });
+    res
+      .status(400)
+      .json({ success: false, message: "Internal server error occurred" });
   }
 });
 
 const authUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
 
-  const user = await User.findOne({ email });
+    if (user) {
+      const isPasswordMatch = await bcrypt.compare(password, user.password);
 
-  if (user) {
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
-
-    if (isPasswordMatch) {
-      res.status(201).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        room_no: user.room_no,
-        roll_no: user.roll_no,
-        wing: user.wing,
-        hostel_no: user.hostel_no,
-        mobile_number: user.mobile_number,
-        token: generateToken(user._id),
-      });
+      if (isPasswordMatch) {
+        res.status(201).json({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          room_no: user.room_no,
+          roll_no: user.roll_no,
+          wing: user.wing,
+          hostel_no: user.hostel_no,
+          mobile_number: user.mobile_number,
+          token: generateToken(user._id),
+          success: true,
+          message: "Login Successful",
+        });
+      } else {
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid Credentials" });
+        // throw new Error("Some Error occurred");
+      }
     } else {
-      res.status(500);
-      throw new Error("Some Error occurred");
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid Credentials" });
     }
-  } else {
-    return res
-      .status(400)
-      .json({ success: false, message: "User already exists" });
+  } catch (error) {
+    console.error("Error while logging in:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to Login due to Server Error" });
   }
 });
 
@@ -136,7 +148,7 @@ const submitFeedback = async (req, res) => {
         .status(200)
         .json({ success: true, message: "Feedback submitted successfully" });
     } else {
-      res.status(404).json({ success: false, message: "Some error occured" });
+      res.status(404).json({ success: false, message: "Some error occurred" });
     }
   } catch (error) {
     // Handle errors

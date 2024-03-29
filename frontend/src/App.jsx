@@ -13,6 +13,7 @@ import Home from "./sections/Home";
 import Contact from "./sections/Contact";
 import PrevComplaints from "./pages/prevComplaints";
 import Feedback from "./pages/feedback";
+import Example from "./components/example";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -84,7 +85,16 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/example"
+          element={
+            <ProtectedRoute>
+              <Example />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
+      {/* <Example /> */}
     </Router>
   );
 };

@@ -16,19 +16,22 @@ const Login = ({ loginStatus }) => {
       return;
     }
     try {
-      const { data } = await axios.post(
+      const response = await axios.post(
         "http://localhost:5000/api/user/login",
         { email, password }
       );
-      if (data) {
-        localStorage.setItem("userInfo", JSON.stringify(data));
-        toast.success("Login successful");
+
+      if (response.data.success) {
+        localStorage.setItem("userInfo", JSON.stringify(response.data));
+        toast.success(response.data.message);
         loginStatus();
         // console.log(data); // data output
         navigate("/dashboard");
+      } else {
+        toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Invalid credentials");
+      console.error("Error logging in:", error);
     }
   };
 
@@ -64,7 +67,7 @@ const Login = ({ loginStatus }) => {
                     id="email"
                     name="email-username"
                     placeholder="Enter your email"
-                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                    // pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                     required
                     onChange={(element) => setEmail(element.target.value)}
                   />
