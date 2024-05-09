@@ -32,22 +32,22 @@ const Navbar = ({ isLoggedIn, loginStatus }) => {
   };
 
   return (
-    <header className="px-8 py-3 fixed z-30 w-full bg-newpurple max-phone:px-4 ">
+    <header className="px-8 py-1 fixed z-50 w-full bg-newpurple max-phone:px-4 ">
       <nav className="flex justify-between items-center">
-        <Link to={"/"} className="flex">
+        <Link to={"/"} className="flex h-auto">
           <img
             src={logo1}
             alt="college logo"
-            height={20}
+            // height="auto"
             width={40}
-            className="rounded-[4px] inline-block bg-slate-50"
+            className="rounded-[4px] inline-block bg-slate-50 scale-[85%]"
           />
           <img
             src={logo2}
             alt="college name"
-            height={40}
+            // height="auto"
             width={200}
-            className="inline-block ms-1"
+            className="inline-block -ms-3 scale-[85%]"
           />
         </Link>
 

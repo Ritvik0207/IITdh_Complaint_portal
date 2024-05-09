@@ -44,7 +44,7 @@ const Majorissues = (props) => {
       ? setVote((voteCount) => voteCount + 1)
       : setVote((voteCount) => voteCount - 1);
     upvotefn();
-    console.log(upvoted);
+    // console.log(upvoted);
   };
 
   const handleButtonClick = () => {
@@ -97,9 +97,9 @@ const Majorissues = (props) => {
   }, [props.upvotedBy]);
 
   const upvotefn = async () => {
-    console.log("up vote function working");
+    // console.log("up vote function working");
     if (!upvoted) {
-      console.log(upvoted);
+      // console.log(upvoted);
       try {
         const token = JSON.parse(localStorage.getItem("userInfo")).token;
 

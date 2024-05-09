@@ -32,4 +32,13 @@ const complaints = [
     subject: "Hostel Maintenance",
     description: "The deteriorating condition of the hostel facilities reflects a lack of attention from the management. Residents have observed issues such as broken plumbing, peeling paint, and pest infestations, indicating a need for urgent repairs and renovations. Without proper maintenance, the hostel's infrastructure will continue to degrade, affecting the quality of life for its occupants.",
   },
+  {
+    Subject: "Insufficient Portion Sizes"
+    Description: "The portion sizes of meals served in the cafeteria have been consistently small, leaving many students feeling hungry and dissatisfied. Despite paying for full meals, students often find themselves needing to supplement their diets with outside food. This issue has led to increased expenses and decreased overall satisfaction with the dining experience."
+  },
+  {
+    Subject: "Foreign Objects in Food"
+    Description: "Students have reported finding foreign objects such as hair, insects, and plastic in their food, raising serious concerns about hygiene and safety standards in the cafeteria. These incidents have caused distress and disgust among students, leading to a loss of confidence in the kitchen staff and management."
+  }
+  
 ];

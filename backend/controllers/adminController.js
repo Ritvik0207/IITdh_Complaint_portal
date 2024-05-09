@@ -1,7 +1,9 @@
-// const asyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 // const User = require("../models/userModel");
 const Complaint = require("../models/complaintModel");
+const Management = require("../models/managementModel");
 const { ObjectId } = require("mongoose").Types;
+const bcrypt = require("bcrypt");
 
 // Controller function to update the status of a complaint
 const updateStatus = async (req, res) => {
@@ -67,7 +69,7 @@ const updateStatus = async (req, res) => {
       }
     }
 
-    // Check if the complaint exists
+    // Check if the updated complaint exists
     if (updatedComplaint) {
       // Return success response with updated complaint
       return res.status(200).json({
@@ -87,4 +89,45 @@ const updateStatus = async (req, res) => {
   }
 };
 
-module.exports = { updateStatus };
+const addMember = async (req, res) => {
+  try {
+    const { name, phoneNumber, email, position, password } = req.body;
+
+    const memberExists = await Management.findOne({ email });
+
+    if (memberExists) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Member already exists" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newMember = await Management.create({
+      name,
+      phoneNumber,
+      email,
+      position,
+      password: hashedPassword,
+    });
+
+    if (newMember) {
+      return res.status(201).json({
+        success: true,
+        message: "New member added successfully",
+        newMember: newMember,
+      });
+    }
+    return res
+      .status(400)
+      .json({ success: false, message: "Failed to add new member" });
+  } catch (error) {
+    console.error("Error adding new member:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+module.exports = { updateStatus, addMember };

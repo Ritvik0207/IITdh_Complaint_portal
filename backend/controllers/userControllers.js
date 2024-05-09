@@ -80,6 +80,7 @@ const authUser = asyncHandler(async (req, res) => {
           wing: user.wing,
           hostel_no: user.hostel_no,
           mobile_number: user.mobile_number,
+          department: user.department,
           token: generateToken(user._id),
           success: true,
           message: "Login Successful",
@@ -159,7 +160,7 @@ const submitFeedback = async (req, res) => {
   }
 };
 
-const getComplaint = async (req, res) => {
+const getComplaints = async (req, res) => {
   try {
     const complaints = await Complaint.find({
       issue: { $ne: "Hostel_affairs" },
@@ -174,11 +175,48 @@ const getComplaint = async (req, res) => {
   }
 };
 
+const getAllComplaints = async (req, res) => {
+  try {
+    const { issue } = req.query;
+    // Find all complaints that match the given issue
+    const complaints = await Complaint.find({ issue });
+
+    return res.json({ success: true, complaints });
+  } catch (error) {
+    console.error("Error fetching complaints:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 const getComplaintsByCategory = async (req, res) => {
   try {
-    const { issue } = req.query; // Extracting the issue from the request query
-    // Find complaints by the specified issue
-    const complaints = await Complaint.find({ issue: issue });
+    const { issue, status } = req.query;
+
+    let query = { issue }; // Base query with the specified issue
+
+    // Adjust the query based on the status parameter
+    switch (status) {
+      case "New Tickets":
+        query.isApproved = false;
+        query.isRejected = false;
+        break;
+      case "Pending Tickets":
+        query.isApproved = true;
+        query.isDone = false;
+        break;
+      case "Resolved Tickets":
+        query.isDone = true;
+        break;
+      case "Rejected Tickets":
+        query.isRejected = true;
+        break;
+      default:
+        // Handle the case where status doesn't match any known condition
+        break;
+    }
+
+    // Find complaints based on the constructed query
+    const complaints = await Complaint.find(query);
 
     res.json({ success: true, complaints });
   } catch (error) {
@@ -266,7 +304,8 @@ module.exports = {
   registerUser,
   authUser,
   registerComplaint,
-  getComplaint,
+  getComplaints,
+  getAllComplaints,
   getComplaintsByCategory,
   getComplaintById,
   getUserComplaints,

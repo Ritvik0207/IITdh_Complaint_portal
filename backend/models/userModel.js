@@ -41,6 +41,11 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+
+    department: {
+      type: "String",
+      required: true,
+    },
   },
   { timestaps: true }
 );

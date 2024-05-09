@@ -17,6 +17,8 @@ export default {
       fontFamily: {
         palanquin: ["Palanquin", "sans-serif"],
         montserrat: ["Montserrat", "sans-serif"],
+        roboto: ["Roboto", "sans-serif"],
+        cormorant: ["Cormorant", "serif"],
       },
       colors: {
         primary: "#ECEEFF",

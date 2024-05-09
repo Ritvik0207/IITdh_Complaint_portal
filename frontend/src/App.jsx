@@ -10,10 +10,12 @@ import Register from "./pages/Authentication/register";
 import Complaint from "./pages/complaint";
 import Dashboard from "./pages/dashboard";
 import Home from "./sections/Home";
-import Contact from "./sections/Contact";
 import PrevComplaints from "./pages/prevComplaints";
 import Feedback from "./pages/feedback";
 import Example from "./components/example";
+import NewTable from "./components/NewTable";
+import NewTablev2 from "./components/NewTablev2";
+import Trail from "./components/trail";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -93,8 +95,31 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/NewTable"
+          element={
+            <ProtectedRoute>
+              <NewTable />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/NewTablev2"
+          element={
+            <ProtectedRoute>
+              <NewTablev2 />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/trail"
+          element={
+            <ProtectedRoute>
+              <Trail />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
-      {/* <Example /> */}
     </Router>
   );
 };

@@ -10,6 +10,7 @@ import LoadingBar from "react-top-loading-bar";
 
 const Dashboard = () => {
   const [isAdmin, setIsAdmin] = useState(false);
+  // const [department, setDepartment] = useState("");
   const [isCatSelected, setCatSelected] = useState(false);
   const [complaints, setComplaints] = useState([]);
   const [complaintsCopy, setComplaintsCopy] = useState([]);
@@ -76,6 +77,7 @@ const Dashboard = () => {
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     if (userInfo && userInfo.isAdmin) {
+      // setDepartment(userInfo.department);
       setIsAdmin(true);
       fetchData();
     } else {
@@ -121,15 +123,6 @@ const Dashboard = () => {
                         setIssue(issue);
                       }}
                     />
-                    {/* <button
-                      className="w-full flex items-center p-3 text-lg text-gray-800 font-medium"
-                      onClick={(issue) => {
-                        setCatSelected(true);
-                        setIssue(issue);
-                      }}
-                    >
-                      Food related issues
-                    </button> */}
                   </div>
                   <div className="w-full flex items-center space-x-2 hover:bg-gray-200 active:bg-gray-300 py-2 px-2 rounded-lg text-gray-500">
                     <Categories
@@ -162,6 +155,12 @@ const Dashboard = () => {
                     />
                   </div>
                   <Link to={"/example"}>Example</Link>
+                  <br />
+                  <Link to={"/NewTable"}>NewTable</Link>
+                  <br />
+                  <Link to={"/NewTablev2"}>NewTablev2</Link>
+                  <br />
+                  <Link to={"/trail"}>Trail</Link>
                 </nav>
               </aside>
               <div className=" flex flex-1 justify-center items-center ps-10">

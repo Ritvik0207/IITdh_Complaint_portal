@@ -3,7 +3,8 @@ const {
   registerUser,
   authUser,
   registerComplaint,
-  getComplaint,
+  getComplaints,
+  getAllComplaints,
   getComplaintsByCategory,
   getComplaintById,
   getUserComplaints,
@@ -39,7 +40,8 @@ router.post(
   registerComplaint
 );
 
-router.get("/getcomplaints", protect, getComplaint);
+router.get("/getcomplaints", protect, getComplaints);
+router.get("/getAllComplaints", protect, getAllComplaints);
 router.get("/getcomplaintbycategory", protect, getComplaintsByCategory);
 router.get("/getcomplaintbyId/:id", protect, getComplaintById);
 router.get("/usercomplaints", protect, getUserComplaints);

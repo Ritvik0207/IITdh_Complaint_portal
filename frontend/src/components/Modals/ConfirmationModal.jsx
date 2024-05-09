@@ -3,6 +3,7 @@
 import React from "react";
 import Modal from "react-modal";
 import { FaTimes } from "react-icons/fa";
+import { MdDeleteForever } from "react-icons/md";
 
 const customStyles = {
   content: {
@@ -12,10 +13,11 @@ const customStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
-    width: "35%",
+    width: "auto",
     height: "auto",
-    padding: "10px",
-    borderRadius: "10px",
+    padding: "0px",
+    // border: "none",
+    borderRadius: "8px",
   },
 };
 
@@ -39,38 +41,38 @@ const ConfirmationModal = ({
       style={customStyles}
       contentLabel="Confirmation Modal"
     >
-      <div className="max-h-full max-w-full overflow-auto">
-        <div className="flex justify-center items-center relative pt-4">
+      <div class="relative text-center bg-white border-transparent px-6 py-4 mx-4">
+        <button
+          type="button"
+          class="text-gray-400 absolute top-2.5 -right-1.5 bg-transparent hover:bg-gray-200 hover:text-gray-600 rounded-lg text-sm p-1.5 inline-flex items-center focus:ring-2 focus:outline-none focus:ring-gray-200 focus:bg-gray-200 focus:text-gray-600"
+          onClick={onRequestClose}
+        >
+          <FaTimes />
+        </button>
+        <div className="flex justify-center items-center py-2">
+          <MdDeleteForever size={50} className="text-gray-600" />
+        </div>
+        <p class="mb-4 text-gray-500 font-palanquin font-semibold">
+          Are you sure you want to delete this item?
+        </p>
+        {/* <p className="text-orange-500 font-normal text-sm font-palanquin mb-4 cursor-pointer">
+          ComplaintID: {complaintId}
+        </p> */}
+        <div class="flex justify-center items-center space-x-4">
           <button
+            type="button"
+            class="py-2 px-3 text-sm font-medium text-center text-white bg-gray-500 rounded-lg hover:bg-gray-600 focus:ring-2 focus:outline-none focus:ring-gray-300"
             onClick={onRequestClose}
-            className="px-2 py-1 bg-gray-200 text-gray-800 font-semibold rounded hover:bg-gray-300 focus:outline-none absolute right-0 top-0"
           >
-            <FaTimes />
+            No, cancel
           </button>
-          <div className="w-full h-full">
-            <div className="flex flex-col justify-start py-4 px-4 gap-4">
-              <p className="text-xl">
-                Are you sure you want to delete this complaint?{" "}
-              </p>
-              <span className="text-orange-500 font-semibold">
-                ComplaintID: {complaintId}
-              </span>
-              <div className="flex justify-center items-center gap-4">
-                <button
-                  className="px-4 py-2 bg-[#ff4d4d] text-white rounded hover:bg-[#ff3333]"
-                  onClick={deleteClickHandler}
-                >
-                  Delete
-                </button>
-                <button
-                  className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-                  onClick={onRequestClose}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
+          <button
+            type="button"
+            class="py-2 px-3 text-sm font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-600 focus:ring-2 focus:outline-none focus:ring-red-300"
+            onClick={deleteClickHandler}
+          >
+            Yes, I'm sure
+          </button>
         </div>
       </div>
     </Modal>

@@ -1,34 +1,60 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import ConfirmationModal from "./Modals/ConfirmationModal";
 import PhotoModal from "./Modals/PhotoModal";
-import LoadingBar from "react-top-loading-bar";
 import axios from "axios";
 import { HiChevronDoubleDown, HiChevronDoubleUp } from "react-icons/hi2";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa6";
-import { MdOutlineFoodBank, MdElectricBolt } from "react-icons/md";
-import { IoCameraOutline, IoWater } from "react-icons/io5";
-import {
-  FaRegBell,
-  FaRegBuilding,
-  FaSearch,
-  FaChevronRight,
-} from "react-icons/fa";
+import { IoCameraOutline } from "react-icons/io5";
+import { FaSearch } from "react-icons/fa";
 
-const Example = () => {
+const Example2 = ({ activeSubLink, Tickets, links }) => {
   const [complaints, setComplaints] = useState([]);
   const [complaintsCopy, setComplaintsCopy] = useState([]);
-  const [approvedComplaints, setApprovedComplaints] = useState([]);
-  const [issue, setIssue] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterBy, setFilterBy] = useState("votes");
   const [descending, setDescending] = useState(true);
   const [showDescription, setShowDescription] = useState({});
-  const [selectedComplaint, setSelectedComplaint] = useState(null); // To store the selected complaint
+  const [selectedComplaint, setSelectedComplaint] = useState(null);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const loadingBar = useRef(null);
+
+  const fetchData = () => {
+    let flattenedTickets;
+    flattenedTickets = Tickets.flat();
+
+    if (activeSubLink === links["Ticket"][0]) {
+      let new_tickets = flattenedTickets.filter((complaint) => {
+        return !complaint.isApproved && !complaint.isRejected;
+      });
+      setComplaintsCopy(new_tickets);
+      setComplaints(new_tickets);
+    }
+    if (activeSubLink === links["Ticket"][1]) {
+      let pending_tickets = flattenedTickets.filter((complaint) => {
+        return complaint.isApproved && !complaint.isDone;
+      });
+      setComplaintsCopy(pending_tickets);
+      setComplaints(pending_tickets);
+    }
+    if (activeSubLink === links["Ticket"][2]) {
+      let resolved_tickets = flattenedTickets.filter((complaint) => {
+        return complaint.isDone;
+      });
+      setComplaintsCopy(resolved_tickets);
+      setComplaints(resolved_tickets);
+    }
+    if (activeSubLink === links["Ticket"][3]) {
+      let rejected_tickets = flattenedTickets.filter((complaint) => {
+        return complaint.isRejected;
+      });
+      setComplaintsCopy(rejected_tickets);
+      setComplaints(rejected_tickets);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [activeSubLink]);
 
   const formatDate = (time) => {
     const date = new Date(time);
@@ -43,7 +69,6 @@ const Example = () => {
   const handleSearch = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
-
     // Filter complaints based on roll number
     const filteredComplaints = complaints.filter((complaint) =>
       complaint.rollNumber.includes(term)
@@ -51,9 +76,33 @@ const Example = () => {
     setComplaintsCopy(filteredComplaints);
   };
 
-  //   const filteredComplaints = complaints.filter((content) =>
-  //     content.rollNumber.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+  const handleFilterChange = (e) => {
+    const filter = e.target.value;
+    setFilterBy(filter);
+
+    let sortedComplaints;
+    if (filter === "votes") {
+      sortedComplaints = complaints.sort(
+        (a, b) => b.upvoteCount - a.upvoteCount
+      );
+    } else if (filter === "date") {
+      sortedComplaints = complaints.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+    } else if (filter === "status") {
+      sortedComplaints = complaints.sort((a, b) => {
+        const trueValuesA = [a.isApproved, a.isAssigned].filter(Boolean).length;
+        const trueValuesB = [b.isApproved, b.isAssigned].filter(Boolean).length;
+        return trueValuesB - trueValuesA;
+      });
+    }
+    setComplaintsCopy(sortedComplaints);
+  };
+
+  const toggleComplaintsOrder = () => {
+    setDescending(!descending);
+    setComplaintsCopy(complaintsCopy.sort().reverse());
+  };
 
   const toggleDescription = (complaintId) => {
     setShowDescription((prevOpenDescriptions) => {
@@ -66,15 +115,6 @@ const Example = () => {
       });
       return updatedDescriptions;
     });
-  };
-
-  const toggleComplaintsOrder = () => {
-    setDescending(!descending);
-    setComplaintsCopy(complaintsCopy.sort().reverse());
-  };
-
-  const handleCategoryFilter = (issue) => {
-    setIssue(issue);
   };
 
   const openConfirmationModal = (complaint) => {
@@ -93,68 +133,7 @@ const Example = () => {
     setIsConfirmationModalOpen(false);
   };
 
-  useEffect(() => {
-    fetchComplaints();
-  }, [issue]);
-
-  useEffect(() => {
-    fetchComplaints();
-  }, [filterBy, issue]);
-
-  const fetchComplaints = async () => {
-    try {
-      const token = JSON.parse(localStorage.getItem("userInfo")).token;
-      setLoading(true);
-      loadingBar.current.continuousStart();
-
-      const response = await axios.get(
-        "http://localhost:5000/api/user/getcomplaintbycategory",
-        {
-          params: { issue: issue },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.data.success) {
-        const totalComplaints = response.data.complaints;
-
-        let sortedComplaints;
-
-        if (filterBy === "votes") {
-          sortedComplaints = totalComplaints.sort(
-            (a, b) => b.upvoteCount - a.upvoteCount
-          );
-        } else if (filterBy === "date") {
-          sortedComplaints = totalComplaints.sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-          );
-        } else if (filterBy === "status") {
-          sortedComplaints = totalComplaints.sort((a, b) => {
-            const trueValuesA = [a.isApproved, a.isAssigned].filter(
-              Boolean
-            ).length;
-            const trueValuesB = [b.isApproved, b.isAssigned].filter(
-              Boolean
-            ).length;
-            return trueValuesB - trueValuesA;
-          });
-        }
-        // console.log(sortedComplaints);
-        setComplaintsCopy(sortedComplaints);
-        setComplaints(totalComplaints);
-        // setIsApproved()
-
-        loadingBar.current.complete();
-        setLoading(false);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
   const updateStatus = async (complaintId, status) => {
-    console.log(status);
     try {
       const token = JSON.parse(localStorage.getItem("userInfo")).token;
 
@@ -169,7 +148,7 @@ const Example = () => {
       );
 
       if (response.data.success) {
-        console.log(...[response.data.updatedComplaint]);
+        // console.log(...[response.data.updatedComplaint]);
         const { isApproved, isAssigned, isDone, isRejected } =
           response.data.updatedComplaint;
 
@@ -178,7 +157,18 @@ const Example = () => {
             ? { ...complaint, isApproved, isAssigned, isDone, isRejected } // Update the fields of the matching complaint
             : complaint
         );
-        setComplaintsCopy(updatedComplaints);
+
+        if (
+          status === "ApproveRequest" ||
+          status === "RejectRequest" ||
+          status === "DoneRequest"
+        ) {
+          setComplaintsCopy(
+            complaintsCopy.filter((c) => c._id !== complaintId)
+          );
+        } else {
+          setComplaintsCopy(updatedComplaints);
+        }
       } else {
         console.log("Failed to update complaint status");
       }
@@ -189,124 +179,23 @@ const Example = () => {
 
   return (
     <>
-      <LoadingBar height={3} color="#f11946" ref={loadingBar} />
-      <div className="grid min-h-screen min-w-full lg:grid-cols-[280px_1fr]">
-        <div className="border-r bg-gray-100/40 ">
+      <div className="grid h-full min-w-full">
+        <div className="grid h-full w-full">
           <div className="flex h-full max-h-screen flex-col">
-            <div className="flex flex-col h-full pt-16 gap-2">
-              <div className="flex h-16 items-center justify-between border-b px-6 mt-3 py-2 bg-gray-200">
-                <h2 className="font-bold font-montserrat text-2xl tracking-wider px-2">
-                  IUHD
-                </h2>
-                <button
-                  className="inline-flex items-center justify-center text-sm font-medium  transition-colors focus-visible:ring-offset-2 border-2 hover:bg-gray-100 p-1.5 rounded-full hover:border-inset hover:border-orange-500 focus:ring-2 focus:ring-offset-0 focus:outline-none"
-                  title="Notifications"
-                >
-                  <FaRegBell size={20} />
-                  {/* NOTIFICATIONS */}
-                </button>
-              </div>
-              <div className="h-auto box-border py-2">
-                <nav className="grid items-start px-4 text-base font-medium gap-2.5">
-                  <button
-                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-gray-800 transition-all hover:bg-gray-200 ${
-                      issue === "Food"
-                        ? "bg-gray-800 text-gray-50 hover:bg-gray-800"
-                        : ""
-                    }`}
-                    value={"Food"}
-                    onClick={() => {
-                      handleCategoryFilter("Food");
-                    }}
-                  >
-                    <MdOutlineFoodBank size={22} />
-                    Food
-                  </button>
-                  <button
-                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-gray-800 transition-all hover:bg-gray-200 ${
-                      issue === "Water"
-                        ? "bg-gray-800 text-gray-100 hover:bg-gray-800"
-                        : ""
-                    }`}
-                    value={"Water"}
-                    onClick={() => {
-                      handleCategoryFilter("Water");
-                    }}
-                  >
-                    <IoWater size={22} />
-                    Water
-                  </button>
-                  <button
-                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-gray-800 transition-all hover:bg-gray-200 ${
-                      issue === "Electricity"
-                        ? "bg-gray-800 text-gray-100 hover:bg-gray-800"
-                        : ""
-                    }`}
-                    value={"Electricity"}
-                    onClick={() => {
-                      handleCategoryFilter("Electricity");
-                    }}
-                  >
-                    <MdElectricBolt size={22} />
-                    Electricity
-                  </button>
-                  <button
-                    className={`flex items-center gap-3 rounded-lg px-4 py-3 text-gray-800 transition-all hover:bg-gray-200 ${
-                      issue === "Hostel_affairs"
-                        ? "bg-gray-800 text-gray-100 hover:bg-gray-800"
-                        : ""
-                    }`}
-                    value={"Hostel_affairs"}
-                    onClick={() => {
-                      handleCategoryFilter("Hostel_affairs");
-                    }}
-                  >
-                    <FaRegBuilding size={20} />
-                    Hostel Affairs
-                  </button>
-                </nav>
-              </div>
-              <div className="p-4 pt-16 h-auto flex items-end">
-                <div className="flex flex-col gap-4 w-full">
-                  <div className="flex justify-between items-center px-2 py-4">
-                    <div className="text-base font-medium">
-                      Total Complaints
-                    </div>
-                    <div className="text-base font-medium pe-4">0</div>
-                  </div>
-                  <div className="flex justify-between items-center px-2 py-4">
-                    <div className="text-base font-medium">
-                      Approved Complaints
-                    </div>
-                    <div className="text-base font-medium pe-4">0</div>
-                  </div>
-                  <div className="flex justify-between items-center px-2 py-4">
-                    <div className="text-base font-medium">
-                      Pending Complaints
-                    </div>
-                    <div className="text-base font-medium pe-4">0</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="grid min-h-screen w-full">
-          <div className="flex h-full max-h-screen flex-col">
-            <div className="flex flex-col h-full pt-16 gap-2">
-              <header className="flex h-16 items-center justify-between border-b bg-gray-100/40 px-6 mt-3 py-2 gap-6">
+            <div className="flex flex-col h-full gap-2">
+              <header className="flex h-16 items-center justify-between border-b-2 bg-gray-100/40 px-7 py-2 gap-6">
                 <div className="w-full h-full flex justify-start items-center">
-                  <div className="flex justify-start items-center text-gray-600 font-palanquin text-2xl font-bold px-4 text-nowrap">
+                  <div className="flex justify-start items-center text-gray-600 font-palanquin text-[25px] font-bold px-4 text-nowrap">
                     Complaints & Work Requests
                   </div>
                 </div>
-                <div className="flex justify-end items-center w-auto relative">
+                <div className="flex justify-start items-center w-auto rounded-lg border-2 border-gray-300 relative">
                   <label className="absolute left-1 px-2 py-2" htmlFor="search">
                     <FaSearch />
                   </label>
                   <input
                     type="search"
-                    className="flex h-auto rounded-md border border-input px-3 py-2 text-sm pl-10 w-60 bg-gray-100 text-gray-700 focus-visible:outline-none focus:ring-2 focus:ring-offset-0 focus:outline-none"
+                    className="flex h-auto px-3 py-2 text-sm pl-10 w-60 bg-gray-100 text-gray-500 font-semibold focus-visible:outline-none focus:ring-2 focus:ring-offset-0 focus:outline-none rounded-lg"
                     value={searchTerm}
                     placeholder="Search complaints"
                     onChange={handleSearch}
@@ -316,7 +205,7 @@ const Example = () => {
                   <div className="w-auto flex items-center justify-center box-border">
                     <label
                       htmlFor="filter"
-                      className="text-xl text-gray-600 mx-1 ms-1 font-semibold w-auto text-nowrap"
+                      className="text-lg text-gray-600 mx-1 ms-1 font-semibold w-auto text-nowrap"
                     >
                       Filter By :
                     </label>
@@ -324,39 +213,39 @@ const Example = () => {
                       id="filter"
                       className="w-28 ms-2 appearance-none rounded-lg border-2 border-gray-400 px-4 py-1 shadow-sm focus:outline-none text-gray-500 font-semibold cursor-pointer focus:ring-2 focus:ring-offset-0"
                       value={filterBy}
-                      onChange={(e) => setFilterBy(e.target.value)}
+                      onChange={handleFilterChange}
                     >
                       <option value="votes">Votes</option>
                       <option value="date">Date</option>
-                      <option value="status">Status</option>
+                      {activeSubLink === "Pending Tickets" && (
+                        <option value="status">Status</option>
+                      )}
                     </select>
                     <button
-                      className="ms-1 p-2 border-2 border-gray-100 rounded-xl hover:bg-gray-100 focus:ring-2 focus:ring-offset-0 focus:outline-none"
+                      className="ms-1 p-2 border-2 border-gray-400 rounded-full hover:bg-gray-300/80 focus:ring-2 focus:ring-offset-0 focus:outline-none"
                       value={descending}
                       title="Reverse sort direction"
                       onClick={toggleComplaintsOrder}
                     >
-                      {descending ? <FaArrowDown /> : <FaArrowUp />}
+                      {descending ? (
+                        <FaArrowDown size={14} />
+                      ) : (
+                        <FaArrowUp size={14} />
+                      )}
                     </button>
                   </div>
                 </div>
-                {/* </div> */}
               </header>
+
               <main className="flex flex-col gap-4 p-4 md:gap-8 md:p-6">
-                <div className="flex justify-start items-center gap-2 text-base w-auto px-2 ">
-                  <Link className="flex justify-start items-center gap-2 px-2 py-1 text-gray-600 hover:text-orange-500 transition-all rounded-md">
-                    <FaChevronRight />
-                    Back to posts
-                  </Link>
-                </div>
-                {complaints.length == 0 && !loading ? (
+                {complaintsCopy.length == 0 ? (
                   <div className="flex justify-center items-center h-full w-full">
-                    <div className="bg-gray-100 border border-gray-300 rounded-lg p-8 text-center w-full">
+                    <div className="bg-gray-100 border border-gray-300 rounded-lg p-8 text-center w-full h-full">
                       <h2 className="text-xl font-semibold text-gray-800 mt-4">
-                        No Pending Complaints
+                        No {activeSubLink.split(" ")[0]} Complaints
                       </h2>
                       <p className="text-sm text-gray-600 mt-2">
-                        Post a complaint and check updates!
+                        Check later for updates!
                       </p>
                     </div>
                   </div>
@@ -383,11 +272,10 @@ const Example = () => {
                           <th className="h-12 w-76 text-center text-base align-middle font-medium">
                             Status
                           </th>
-                          {/* <th className="h-12 w-12 text-center text-base align-middle font-medium"></th> */}
                         </tr>
                       </thead>
                       <tbody className="border-0">
-                        {complaintsCopy.map((complaint) => (
+                        {complaintsCopy.map((complaint, index) => (
                           <tr
                             key={complaint._id}
                             className="border-b transition-colors hover:bg-[#FFFFF0] h-14"
@@ -429,7 +317,6 @@ const Example = () => {
                                 </button>
                               </div>
 
-                              {/* Render description if showDescription[complaint._id] is true */}
                               {showDescription[complaint._id] && (
                                 <div className="my-2">
                                   {complaint.description}
@@ -470,10 +357,26 @@ const Example = () => {
                             <td className="px-4 pt-3 align-top">
                               <div className="w-full h-full">
                                 <div className="flex items-center justify-center">
-                                  <div className="grid grid-cols-4 gap-2">
+                                  {complaint.isDone ? (
                                     <div className="flex justify-center w-24">
                                       <button
-                                        className={`inline-flex items-center rounded-full whitespace-nowrap border-2 border-transparent py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center
+                                        className="inline-flex items-center rounded-full whitespace-nowrap py-1.5 px-4 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-auto justify-center border-[#62cf62] border-2 bg-[#62cf62] text-white"
+                                        disabled={complaint.isDone}
+                                      >
+                                        Complaint Resolved
+                                      </button>
+                                    </div>
+                                  ) : (
+                                    <div
+                                      className={`grid gap-2 ${
+                                        complaint.isApproved
+                                          ? "grid-cols-3"
+                                          : "grid-cols-4"
+                                      }`}
+                                    >
+                                      <div className="flex justify-center w-24">
+                                        <button
+                                          className={`inline-flex items-center rounded-full whitespace-nowrap border-2 border-gray-200 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center
                                         ${
                                           complaint.isApproved
                                             ? "border-[#62cf62] border-2 bg-[#62cf62] text-white"
@@ -484,25 +387,25 @@ const Example = () => {
                                             ? "opacity-50 cursor-not-allowed bg-[#d1d5d8] hover:border-2 hover:border-[#D9D9D9]"
                                             : "border-[#D9D9D9]"
                                         }`}
-                                        disabled={
-                                          complaint.isApproved ||
-                                          complaint.isRejected
-                                        }
-                                        onClick={() =>
-                                          updateStatus(
-                                            complaint._id,
-                                            "ApproveRequest"
-                                          )
-                                        }
-                                      >
-                                        {complaint.isApproved
-                                          ? "Approved"
-                                          : "Approve"}
-                                      </button>
-                                    </div>
-                                    <div className="flex justify-center w-24">
-                                      <button
-                                        className={`inline-flex items-center rounded-full whitespace-nowrap border-2 border-transparent py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center
+                                          disabled={
+                                            complaint.isApproved ||
+                                            complaint.isRejected
+                                          }
+                                          onClick={() =>
+                                            updateStatus(
+                                              complaint._id,
+                                              "ApproveRequest"
+                                            )
+                                          }
+                                        >
+                                          {complaint.isApproved
+                                            ? "Approved"
+                                            : "Approve"}
+                                        </button>
+                                      </div>
+                                      <div className="flex justify-center w-24">
+                                        <button
+                                          className={`inline-flex items-center rounded-full whitespace-nowrap border-2 border-gray-200 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center
                                         ${
                                           complaint.isAssigned
                                             ? "border-[#62cf62] border-2 bg-[#62cf62] text-white "
@@ -519,26 +422,28 @@ const Example = () => {
                                             ? "opacity-50 cursor-not-allowed bg-[#d1d5d8] hover:border-2 hover:border-[#D9D9D9]"
                                             : "border-[#D9D9D9]"
                                         }`}
-                                        disabled={
-                                          !complaint.isApproved ||
-                                          complaint.isAssigned ||
-                                          complaint.isRejected
-                                        }
-                                        onClick={() =>
-                                          updateStatus(
-                                            complaint._id,
-                                            "AssignRequest"
-                                          )
-                                        }
+                                          disabled={
+                                            !complaint.isApproved ||
+                                            complaint.isAssigned ||
+                                            complaint.isRejected
+                                          }
+                                          onClick={() =>
+                                            updateStatus(
+                                              complaint._id,
+                                              "AssignRequest"
+                                            )
+                                          }
+                                        >
+                                          {complaint.isAssigned
+                                            ? "Assigned"
+                                            : "Assign"}
+                                        </button>
+                                      </div>
+                                      <div
+                                        className={`flex justify-center w-24`}
                                       >
-                                        {complaint.isAssigned
-                                          ? "Assigned"
-                                          : "Assign"}
-                                      </button>
-                                    </div>
-                                    <div className={`flex justify-center w-24`}>
-                                      <button
-                                        className={`inline-flex items-center rounded-full whitespace-nowrap border-2 border-transparent py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center
+                                        <button
+                                          className={`inline-flex items-center rounded-full whitespace-nowrap border-2 border-gray-200 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center
                                         ${
                                           complaint.isDone
                                             ? "border-[#62cf62] border-2 bg-[#62cf62] text-white"
@@ -555,52 +460,56 @@ const Example = () => {
                                             ? "opacity-50 cursor-not-allowed bg-[#d1d5d8] hover:border-2 hover:border-[#D9D9D9]"
                                             : "border-[#D9D9D9]"
                                         }`}
-                                        disabled={
-                                          !complaint.isApproved ||
-                                          !complaint.isAssigned ||
-                                          complaint.isDone
-                                        }
-                                        onClick={() =>
-                                          updateStatus(
-                                            complaint._id,
-                                            "DoneRequest"
-                                          )
-                                        }
-                                      >
-                                        {complaint.isDone
-                                          ? "Done"
-                                          : "Mark as Done"}
-                                      </button>
-                                    </div>
-                                    <div className="flex justify-center w-24">
-                                      <button
-                                        className={`inline-flex items-center rounded-full whitespace-nowrap border-2 border-transparent py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center 
+                                          disabled={
+                                            !complaint.isApproved ||
+                                            !complaint.isAssigned ||
+                                            complaint.isDone
+                                          }
+                                          onClick={() =>
+                                            updateStatus(
+                                              complaint._id,
+                                              "DoneRequest"
+                                            )
+                                          }
+                                        >
+                                          {complaint.isDone
+                                            ? "Done"
+                                            : "Mark as Done"}
+                                        </button>
+                                      </div>
+                                      {!complaint.isApproved && (
+                                        <div className="flex justify-center w-24">
+                                          <button
+                                            className={`inline-flex items-center rounded-full whitespace-nowrap border-2 border-gray-200 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 w-24 justify-center 
                                         ${
                                           !complaint.isApproved
-                                            ? "bg-red-500/80 text-white cursor-pointer"
+                                            ? "bg-red-500 hover:border-red-500/80 text-white cursor-pointer"
                                             : "bg-gray-300 text-gray-700"
                                         }`}
-                                        disabled={complaint.isApproved}
-                                        onClick={
-                                          complaint.isRejected
-                                            ? () => {
-                                                openConfirmationModal(
-                                                  complaint
-                                                );
-                                              }
-                                            : () =>
-                                                updateStatus(
-                                                  complaint._id,
-                                                  "RejectRequest"
-                                                )
-                                        }
-                                      >
-                                        {complaint.isRejected
-                                          ? "Delete"
-                                          : "Reject"}
-                                      </button>
+                                            disabled={complaint.isApproved}
+                                            onClick={
+                                              complaint.isRejected
+                                                ? () => {
+                                                    openConfirmationModal(
+                                                      complaint
+                                                    );
+                                                  }
+                                                : () => {
+                                                    updateStatus(
+                                                      complaint._id,
+                                                      "RejectRequest"
+                                                    );
+                                                  }
+                                            }
+                                          >
+                                            {complaint.isRejected
+                                              ? "Delete"
+                                              : "Reject"}
+                                          </button>
+                                        </div>
+                                      )}
                                     </div>
-                                  </div>
+                                  )}
                                 </div>
                               </div>
                             </td>
@@ -635,4 +544,4 @@ const Example = () => {
   );
 };
 
-export default Example;
+export default Example2;
