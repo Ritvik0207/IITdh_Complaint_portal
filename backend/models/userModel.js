@@ -42,10 +42,10 @@ const userSchema = mongoose.Schema(
       default: false,
     },
 
-    department: {
-      type: "String",
-      required: true,
-    },
+    // department: {
+    //   type: "String",
+    //   required: true,
+    // },
   },
   { timestaps: true }
 );

@@ -18,22 +18,15 @@ import NewTablev2 from "./components/NewTablev2";
 import Trail from "./components/trail";
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <Router>
-      <Navbar
-        isLoggedIn={isLoggedIn}
-        loginStatus={(bool) => {
-          setIsLoggedIn(bool);
-        }}
-      />
+      <Navbar />
       <Notification />
       <Routes>
         <Route
           path="/"
           element={
             <PublicRoute>
-              {" "}
               <Home />
             </PublicRoute>
           }
@@ -42,7 +35,7 @@ const App = () => {
           path="/login"
           element={
             <PublicRoute>
-              <Login loginStatus={() => setIsLoggedIn(true)} />
+              <Login />
             </PublicRoute>
           }
         />
@@ -50,7 +43,6 @@ const App = () => {
           path="/register"
           element={
             <PublicRoute>
-              {" "}
               <Register />
             </PublicRoute>
           }

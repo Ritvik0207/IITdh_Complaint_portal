@@ -7,56 +7,64 @@ const { ObjectId } = require("mongoose").Types;
 const path = require("path"); // Import the path module
 
 const registerUser = asyncHandler(async (req, res) => {
-  const {
-    name,
-    email,
-    password,
-    room_no,
-    wing,
-    hostel_no,
-    mobile_number,
-    roll_no,
-  } = req.body;
+  try {
+    const {
+      name,
+      email,
+      password,
+      room_no,
+      wing,
+      hostel_no,
+      mobile_number,
+      roll_no,
+    } = req.body;
 
-  const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email });
 
-  if (userExists) {
-    return res
-      .status(200)
-      .json({ success: false, message: "User already exists" });
-  }
+    if (userExists) {
+      return res
+        .status(200)
+        .json({ success: false, message: "User already exists" });
+    }
 
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-  const user = await User.create({
-    name,
-    email,
-    password: hashedPassword,
-    roll_no,
-    room_no,
-    wing,
-    hostel_no,
-    mobile_number,
-  });
-
-  if (user) {
-    res.status(201).json({
-      success: true,
-      _id: user._id,
-      name: user.name,
-      roll_no: user.roll_no,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      room_no: user.room_no,
-      wing: user.wing,
-      hostel_no: user.hostel_no,
-      mobile_number: user.mobile_number,
-      token: generateToken(user._id),
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      roll_no,
+      room_no,
+      wing,
+      hostel_no,
+      mobile_number,
     });
-  } else {
+
+    if (user) {
+      res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        roll_no: user.roll_no,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        room_no: user.room_no,
+        wing: user.wing,
+        hostel_no: user.hostel_no,
+        mobile_number: user.mobile_number,
+        token: generateToken(user._id),
+        success: true,
+        message: "Registration successful!",
+      });
+    } else {
+      res
+        .status(400)
+        .json({ success: false, message: "Internal server error occurred" });
+    }
+  } catch (error) {
+    console.error("Error registering user:", error);
     res
-      .status(400)
+      .status(500)
       .json({ success: false, message: "Internal server error occurred" });
   }
 });
@@ -80,24 +88,19 @@ const authUser = asyncHandler(async (req, res) => {
           wing: user.wing,
           hostel_no: user.hostel_no,
           mobile_number: user.mobile_number,
-          department: user.department,
           token: generateToken(user._id),
           success: true,
           message: "Login Successful",
         });
       } else {
-        return res
-          .status(400)
-          .json({ success: false, message: "Invalid Credentials" });
-        // throw new Error("Some Error occurred");
+        console.log("pass wrong");
+        return res.json({ success: false, message: "Invalid Credentials" });
       }
     } else {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid Credentials" });
+      return res.json({ success: false, message: "Invalid Credentials" });
     }
   } catch (error) {
-    console.error("Error while logging in:", error);
+    // console.error("Error while logging in:", error);
     res
       .status(500)
       .json({ success: false, message: "Failed to Login due to Server Error" });
