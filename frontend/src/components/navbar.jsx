@@ -26,20 +26,21 @@ const Navbar = () => {
     { path: "/register", label: "Register" },
   ];
 
-  const toggleProfile = () => {
-    setShowProfile(!showProfile);
-  };
-
   const handleSignOut = () => {
     localStorage.removeItem("userInfo"); // Clear userInfo from localStorage
     navigate("/"); // Navigate to the login page
     setLoggedIn(false);
   };
 
+  const toggleProfile = () => {
+    setShowProfile(!showProfile);
+  };
+
   return (
     <header className="px-16 py-1 fixed z-50 w-full bg-newpurple lg:ps-16 lg:pe-8 md:ps-12 md:pe-6 sm:px-16 sm:pe-8 max-sm:ps-6 max-sm:pe-3">
       <nav className="flex justify-between items-center">
-        <Link to={"/"} className="flex h-auto focus:outline-none">
+        {/* Logo */}
+        <Link to={"/"} className="flex h-auto focus:outline-none" tabIndex="-1">
           <img
             src={logo1}
             alt="college logo"
@@ -56,27 +57,38 @@ const Navbar = () => {
 
         <OutsideClickHandler onOutsideClick={() => setShowDropdown(false)}>
           <div className="invisible max-md:visible">
-            <div
-              className={`cursor-pointer p-2 border-2 border-newpurple rounded-full hover:border-orange-500 ${
-                showDropdown && "border-orange-500"
-              }`}
+            <button
+              className={`p-2 border-2 border-newpurple rounded-full hover:border-orange-500 outline-none focus:border-orange-500 
+              ${showDropdown && "border-orange-500"}`}
               onClick={() => {
                 setShowDropdown(!showDropdown);
               }}
             >
               <RxHamburgerMenu size={20} color="white" />
-            </div>
+            </button>
             {showDropdown && (
               <ul className="bg-[#89288f] absolute top-full right-1 mt-[1px] h-auto w-auto align-baseline rounded-md text-center divide-y-2">
                 {isLoggedIn ? (
                   <>
                     <li>
-                      <button className="block text-white text-base py-2 px-10 hover:bg-orange-500 rounded-md">
+                      <button
+                        className="w-full text-white text-base py-2 px-10 hover:bg-orange-500 outline-none focus:bg-orange-500 rounded-md "
+                        onClick={() => {
+                          handleSignOut();
+                          setShowDropdown(false);
+                        }}
+                      >
                         Sign Out
                       </button>
                     </li>
                     <li>
-                      <button className="block text-white text-base py-2 px-10 hover:bg-orange-500 rounded-md">
+                      <button
+                        className="w-full text-white text-base py-2 px-10 hover:bg-orange-500 outline-none focus:bg-orange-500 rounded-md"
+                        onClick={() => {
+                          toggleProfile();
+                          setShowDropdown(false);
+                        }}
+                      >
                         Profile
                       </button>
                     </li>
@@ -86,7 +98,7 @@ const Navbar = () => {
                     <li key={index}>
                       <Link
                         to={item.path}
-                        className="block text-white text-base py-2 px-10 hover:bg-orange-500 rounded-md"
+                        className="block text-white text-base py-2 px-10 hover:bg-orange-500 rounded-md outline-none focus:bg-orange-500"
                         onClick={() => {
                           setShowDropdown(!showDropdown);
                         }}
@@ -123,7 +135,10 @@ const Navbar = () => {
                     width={38}
                   />
                   {showProfile && (
-                    <Profile WindowCloseFunction={toggleProfile} />
+                    <>
+                      {/* {console.log("showing profile")} */}
+                      <Profile WindowCloseFunction={toggleProfile} />
+                    </>
                   )}
                 </button>
               )}

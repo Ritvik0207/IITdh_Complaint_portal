@@ -71,13 +71,15 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const authUser = asyncHandler(async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, checkbox } = req.body;
     const user = await User.findOne({ email });
 
     if (user) {
       const isPasswordMatch = await bcrypt.compare(password, user.password);
 
       if (isPasswordMatch) {
+        const tokenExpiry = checkbox ? "30d" : "1d";
+
         res.status(201).json({
           _id: user._id,
           name: user.name,
@@ -85,15 +87,16 @@ const authUser = asyncHandler(async (req, res) => {
           isAdmin: user.isAdmin,
           room_no: user.room_no,
           roll_no: user.roll_no,
+          department: user.department,
           wing: user.wing,
           hostel_no: user.hostel_no,
           mobile_number: user.mobile_number,
-          token: generateToken(user._id),
+          token: generateToken(user._id, tokenExpiry),
           success: true,
           message: "Login Successful",
         });
       } else {
-        console.log("pass wrong");
+        // console.log("password wrong");
         return res.json({ success: false, message: "Invalid Credentials" });
       }
     } else {

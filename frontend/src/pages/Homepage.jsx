@@ -3,12 +3,13 @@
 import React from "react";
 import { homelogo } from "../assets/images";
 
-const Home = () => {
+const Homepage = () => {
   return (
-    <section className="w-full h-screen flex flex-row max-lg:flex-col max-lg:gap-10 max-sm:gap-6 pt-14">
-      <div className="flex justify-center items-center lg:w-3/5 my-auto pt-6">
-        <div className="w-full h-full flex flex-col justify-center items-start lg:px-20 max-lg:px-28 max-md:px-20 max-sm:px-8">
-          <h3 className="mb-6 font-palanquin font-bold text-orange-500 text-3xl max-xl:text-[34px] max-md:text-2xl max-sm:text-xl text-nowrap max-sm:text-wrap">
+    <section className="w-full min-h-screen grid bg-white">
+      <div className="flex max-lg:flex-col max-lg:gap-10 max-sm:gap-6 pt-14">
+        {/* Left Div */}
+        <div className="w-full my-auto lg:w-3/5 px-8 lg:px-20 md:px-28 sm:px-20 pt-6 sm:pt-0">
+          <h3 className="mb-6 font-palanquin font-bold text-orange-500 text-3xl max-xl:text-[34px] max-md:text-2xl max-sm:text-[26px] max-[400px]:text-[20px] max-[400px]:leading-7 sm:text-nowrap text-wrap">
             Discover IUHD: Elevating Campus Living
           </h3>
 
@@ -45,15 +46,14 @@ const Home = () => {
             </span>
           </div>
         </div>
-      </div>
 
-      <div className="flex justify-center items-center lg:w-2/5 my-auto py-6 max-lg:mx-auto max-md:px-6">
-        <div className="max-w-lg mx-auto">
-          <div className="rounded-sm max-sm:rounded-tl-[5.5rem] max-sm:rounded-br-[5.5rem] rounded-tl-[7.5rem] rounded-br-[7.5rem] bg-[#FFE4BA]/70 ">
+        {/* Right Div */}
+        <div className="max-w-lg lg:w-2/5 my-auto mx-auto max-md:px-6">
+          <div className="rounded-sm bg-[#FFE4BA]/70 max-sm:rounded-tl-[5.5rem] max-sm:rounded-br-[5.5rem] rounded-tl-[7.5rem] rounded-br-[7.5rem]">
             <img
               src={homelogo}
               alt="Community Logo"
-              className="w-auto h-auto object-cover p-10"
+              className="w-auto h-auto object-cover sm:p-10 p-4"
             />
           </div>
         </div>
@@ -62,4 +62,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Homepage;

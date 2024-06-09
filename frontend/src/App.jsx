@@ -9,7 +9,7 @@ import Login from "./pages/Authentication/login";
 import Register from "./pages/Authentication/register";
 import Complaint from "./pages/complaint";
 import Dashboard from "./pages/dashboard";
-import Home from "./sections/Home";
+import Home from "./pages/Homepage";
 import PrevComplaints from "./pages/prevComplaints";
 import Feedback from "./pages/feedback";
 import Example from "./components/example";

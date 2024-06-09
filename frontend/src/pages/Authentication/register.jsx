@@ -4,25 +4,38 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { FaChevronDown } from "react-icons/fa";
+import { IoChevronUp, IoChevronDown } from "react-icons/io5";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import OutsideClickHandler from "react-outside-click-handler";
 
 const Register = () => {
   const [name, setName] = useState("");
   const [roll_no, setRoll_No] = useState("");
   const [email, setEmail] = useState("");
   const [mobile_no, setMobile_No] = useState("");
-  const [hostel_no, setHostel_No] = useState("");
-  const [wing, setWing] = useState("");
+  const [hostel_no, setHostel_No] = useState("Hostel");
+  const [HostelDropdown, setHostelDropdown] = useState(false);
+  const [wing, setWing] = useState("Wing");
+  const [WingDropdown, setWingDropdown] = useState(false);
   const [room, setRoom] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [isVisible, setIsVisible] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const navigate = useNavigate();
 
   const hostels = ["Hostel-1", "Hostel-2"];
   const wings = ["A", "B", "C", "D", "E"];
+
+  const handleHostelOptionClick = (hostel) => {
+    setHostel_No(hostel);
+    setHostelDropdown(false);
+  };
+
+  const handleWingOptionClick = (wing) => {
+    setWing(wing);
+    setWingDropdown(false);
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -74,300 +87,356 @@ const Register = () => {
     }
   };
 
-  const handleHostelChange = (e) => {
-    setHostel_No(e.target.value);
-  };
-
-  const handleWingChange = (e) => {
-    setWing(e.target.value);
-  };
-
   return (
-    <>
-      <section className="min-h-screen w-full bg-gray-50">
-        <div className="h-full w-full pt-14">
-          <div className="h-full w-full flex justify-center items-center py-6">
-            <div className="relative flex sm:w-[30rem] max-sm:w-[24rem] rounded-lg border-gray-600 bg-white shadow-lg">
-              <div className="flex-auto px-6 py-3 max-sm:px-4">
-                <div className="mb-6 flex items-center justify-center max-sm:mb-4">
-                  <span className="text-newpurple text-3xl font-black tracking-normal max-sm:text-2xl">
-                    Sign Up
-                  </span>
+    <section className="min-h-screen w-full grid sm:bg-gray-50 select-none">
+      <div className="h-full pt-14">
+        <div className="h-full flex justify-center items-center py-6">
+          <div className="flex sm:w-[30rem] rounded-lg bg-white shadow-lg px-4 max-phone:shadow-none">
+            <div className="flex-auto sm:p-6 py-2">
+              <div className="mb-4 sm:mb-6 flex items-center justify-center">
+                <span className="text-newpurple text-2xl sm:text-3xl font-black tracking-normal">
+                  Sign Up
+                </span>
+              </div>
+
+              <h4 className="mb-2 font-medium text-xl text-gray-700 max-sm:text-base">
+                Get Started
+              </h4>
+              <p className="mb-4 text-gray-500 text-xs sm:text-base">
+                Sign Up to get your account
+              </p>
+
+              <form className="mb-4" method="POST">
+                <div className="sm:flex sm:flex-row flex-col gap-4 mb-0 sm:mb-2">
+                  {/* Fullname Input Field */}
+                  <div className="sm:w-2/3 max-sm:mb-1">
+                    <label
+                      htmlFor="name"
+                      className="mb-2 inline-block text-xs font-medium uppercase text-gray-700"
+                    >
+                      Full Name
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      className="inline-block w-full rounded-md border border-gray-400 py-2 px-3 text-sm focus:border-orange-500 focus:text-gray-600 focus:shadow outline-none"
+                      placeholder="John"
+                      pattern="[a-zA-Z]{3,}$"
+                      title="3 letters or more"
+                      onChange={(element) => setName(element.target.value)}
+                      required
+                    />
+                  </div>
+
+                  {/* Roll Number Input Field */}
+                  <div className="sm:w-1/3 max-sm:mb-1">
+                    <label
+                      htmlFor="roll_no"
+                      className="mb-2 inline-block text-xs font-medium uppercase text-gray-700"
+                    >
+                      Roll Number
+                    </label>
+                    <input
+                      id="roll_no"
+                      type="text"
+                      className="inline-block w-full rounded-md border border-gray-400 py-2 px-3 text-sm focus:border-orange-500 focus:text-gray-600 focus:shadow outline-none"
+                      placeholder="2100100**"
+                      pattern="[0-9]{9}"
+                      minLength={9}
+                      maxLength={9}
+                      onChange={(element) => setRoll_No(element.target.value)}
+                      required
+                    />
+                  </div>
                 </div>
-                <p className="mb-4 text-gray-500 text-base max-sm:text-xs">
-                  Please sign-in to access your account
-                </p>
 
-                <form className="mb-4 px-2" method="POST">
-                  <div className="mb-4 flex flex-row max-sm:flex-col sm:space-x-4 max-sm:mb-1">
-                    <div className="flex-1">
-                      <label
-                        htmlFor="name"
-                        className="mb-2 ms-1 inline-block text-xs font-medium uppercase text-gray-700"
-                      >
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        className="block w-full cursor-text appearance-none rounded-md border border-gray-400 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white focus:text-gray-600 focus:shadow"
-                        id="name"
-                        placeholder="John"
-                        pattern="[a-zA-Z]{3,}$"
-                        title="3 letters or more"
-                        required
-                        onChange={(element) => setName(element.target.value)}
-                      />
-                    </div>
-
-                    <div className="flex-1">
-                      <label
-                        htmlFor="roll_no"
-                        className="mb-2 ms-1 inline-block text-xs font-medium uppercase text-gray-700"
-                      >
-                        Roll Number
-                      </label>
-                      <input
-                        type="text"
-                        className="block w-full cursor-text appearance-none rounded-md border border-gray-400  py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white focus:text-gray-600 focus:shadow"
-                        id="roll_no"
-                        placeholder="2100100**"
-                        pattern="[0-9]{9}"
-                        minLength={9}
-                        maxLength={9}
-                        required
-                        onChange={(element) => setRoll_No(element.target.value)}
-                      />
-                    </div>
+                <div className="sm:flex sm:flex-row flex-col gap-4 mb-0 sm:mb-2">
+                  {/* Email Input Field */}
+                  <div className="sm:w-2/3 max-sm:mb-1">
+                    <label
+                      htmlFor="email"
+                      className="mb-2 inline-block text-xs font-medium uppercase text-gray-700"
+                    >
+                      Email
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      className="inline-block w-full rounded-md border border-gray-400 py-2 px-3 text-sm focus:border-orange-500 focus:text-gray-600 focus:shadow outline-none"
+                      placeholder="student@iitdh.ac.in"
+                      // pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                      onChange={(element) => setEmail(element.target.value)}
+                      required
+                    />
                   </div>
 
-                  <div className="mb-4 flex flex-row max-sm:flex-col sm:space-x-4 max-sm:mb-1">
-                    <div className="flex-1">
-                      <label
-                        htmlFor="email"
-                        className="mb-2 ms-1 inline-block text-xs font-medium uppercase text-gray-700"
-                      >
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        className="block w-full cursor-text appearance-none rounded-md border border-gray-400 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white focus:text-gray-600 focus:shadow"
-                        id="email"
-                        name="email-username"
-                        placeholder="student@iitdh.ac.in"
-                        // pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-                        required
-                        onChange={(element) => setEmail(element.target.value)}
-                      />
-                    </div>
-
-                    <div className="flex-1">
-                      <label
-                        htmlFor="mobile_no"
-                        className="mb-2 ms-1 inline-block text-xs font-medium uppercase text-gray-700"
-                      >
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        className="block w-full cursor-text appearance-none rounded-md border border-gray-400 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white focus:text-gray-600 focus:shadow"
-                        name="mobile_no"
-                        placeholder="### - ### - ####"
-                        pattern="[0-9]{10}"
-                        minLength={10}
-                        maxLength={10}
-                        required
-                        onChange={(element) =>
-                          setMobile_No(element.target.value)
-                        }
-                      />
-                    </div>
+                  {/* Mobile Number Input Field */}
+                  <div className="sm:w-1/3 max-sm:mb-1">
+                    <label
+                      htmlFor="mobile_no"
+                      className="mb-2 inline-block text-xs font-medium uppercase text-gray-700"
+                    >
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      className="inline-block w-full rounded-md border border-gray-400 py-2 px-3 text-sm focus:border-orange-500 focus:text-gray-600 focus:shadow outline-none"
+                      placeholder="### - ### - ####"
+                      pattern="[0-9]{10}"
+                      minLength={10}
+                      maxLength={10}
+                      required
+                      onChange={(element) => setMobile_No(element.target.value)}
+                    />
                   </div>
+                </div>
 
-                  <div className="mb-4 flex flex-row space-y-0 space-x-4">
-                    <div className="flex-1">
+                <div className="flex flex-row sm:gap-4 gap-1 mb-0 sm:mb-2 max-sm:my-2">
+                  <div className="w-2/3 flex sm:gap-4 gap-1">
+                    {/* Hostel Input Fields */}
+                    <div className="flex-1 relative">
                       <label
                         htmlFor="hostel_no"
-                        className="mb-2 ms-1 inline-block text-xs font-medium uppercase text-gray-700"
+                        className="mb-2 inline-block text-xs font-medium uppercase text-gray-700"
                       >
                         Hostel No.
                       </label>
-                      <div className="relative">
-                        <select
-                          id="hostel_no"
-                          value={hostel_no}
-                          className="block w-full cursor-pointer appearance-none rounded-md border border-gray-400 py-2 px-3 text-gray-400 text-sm outline-none focus:border-orange-500 focus:bg-white"
-                          required
-                          onChange={handleHostelChange}
-                        >
-                          <option value="" disabled>
-                            Hostel
-                          </option>
-                          {hostels.map((hostel) => (
-                            <option key={hostel} value={hostel}>
-                              {hostel}
-                            </option>
-                          ))}
-                        </select>
-                        <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                          <FaChevronDown size={12} />
+                      <OutsideClickHandler
+                        onOutsideClick={() => setHostelDropdown(false)}
+                      >
+                        <div className="relative">
+                          <input
+                            id="hostel_no"
+                            type="button"
+                            value={hostel_no}
+                            className="inline-block w-full rounded-md border text-gray-600 border-gray-400 py-2 px-3 text-sm focus:border-orange-500 focus:shadow outline-none text-left"
+                            onFocus={() => setHostelDropdown(true)}
+                          />
+                          {HostelDropdown ? (
+                            <button
+                              type="button"
+                              onClick={() => setHostelDropdown(false)}
+                              tabIndex="-1"
+                            >
+                              <IoChevronUp className="absolute right-3 max-sm:right-1.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setHostelDropdown(true)}
+                              tabIndex="-1"
+                            >
+                              <IoChevronDown className="absolute right-3 max-sm:right-1.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
+                            </button>
+                          )}
                         </div>
-                      </div>
+                        {HostelDropdown && (
+                          <div className="absolute space-y-1 top-full left-1/2 text-nowrap transform -translate-x-1/2 w-fit bg-white border rounded-md shadow-md p-1 z-10">
+                            {hostels.map((item) => (
+                              <div
+                                key={item}
+                                className="flex justify-start items-center gap-1 w-full py-0.5"
+                              >
+                                <button
+                                  type="button"
+                                  className="w-full text-left px-3 border-2 border-transparent hover:bg-gray-100 rounded-md focus:bg-gray-100 focus:outline-none focus:rounded-sm"
+                                  onClick={() => handleHostelOptionClick(item)}
+                                >
+                                  {item}
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </OutsideClickHandler>
                     </div>
 
+                    {/* Wing Input Field */}
                     <div className="flex-1 relative">
                       <label
                         htmlFor="wing"
-                        className="mb-2 ms-1 inline-block text-xs font-medium uppercase text-gray-700"
+                        className="mb-2 inline-block text-xs font-medium uppercase text-gray-700"
                       >
                         WING
                       </label>
-                      <div className="relative">
-                        <select
-                          id="wing"
-                          value={wing}
-                          className="block w-full cursor-pointer appearance-none rounded-md border border-gray-400 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white text-gray-400 "
-                          required
-                          onChange={handleWingChange}
-                        >
-                          <option value="" disabled>
-                            Wing
-                          </option>
-                          {wings.map((wing) => (
-                            <option key={wing} value={wing}>
-                              {wing}
-                            </option>
-                          ))}
-                        </select>
-                        <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                          <FaChevronDown size={12} />
+                      <OutsideClickHandler
+                        onOutsideClick={() => setWingDropdown(false)}
+                      >
+                        <div className="relative">
+                          <input
+                            id="wing"
+                            type="button"
+                            value={wing}
+                            className="inline-block w-full rounded-md border text-gray-600 border-gray-400 py-2 px-3 text-sm focus:border-orange-500 focus:shadow outline-none text-left"
+                            onFocus={() => setWingDropdown(true)}
+                          />
+                          {WingDropdown ? (
+                            <button
+                              type="button"
+                              onClick={() => setWingDropdown(false)}
+                              tabIndex="-1"
+                            >
+                              <IoChevronUp className="absolute right-3 max-sm:right-1.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setWingDropdown(true)}
+                              tabIndex="-1"
+                            >
+                              <IoChevronDown className="absolute right-3 max-sm:right-1.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
+                            </button>
+                          )}
                         </div>
-                      </div>
+                        {WingDropdown && (
+                          <div className="absolute space-y-1 top-full right-0 w-14 bg-white border rounded-md shadow-md p-1 z-10">
+                            {wings.map((item) => (
+                              <div
+                                key={item}
+                                className="flex justify-start items-center w-full"
+                              >
+                                <button
+                                  type="button"
+                                  className="w-full text-center hover:bg-gray-100 rounded-md focus:bg-gray-100 focus:outline-none focus:rounded-sm"
+                                  onClick={() => handleWingOptionClick(item)}
+                                >
+                                  {item}
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </OutsideClickHandler>
                     </div>
-
+                  </div>
+                  <div className="w-1/3">
+                    {/* Room Number Input Field */}
                     <div className="flex-1">
                       <label
                         htmlFor="room_no"
-                        className="mb-2 ms-1 inline-block text-xs font-medium uppercase text-gray-700"
+                        className="mb-2 inline-block text-xs font-medium uppercase text-gray-700"
                       >
                         Room
                       </label>
                       <input
+                        id="room_no"
                         type="tel"
-                        className="block w-full cursor-text appearance-none rounded-md border border-gray-400 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white text-gray-400 focus:shadow"
+                        className="block w-full rounded-md border border-gray-400 py-2 px-3 text-sm focus:border-orange-500 text-gray-600 focus:shadow outline-none"
                         placeholder="Room No."
                         pattern="[0-8]([0-2][1-9]|3[012])"
                         maxLength={3}
-                        required
                         onChange={(element) => setRoom(element.target.value)}
+                        required
                       />
                     </div>
                   </div>
+                </div>
 
-                  <div className="mb-2 flex flex-row max-sm:flex-col sm:space-x-4 max-sm:mb-1">
-                    <div className="flex-1">
-                      <label
-                        htmlFor="password"
-                        className="mb-2 ms-1 inline-block text-xs font-medium uppercase text-gray-700"
-                      >
-                        Set Password
-                      </label>
-                      <div className="relative flex items-center">
-                        <input
-                          type={`${isVisible ? "text" : "password"}`}
-                          className="w-full block cursor-text appearance-none rounded-md border border-gray-400 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white focus:text-gray-600 focus:shadow"
-                          id="password"
-                          placeholder="•••••"
-                          // pattern="[a-zA-Z0-9]{6,}$"
-                          required
-                          onChange={(element) =>
-                            setPassword(element.target.value)
-                          }
-                        />
-                        <button
-                          type="button"
-                          className="absolute right-4 focus:outline-none"
-                          onClick={() => {
-                            setIsVisible(!isVisible);
-                          }}
-                        >
-                          {isVisible ? (
-                            <FaEye className="text-gray-500" />
-                          ) : (
-                            <FaEyeSlash className="text-gray-500" />
-                          )}
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="flex-1">
-                      <label
-                        htmlFor="confirmPassword"
-                        className="mb-2 ms-1 inline-block text-xs font-medium uppercase text-gray-700"
-                      >
-                        Confirm Password
-                      </label>
-                      <div className="relative flex items-center">
-                        <input
-                          type={`${isConfirmVisible ? "text" : "password"}`}
-                          className="w-full block cursor-text appearance-none rounded-md border border-gray-400 py-2 px-3 text-sm outline-none focus:border-orange-500 focus:bg-white focus:text-gray-600 focus:shadow"
-                          id="confirmPassword"
-                          placeholder="•••••"
-                          // pattern="[a-zA-Z0-9]{6,}$"
-                          required
-                          onChange={(element) =>
-                            setConfirmPassword(element.target.value)
-                          }
-                        />
-                        <button
-                          type="button"
-                          className="absolute right-4 focus:outline-none"
-                          onClick={() => {
-                            setIsConfirmVisible(!isConfirmVisible);
-                          }}
-                        >
-                          {isConfirmVisible ? (
-                            <FaEye className="text-gray-500" />
-                          ) : (
-                            <FaEyeSlash className="text-gray-500" />
-                          )}
-                        </button>
-                      </div>
-                      <div className="h-5">
-                        {password !== confirmPassword && (
-                          <div className="text-sm font-normal text-red-500 ps-1">
-                            Password doesn't match
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mb-4 py-2">
-                    <button
-                      type="submit"
-                      className="grid w-full cursor-pointer select-none rounded-md border bg-newpurple py-2 px-5 text-center align-middle text-sm font-bold text-white shadow hover:border-[#75237a] hover:bg-[#75237a] hover:text-white focus:border-[#75237a] focus:bg-[#75237a] focus:text-white focus:shadow-none tracking-wide"
-                      onClick={onSubmit}
+                <div className="sm:flex sm:flex-row gap-4 mb-0 sm:mb-2">
+                  {/* Password Input Field */}
+                  <div className="flex-1 max-sm:mb-1">
+                    <label
+                      htmlFor="password"
+                      className="mb-2 inline-block text-xs font-medium uppercase text-gray-700"
                     >
-                      Sign Up
-                    </button>
+                      Set Password
+                    </label>
+                    <div className="relative flex items-center">
+                      <input
+                        id="password"
+                        type={`${isVisible ? "text" : "password"}`}
+                        className="w-full rounded-md border border-gray-400 py-2 px-3 text-sm focus:border-orange-500 focus:text-gray-600 focus:shadow outline-none"
+                        placeholder="•••••"
+                        // pattern="[a-zA-Z0-9]{6,}$"
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                      />
+                      <button
+                        tabIndex="-1"
+                        type="button"
+                        className="absolute right-4 focus:outline-none"
+                        onClick={() => {
+                          setIsVisible(!isVisible);
+                        }}
+                      >
+                        {isVisible ? (
+                          <FaEye className="text-gray-500" />
+                        ) : (
+                          <FaEyeSlash className="text-gray-500" />
+                        )}
+                      </button>
+                    </div>
                   </div>
-                </form>
 
-                <p className="mb-4 text-center">
-                  Already have an account?
-                  <Link
-                    to="/login"
-                    className="cursor-pointer text-newpurple underline hover:text-orange-500 hover:underline-offset-2 ms-2"
+                  {/* Confirm Password Input Field */}
+                  <div className="flex-1 max-sm:mb-1">
+                    <label
+                      htmlFor="confirmPassword"
+                      className="mb-2 inline-block text-xs font-medium uppercase text-gray-700"
+                    >
+                      Confirm Password
+                    </label>
+                    <div className="relative flex items-center">
+                      <input
+                        id="confirmPassword"
+                        type={`${isConfirmVisible ? "text" : "password"}`}
+                        className="w-full rounded-md border border-gray-400 py-2 px-3 text-sm focus:border-orange-500 focus:text-gray-600 focus:shadow outline-none"
+                        placeholder="•••••"
+                        // pattern="[a-zA-Z0-9]{6,}$"
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                      />
+                      <button
+                        tabIndex="-1"
+                        type="button"
+                        className="absolute right-4 focus:outline-none"
+                        onClick={() => {
+                          setIsConfirmVisible(!isConfirmVisible);
+                        }}
+                      >
+                        {isConfirmVisible ? (
+                          <FaEye className="text-gray-500" />
+                        ) : (
+                          <FaEyeSlash className="text-gray-500" />
+                        )}
+                      </button>
+                    </div>
+                    <div className="h-5">
+                      {password !== confirmPassword && (
+                        <div className="text-sm font-normal text-red-500 ps-1">
+                          Password doesn't match
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sign Up Button */}
+                <div className="mb-4 py-2">
+                  <button
+                    type="submit"
+                    className="w-full py-2 px-5 text-center text-sm text-white font-bold select-none rounded-md bg-newpurple hover:bg-[#75237a] focus:bg-[#75237a] shadow-md border hover:border-[#75237a] focus:border-[#75237a] focus:outline-none tracking-wide"
+                    onClick={onSubmit}
                   >
-                    Login
-                  </Link>
-                </p>
-              </div>
+                    Sign Up
+                  </button>
+                </div>
+              </form>
+
+              <p className="mb-4 text-center">
+                Already have an account?
+                <Link
+                  to="/login"
+                  className="cursor-pointer text-newpurple underline hover:text-orange-500 hover:underline-offset-2 ms-2 max-phone:inline-block transition-all"
+                >
+                  Login
+                </Link>
+              </p>
             </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
