@@ -4,12 +4,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import StatusModal from "../components/Modals/StatusModal";
+import StatusModal from "./Modals/StatusModal";
 import LoadingBar from "react-top-loading-bar";
 import { FaRegCalendar } from "react-icons/fa6";
 import { BiUpvote } from "react-icons/bi";
 
-const Majorissues = (props) => {
+const ComplaintCard = (props) => {
   const [vote, setVote] = useState(props.upvoteCount);
   const [upvoted, setUpvoted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -185,25 +185,6 @@ const Majorissues = (props) => {
                 upvoted ? "hover:bg-orange-300" : "hover:bg-gray-100"
               }  m-1`}
             >
-              {/* <svg
-                width={24}
-                height={24}
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 m-1"
-              >
-                <path
-                  d="M9.8 21C9.51997 21 9.37996 21 9.273 20.9455C9.17892 20.8976 9.10243 20.8211 9.0545 20.727C9 20.62 9 20.48 9 20.2V10H5L12 3L19 10H15V20.2C15 20.48 15 20.62 14.9455 20.727C14.8976 20.8211 14.8211 20.8976 14.727 20.9455C14.62 21 14.48 21 14.2 21H9.8Z"
-                  stroke={upvoted ? "white" : "rgb(156, 163, 175) "}
-                  strokeWidth="2"
-                  strokeLinecap="square"
-                  strokeLinejoin="miter"
-                  // className={`transition-colors ${
-                  //   upvoted ? "hover:stroke-[#7C838F]" : "hover:stroke-white"
-                  // }`}
-                />
-              </svg> */}
               <BiUpvote
                 size={20}
                 className="m-1"
@@ -235,4 +216,4 @@ const Majorissues = (props) => {
   );
 };
 
-export default Majorissues;
+export default ComplaintCard;

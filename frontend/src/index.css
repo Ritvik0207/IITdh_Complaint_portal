@@ -58,3 +58,19 @@
     @apply font-montserrat text-slate-gray text-lg leading-7;
   }
 }
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Optional: Removing up/down arrows in Internet Explorer 10+ */
+input[type="number"] {
+  -ms-appearance: textfield;
+}

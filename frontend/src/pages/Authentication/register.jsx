@@ -99,10 +99,10 @@ const Register = () => {
                 </span>
               </div>
 
-              <h4 className="mb-2 font-medium text-xl text-gray-700 max-sm:text-base">
+              <h4 className="mb-1 font-medium text-xl text-gray-700 max-sm:text-base">
                 Get Started
               </h4>
-              <p className="mb-4 text-gray-500 text-xs sm:text-base">
+              <p className="mb-4 text-gray-500 text-xs sm:text-sm">
                 Sign Up to get your account
               </p>
 
@@ -138,7 +138,7 @@ const Register = () => {
                     </label>
                     <input
                       id="roll_no"
-                      type="text"
+                      type="number"
                       className="inline-block w-full rounded-md border border-gray-400 py-2 px-3 text-sm focus:border-orange-500 focus:text-gray-600 focus:shadow outline-none"
                       placeholder="2100100**"
                       pattern="[0-9]{9}"
@@ -179,7 +179,7 @@ const Register = () => {
                       Phone Number
                     </label>
                     <input
-                      type="tel"
+                      type="number"
                       className="inline-block w-full rounded-md border border-gray-400 py-2 px-3 text-sm focus:border-orange-500 focus:text-gray-600 focus:shadow outline-none"
                       placeholder="### - ### - ####"
                       pattern="[0-9]{10}"
@@ -212,42 +212,42 @@ const Register = () => {
                             className="inline-block w-full rounded-md border text-gray-600 border-gray-400 py-2 px-3 text-sm focus:border-orange-500 focus:shadow outline-none text-left"
                             onFocus={() => setHostelDropdown(true)}
                           />
-                          {HostelDropdown ? (
-                            <button
-                              type="button"
-                              onClick={() => setHostelDropdown(false)}
-                              tabIndex="-1"
-                            >
-                              <IoChevronUp className="absolute right-3 max-sm:right-1.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={() => setHostelDropdown(true)}
-                              tabIndex="-1"
-                            >
-                              <IoChevronDown className="absolute right-3 max-sm:right-1.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
-                            </button>
-                          )}
+
+                          <button
+                            type="button"
+                            onClick={() => setHostelDropdown((prev) => !prev)}
+                          >
+                            <IoChevronUp
+                              className={`absolute right-3 max-sm:right-1.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600 transition-transform duration-300 ${
+                                HostelDropdown ? "rotate-0" : "rotate-180"
+                              }`}
+                            />
+                          </button>
                         </div>
-                        {HostelDropdown && (
-                          <div className="absolute space-y-1 top-full left-1/2 text-nowrap transform -translate-x-1/2 w-fit bg-white border rounded-md shadow-md p-1 z-10">
-                            {hostels.map((item) => (
-                              <div
-                                key={item}
-                                className="flex justify-start items-center gap-1 w-full py-0.5"
+
+                        <div
+                          className={`absolute space-y-1 top-full left-1/2 text-nowrap transform -translate-x-1/2 w-full bg-white border rounded-md shadow-md p-1 z-10 transition-all duration-200 
+                          ${
+                            HostelDropdown
+                              ? "translate-y-0 opacity-100"
+                              : "-translate-y-full opacity-0 pointer-events-none"
+                          }`}
+                        >
+                          {hostels.map((item) => (
+                            <div
+                              key={item}
+                              className="flex justify-start items-center gap-1 w-full py-0.5"
+                            >
+                              <button
+                                type="button"
+                                className="w-full text-left px-3 border-2 border-transparent hover:bg-gray-100 rounded-md focus:bg-gray-100 focus:outline-none focus:rounded-sm"
+                                onClick={() => handleHostelOptionClick(item)}
                               >
-                                <button
-                                  type="button"
-                                  className="w-full text-left px-3 border-2 border-transparent hover:bg-gray-100 rounded-md focus:bg-gray-100 focus:outline-none focus:rounded-sm"
-                                  onClick={() => handleHostelOptionClick(item)}
-                                >
-                                  {item}
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                                {item}
+                              </button>
+                            </div>
+                          ))}
+                        </div>
                       </OutsideClickHandler>
                     </div>
 
@@ -270,42 +270,40 @@ const Register = () => {
                             className="inline-block w-full rounded-md border text-gray-600 border-gray-400 py-2 px-3 text-sm focus:border-orange-500 focus:shadow outline-none text-left"
                             onFocus={() => setWingDropdown(true)}
                           />
-                          {WingDropdown ? (
-                            <button
-                              type="button"
-                              onClick={() => setWingDropdown(false)}
-                              tabIndex="-1"
-                            >
-                              <IoChevronUp className="absolute right-3 max-sm:right-1.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={() => setWingDropdown(true)}
-                              tabIndex="-1"
-                            >
-                              <IoChevronDown className="absolute right-3 max-sm:right-1.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
-                            </button>
-                          )}
+                          <button
+                            type="button"
+                            onClick={() => setWingDropdown((prev) => !prev)}
+                          >
+                            <IoChevronUp
+                              className={`absolute right-3 max-sm:right-1.5 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600 transition-transform duration-300 ${
+                                WingDropdown ? "rotate-0" : "rotate-180"
+                              }`}
+                            />
+                          </button>
                         </div>
-                        {WingDropdown && (
-                          <div className="absolute space-y-1 top-full right-0 w-14 bg-white border rounded-md shadow-md p-1 z-10">
-                            {wings.map((item) => (
-                              <div
-                                key={item}
-                                className="flex justify-start items-center w-full"
+                        <div
+                          className={`absolute space-y-1 top-full left-full text-nowrap transform -translate-x-full w-14 bg-white border rounded-md shadow-md p-1 z-10 transition-all duration-300 
+                          ${
+                            WingDropdown
+                              ? "translate-y-0 opacity-100"
+                              : "-translate-y-full opacity-0 pointer-events-none"
+                          }`}
+                        >
+                          {wings.map((item) => (
+                            <div
+                              key={item}
+                              className="flex justify-start items-center w-full"
+                            >
+                              <button
+                                type="button"
+                                className="w-full text-center hover:bg-gray-100 rounded-md focus:bg-gray-100 focus:outline-none focus:rounded-sm"
+                                onClick={() => handleWingOptionClick(item)}
                               >
-                                <button
-                                  type="button"
-                                  className="w-full text-center hover:bg-gray-100 rounded-md focus:bg-gray-100 focus:outline-none focus:rounded-sm"
-                                  onClick={() => handleWingOptionClick(item)}
-                                >
-                                  {item}
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                                {item}
+                              </button>
+                            </div>
+                          ))}
+                        </div>
                       </OutsideClickHandler>
                     </div>
                   </div>
@@ -320,7 +318,7 @@ const Register = () => {
                       </label>
                       <input
                         id="room_no"
-                        type="tel"
+                        type="number"
                         className="block w-full rounded-md border border-gray-400 py-2 px-3 text-sm focus:border-orange-500 text-gray-600 focus:shadow outline-none"
                         placeholder="Room No."
                         pattern="[0-8]([0-2][1-9]|3[012])"

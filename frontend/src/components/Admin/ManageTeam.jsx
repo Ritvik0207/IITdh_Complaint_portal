@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { profile } from "../assets/images";
 import { FaPhoneAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import TeamData from "./TeamData.json";
+import TeamData from "../../constants/TeamData.json";
 
 const ManageTeam = () => {
-  const Image = [profile, profile, profile, profile, profile, profile];
+  // const Image = [profile, profile, profile, profile, profile, profile];
 
   const [visiblePhoneIndex, setVisiblePhoneIndex] = useState(null);
   const [visibleEmailIndex, setVisibleEmailIndex] = useState(null);
@@ -27,7 +26,7 @@ const ManageTeam = () => {
               >
                 <img
                   className="mx-auto mb-2 w-36 h-36 rounded-full object-cover"
-                  src={Image[index]}
+                  src="/assets/icons/profile.png"
                   alt={item.Name}
                 />
 

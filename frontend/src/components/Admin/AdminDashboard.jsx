@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { HiMiniTicket } from "react-icons/hi2";
 import { MdPending } from "react-icons/md";
@@ -6,8 +6,8 @@ import { GrInProgress } from "react-icons/gr";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import OutsideClickHandler from "react-outside-click-handler";
-import TicketAreaGraph from "./ticketareagraph";
-import TicketPieChart from "./ticketpiechart";
+import TicketAreaGraph from "./Ticketareagraph";
+import TicketPieChart from "./Ticketpiechart";
 
 const Dashboard = ({ TicketCounts, Tickets }) => {
   const svgs = [
@@ -27,7 +27,7 @@ const Dashboard = ({ TicketCounts, Tickets }) => {
   const dateOptions = ["Today", "This week", "This month", "This year"];
   const [areaGraphData, setAreaGraphData] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(dateOptions[1]);
+  const [selectedOption, setSelectedOption] = useState(dateOptions[3]);
 
   const getAreaGraphData = (tickets, start, end) => {
     let graphData = [];
@@ -230,7 +230,7 @@ const Dashboard = ({ TicketCounts, Tickets }) => {
                 <div className="rounded-sm px-2 h-full bg-gray-200/50 flex items-center">
                   <div className="flex items-center w-full h-full">
                     <div className="w-3/4 h-auto flex flex-col justify-between items-center ps-2 pb-2">
-                      <div className="w-full text-sm align-top py-2 font-montserrat font-semibold text-gray-600 text-nowrap">
+                      <div className="w-full text-sm align-top py-2 font-montserrat font-semibold text-gray-600 whitespace-nowrap">
                         {header}
                       </div>
                       <div className="w-full text-lg font-montserrat font-bold ps-1">

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import OutsideClickHandler from "react-outside-click-handler";
-import { Team } from "../assets/images";
 import { FaPhoneAlt, FaUser, FaPlus } from "react-icons/fa";
 import { MdEmail, MdLeaderboard } from "react-icons/md";
 import { RiLockPasswordFill } from "react-icons/ri";
@@ -250,7 +249,11 @@ const AddTeam = () => {
       </div>
       <div className="w-auto h-auto px-1 py-2 flex items-center ">
         <div className="rounded-sm rounded-tl-[100px] rounded-br-[100px] bg-[#FFE4BA]/70">
-          <img src={Team} alt="team" className="w-96 h-96 object-cover p-4" />
+          <img
+            src="/assets/images/team.png"
+            alt="team"
+            className="w-96 h-96 object-cover p-4"
+          />
         </div>
       </div>
     </div>

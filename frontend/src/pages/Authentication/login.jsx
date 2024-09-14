@@ -95,12 +95,12 @@ const Login = ({}) => {
                       Password
                     </label>
 
-                    <button
+                    {/* <button
                       type="button"
                       className="mb-2 font-medium text-sm text-orange-500 focus:underline focus:outline-none hover:underline underline-offset-2 me-2"
                     >
                       Forgot Password?
-                    </button>
+                    </button> */}
                   </div>
 
                   <div className="relative flex items-center">

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import Dashboard from "./dashboardv2";
-import Example2 from "./example2";
+import Dashboard from "./AdminDashboard";
+import TableData from "./example2";
 import LoadingBar from "react-top-loading-bar";
-import ManageTeam from "./manageTeam";
-import Loader from "./loader";
-import AddTeam from "./addTeam";
+import ManageTeam from "./ManageTeam";
+import Loader from "../Loader";
+import AddTeam from "./AddTeam";
 
 const Maincontent = ({ activeSubLink, links }) => {
   // console.log(activeSubLink);
@@ -27,14 +27,9 @@ const Maincontent = ({ activeSubLink, links }) => {
       setLoading(true);
       loadingBar.current.continuousStart();
 
-      // Rohith TODO
-      // /complaints  => to get all complaints
-      // /complaints?filter_or_groupby=<>  => get all complaints based on filter
-      // /complaints/:id  => get complaint by id
-
       let params = { issue: issue };
       const response = await axios.get(
-        "http://localhost:5000/api/user/getcomplaintbycategory", // http://localhost:5000/api/user/getcomplaintbycategory"
+        "http://localhost:5000/api/user/getcomplaintbycategory",
         {
           params,
           headers: {
@@ -91,7 +86,7 @@ const Maincontent = ({ activeSubLink, links }) => {
         )
       ) : links["Ticket"].includes(activeSubLink) ? (
         !loading ? (
-          <Example2
+          <TableData
             activeSubLink={activeSubLink}
             Tickets={tickets}
             links={links}

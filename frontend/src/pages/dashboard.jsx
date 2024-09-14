@@ -2,25 +2,20 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import Categories from "../components/categories";
-import TableData from "../components/tabledata";
-import Majorissues from "../components/majorissues";
+import Majorissues from "../components/ComplaintCard";
 import { Link } from "react-router-dom";
-import Adminview from "../components/adminview";
 import LoadingBar from "react-top-loading-bar";
 import { RxDropdownMenu } from "react-icons/rx";
 import OutsideClickHandler from "react-outside-click-handler";
+import SuperAdmin from "../components/SuperAdmin";
+import Admin from "../components/Admin";
 
 const Dashboard = () => {
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isCatSelected, setCatSelected] = useState(false);
+  const [department, setDepartment] = useState("");
   const [complaints, setComplaints] = useState([]);
   const [complaintsCopy, setComplaintsCopy] = useState([]);
-  const [issue, setIssue] = useState("");
   const [filterBy, setFilterBy] = useState("votes");
-  const [totalComplaintsCount, setTotalComplaintsCount] = useState(0);
-  const [approvedComplaintsCount, setApprovedComplaintsCount] = useState(0);
-  const [pendingComplaintsCount, setPendingComplaintsCount] = useState(0);
   const [selectedIssue, setSelectedIssue] = useState("");
   const [loading, setLoading] = useState(false);
   const [DropdownVisible, setDropdownVisible] = useState(false);
@@ -46,9 +41,8 @@ const Dashboard = () => {
   };
 
   const fetchData = async () => {
-    console.log("Here");
     const token = JSON.parse(localStorage.getItem("userInfo")).token;
-    console.log(token);
+    // console.log(token);
     try {
       setLoading(true);
       loadingBar.current.continuousStart(); // Start the loading bar
@@ -89,112 +83,30 @@ const Dashboard = () => {
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     if (userInfo && userInfo.isAdmin) {
-      // setDepartment(userInfo.department);
+      setDepartment(userInfo.department);
       setIsAdmin(true);
       fetchData();
     } else {
       setIsAdmin(false);
       fetchData();
     }
-  }, [filterBy]);
+  }, []);
 
-  useEffect(() => {
-    // Calculate complaint counts
-    const totalComplaintsCount = complaints.length;
-    const approvedComplaintsCount = complaints.filter(
-      (complaint) => complaint.isApproved
-    ).length;
-    const pendingComplaintsCount = complaints.filter(
-      (complaint) => !complaint.isApproved && !complaint.isDone
-    ).length;
-
-    // Pass complaint counts to Adminview
-    setTotalComplaintsCount(totalComplaintsCount);
-    setApprovedComplaintsCount(approvedComplaintsCount);
-    setPendingComplaintsCount(pendingComplaintsCount);
-  }, [complaints]);
+  console.log(department);
 
   return (
     <>
       <LoadingBar height={3} color="#f11946" ref={loadingBar} />
       {isAdmin ? (
-        <div className="flex flex-col justify-center items-center min-h-screen">
-          {/* <h1 className="text-3xl font-bold mb-8 pb-2 text-[#89288f] border-b-gray-400 border-b-2">
-            Welcome Admin
-          </h1> */}
-          <div className="py-16 w-full">
-            <div className="flex flex-row max-sm:flex-col">
-              <aside className="sticky top-0 h-screen w-1/6 bg-gray-100 text-gray-800 py-10 px-6">
-                <nav className="space-y-2">
-                  {/* <div className="w-full flex items-center space-x-2 hover:bg-gray-200 active:bg-gray-300 p-2 rounded-lg text-gray-500">
-                    <Categories
-                      name="Food"
-                      issue="Food"
-                      fun={(issue) => {
-                        setCatSelected(true);
-                        setIssue(issue);
-                      }}
-                    />
-                  </div>
-                  <div className="w-full flex items-center space-x-2 hover:bg-gray-200 active:bg-gray-300 py-2 px-2 rounded-lg text-gray-500">
-                    <Categories
-                      name="Water"
-                      issue="Water"
-                      fun={(issue) => {
-                        setCatSelected(true);
-                        setIssue(issue);
-                      }}
-                    />
-                  </div>
-                  <div className="w-full flex items-center space-x-2 hover:bg-gray-200 active:bg-gray-300 py-2 px-2 rounded-lg text-gray-500">
-                    <Categories
-                      name="Electricity"
-                      issue="Electricity"
-                      fun={(issue) => {
-                        setCatSelected(true);
-                        setIssue(issue);
-                      }}
-                    />
-                  </div>
-                  <div className="w-full flex items-center space-x-2 hover:bg-gray-200 active:bg-gray-300 py-2 px-2 rounded-lg text-gray-500">
-                    <Categories
-                      name="Hostel Affaires"
-                      issue="Hostel_affairs"
-                      fun={(issue) => {
-                        setCatSelected(true);
-                        setIssue(issue);
-                      }}
-                    />
-                  </div> */}
-                  <Link to={"/example"}>Example</Link>
-                  <br />
-                  <Link to={"/NewTable"}>NewTable</Link>
-                  <br />
-                  <Link to={"/NewTablev2"}>NewTablev2</Link>
-                  <br />
-                  <Link to={"/trail"}>Trail</Link>
-                  <br />
-                </nav>
-              </aside>
-              {/* <div className=" flex flex-1 justify-center items-center ps-10">
-                {isCatSelected ? (
-                  <TableData issue={issue} />
-                ) : (
-                  <Adminview
-                    totalComplaintsCount={totalComplaintsCount}
-                    approvedComplaintsCount={approvedComplaintsCount}
-                    pendingComplaintsCount={pendingComplaintsCount}
-                  />
-                )}
-              </div> */}
-            </div>
-          </div>
-        </div>
+        department === "All" ? (
+          <SuperAdmin />
+        ) : (
+          <Admin />
+        )
       ) : (
         <section className="min-h-screen w-full grid bg-white">
-          <div className="h-full w-full pt-14">
-            {/* <div className="h-full w-full"> */}
-            <div className="flex pt-6 max-lg:justify-between">
+          <div className="h-full w-full pt-16">
+            <div className="flex pt-4 max-lg:justify-between">
               <div className="flex justify-between items-center w-3/4 ms-16">
                 <h1 className="text-gray-600 font-palanquin text-2xl font-bold text-nowrap">
                   Complaint Dashboard
@@ -257,6 +169,7 @@ const Dashboard = () => {
                   </div>
                 </OutsideClickHandler>
               </div>
+
               <div className="inline-flex justify-end items-center w-1/4 me-8 max-lg:me-16">
                 <div className="flex items-center">
                   <label
@@ -277,31 +190,11 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
+
             <div className="flex flex-col lg:flex-row">
               <div className="text-gray-600 w-full lg:w-3/4">
                 <div className="px-10 py-0">
-                  <div className="flex justify-between items-center mx-4">
-                    {/* <h1 className="text-gray-600 font-palanquin text-2xl font-bold px-4 text-nowrap">
-                        Complaint Dashboard
-                      </h1>
-                      <div className="flex justify-center me-4">
-                        <div className="flex gap-2 flex-auto flex-wrap justify-center">
-                          {buttons.map((button, index) => (
-                            <button
-                              key={index}
-                              className="w-auto py-1 bg-orange-500 rounded-3xl font-palanquin font-medium text-xl text-white hover:bg-gray-100 border-2 border-transparent hover:border-gray-700 transition-colors hover:shadow-md"
-                              onClick={() =>
-                                handleCategoryFilter(button.category)
-                              }
-                            >
-                              <div className="hover:drop-shadow-lg hover:text-gray-700 transition-colors w-full px-4">
-                                {button.label}
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      </div> */}
-                  </div>
+                  <div className="flex justify-between items-center mx-4"></div>
                   <div className="m-4">
                     {complaintsCopy.length == 0 && !loading ? (
                       <h2 className="pt-30 font-palanquin font-semibold text-2xl text-orange-400 flex justify-center items-center h-full w-full pt-20">
@@ -328,24 +221,6 @@ const Dashboard = () => {
 
               <aside className="w-full lg:w-1/4">
                 <div className="flex flex-col justify-start items-center mx-4 h-full">
-                  {/* <div className="w-80 p-1 flex items-center justify-start box-border mx-auto pt-28">
-                      <label
-                        htmlFor="filter"
-                        className="text-xl text-gray-600 mx-1 ms-1 tracking-wider font-semibold w-auto text-nowrap"
-                      >
-                        Filter By :
-                      </label>
-                      <select
-                        id="filter"
-                        className="w-full ms-2 appearance-none rounded-lg border-2 border-gray-400 px-4 py-2 shadow-sm focus:border-orange-500 focus:outline-none text-gray-500 font-semibold"
-                        value={filterBy}
-                        onChange={(e) => setFilterBy(e.target.value)}
-                      >
-                        <option value="votes">Votes</option>
-                        <option value="date">Date</option>
-                      </select>
-                    </div> */}
-
                   <div className="font-medium text-xl py-3 text-center space-y-3 flex flex-col justify-center items-center">
                     <div className="font-montserrat font-semibold w-full pb-5 text-lg">
                       Complaint Status & New Complaints ?
@@ -370,7 +245,6 @@ const Dashboard = () => {
                 </div>
               </aside>
             </div>
-            {/* </div> */}
           </div>
         </section>
       )}

@@ -28,6 +28,7 @@ export default {
         "white-400": "rgba(255, 255, 255, 0.80)",
         newpurple: "#89288f",
         neworange: "#FAA519",
+        newgreen: "#62cf62",
       },
       boxShadow: {
         "3xl": "0 10px 40px rgba(0, 0, 0, 0.1)",
