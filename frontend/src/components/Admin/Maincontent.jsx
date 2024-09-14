@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Dashboard from "./AdminDashboard";
-import TableData from "./example2";
+import Tickets from "./Tickets";
 import LoadingBar from "react-top-loading-bar";
 import ManageTeam from "./ManageTeam";
 import Loader from "../Loader";
@@ -86,7 +86,7 @@ const Maincontent = ({ activeSubLink, links }) => {
         )
       ) : links["Ticket"].includes(activeSubLink) ? (
         !loading ? (
-          <TableData
+          <Tickets
             activeSubLink={activeSubLink}
             Tickets={tickets}
             links={links}

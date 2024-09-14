@@ -252,7 +252,10 @@ const Example2 = ({ activeSubLink, Tickets, links }) => {
                   </div>
                 ) : (
                   <>
-                    <Table complaintsCopy={complaintsCopy} />
+                    <Table
+                      complaintsCopy={complaintsCopy}
+                      updateStatus={updateStatus}
+                    />
                   </>
                 )}
               </main>
